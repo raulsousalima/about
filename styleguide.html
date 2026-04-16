@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Styleguide — Raul Lima Portfolio</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>S</text></svg>" />
+  <!-- Tabler Icons Standard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+<body class="bg-bg-dark text-text-primary-dark">
+
+  <!-- Header -->
+  <header class="glass-nav sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <a href="/" class="flex items-center justify-center w-8 h-8 rounded-full bg-accent font-bold text-xs text-bg-dark">R</a>
+        <h1 class="text-sm font-semibold tracking-tight uppercase">Styleguide &amp; Tokens</h1>
+      </div>
+      <a href="/" class="text-xs font-medium text-text-muted-dark hover:text-text-primary-dark transition-colors" data-i18n="styleguide.back">Voltar para o site</a>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-20 divide-y divide-white/10">
+
+    <!-- Theme Selection Tabs -->
+    <section class="sticky top-[73px] z-40 glass-nav py-4 -mx-6 px-6 mb-8">
+      <div class="flex items-center gap-4">
+        <h2 class="text-xs uppercase tracking-widest text-text-muted-dark font-medium">Theme Preview</h2>
+        <div class="flex bg-surface border border-[var(--color-border)] p-1 rounded-full">
+          <button id="tab-dark" class="px-6 py-2 rounded-full text-sm font-semibold transition-colors bg-accent text-[#111]">Dark Mode</button>
+          <button id="tab-light" class="px-6 py-2 rounded-full text-sm font-medium text-text-muted-dark hover:text-text-primary-dark transition-colors">Light Mode</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1: Colors -->
+    <section class="py-16">
+      <div class="grid md:grid-cols-4 gap-12">
+        <div class="md:col-span-1">
+          <h2 class="font-serif text-3xl font-bold mb-4">Cores</h2>
+          <p class="text-xs text-text-muted-dark leading-relaxed">
+            A paleta é baseada em alto contraste (Dark/Light) com um tom de destaque vibrante (Lime Green).
+          </p>
+        </div>
+        <div class="md:col-span-3 grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Dark -->
+          <div class="space-y-3">
+            <div class="aspect-square rounded-xl bg-bg-dark border border-white/10 flex items-end p-4">
+              <span class="text-[10px] uppercase font-bold text-white/40">Dark BG</span>
+            </div>
+            <p class="text-[10px] font-mono text-text-muted-dark">#111111</p>
+          </div>
+          <!-- Surface -->
+          <div class="space-y-3">
+            <div class="aspect-square rounded-xl bg-surface border border-white/10 flex items-end p-4">
+              <span class="text-[10px] uppercase font-bold text-white/40">Surface</span>
+            </div>
+            <p class="text-[10px] font-mono text-text-muted-dark">#1A1A1A</p>
+          </div>
+          <!-- Accent -->
+          <div class="space-y-3">
+            <div class="aspect-square rounded-xl bg-accent flex items-end p-4 transition-colors">
+              <span class="text-[10px] uppercase font-bold text-[#111]">Accent (Main)</span>
+            </div>
+            <p class="text-[10px] font-mono text-text-muted-dark">var(--color-accent)<br/>Dark: #C8F04E<br/>Light: #A7D226</p>
+          </div>
+          <!-- Light -->
+          <div class="space-y-3">
+            <div class="aspect-square rounded-xl bg-bg-light flex items-end p-4">
+              <span class="text-[10px] uppercase font-bold text-bg-dark/40">Light BG</span>
+            </div>
+            <p class="text-[10px] font-mono text-text-muted-dark">#EFEFEF</p>
+          </div>
+
+          <!-- Semantics (Status Colors) -->
+          <div class="col-span-2 lg:col-span-4 mt-8 pt-8 border-t border-white/10">
+            <h3 class="font-serif text-xl font-bold mb-6">Cores Semânticas (Status)</h3>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <!-- Success -->
+              <div class="space-y-3">
+                <div class="aspect-square rounded-xl bg-success-bg flex items-end p-4 border border-success/20">
+                  <span class="text-[10px] uppercase font-bold text-success">Success</span>
+                </div>
+                <p class="text-[10px] font-mono text-text-muted-dark">var(--color-success)</p>
+              </div>
+              <!-- Warning -->
+              <div class="space-y-3">
+                <div class="aspect-square rounded-xl bg-warning-bg flex items-end p-4 border border-warning/20">
+                  <span class="text-[10px] uppercase font-bold text-warning">Warning</span>
+                </div>
+                <p class="text-[10px] font-mono text-text-muted-dark">var(--color-warning)</p>
+              </div>
+              <!-- Error -->
+              <div class="space-y-3">
+                <div class="aspect-square rounded-xl bg-error-bg flex items-end p-4 border border-error/20">
+                  <span class="text-[10px] uppercase font-bold text-error">Error</span>
+                </div>
+                <p class="text-[10px] font-mono text-text-muted-dark">var(--color-error)</p>
+              </div>
+              <!-- Info -->
+              <div class="space-y-3">
+                <div class="aspect-square rounded-xl bg-info-bg flex items-end p-4 border border-info/20">
+                  <span class="text-[10px] uppercase font-bold text-info">Info</span>
+                </div>
+                <p class="text-[10px] font-mono text-text-muted-dark">var(--color-info)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Typography -->
+    <section class="py-16">
+      <div class="grid md:grid-cols-4 gap-12">
+        <div class="md:col-span-1">
+          <h2 class="font-serif text-3xl font-bold mb-4">Tipografia</h2>
+          <p class="text-xs text-text-muted-dark leading-relaxed">
+            Combinação de Serif (para elegância e títulos) e Sans-serif (para legibilidade e UI).
+          </p>
+        </div>
+        <div class="md:col-span-3 space-y-12">
+          <!-- Playfair Display -->
+          <div>
+            <p class="text-[10px] uppercase tracking-widest text-accent mb-6">Heading / Playfair Display</p>
+            <h3 class="font-serif text-7xl font-bold mb-4 italic">The quick brown fox</h3>
+            <h3 class="font-serif text-5xl font-bold mb-2">Raul de Sousa Lima</h3>
+            <p class="text-xs text-text-muted-dark font-mono">Font: Playfair Display | Weight: 700, 800</p>
+          </div>
+          <!-- Inter -->
+          <div>
+            <p class="text-[10px] uppercase tracking-widest text-accent mb-6">Body / Inter</p>
+            <p class="text-3xl font-normal leading-tight mb-4">Design como ponte entre empatia e resultado.</p>
+            <p class="text-sm leading-relaxed max-w-lg mb-4">
+              Tenho 15 anos de experiência trabalhando com produtos digitais — criando experiências que conectam pessoas, produtos e estratégia de negócios.
+            </p>
+            <p class="text-xs text-text-muted-dark font-mono">Font: Inter | Weight: 300, 400, 500, 600</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Components -->
+    <section class="py-16">
+      <div class="grid md:grid-cols-4 gap-12">
+        <div class="md:col-span-1">
+          <h2 class="font-serif text-3xl font-bold mb-4">Componentes</h2>
+          <p class="text-xs text-text-muted-dark leading-relaxed">
+            Elementos reutilizáveis que mantêm a consistência visual.
+          </p>
+        </div>
+        <div class="md:col-span-3 space-y-16">
+          <!-- Buttons -->
+          <div>
+            <p class="text-[10px] uppercase tracking-widest text-text-muted-dark mb-6">Botões</p>
+            <div class="flex flex-wrap gap-4">
+              <button class="px-6 py-3 rounded-full bg-accent text-bg-dark font-semibold text-sm hover:opacity-90 transition-all">Primary Action</button>
+              <button class="px-6 py-3 rounded-full border border-white/15 text-sm font-medium hover:border-white/40 transition-all">Secondary Action</button>
+              <button class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 text-sm font-medium text-text-muted-dark hover:border-accent hover:text-accent transition-all">Contatar</button>
+            </div>
+          </div>
+          <!-- Tags -->
+          <div>
+            <p class="text-[10px] uppercase tracking-widest text-text-muted-dark mb-6">Tags &amp; Pills</p>
+            <div class="flex flex-wrap gap-3">
+              <span class="tag">User-Centered Design</span>
+              <span class="tag">Data-Driven</span>
+              <span class="tag">Agile</span>
+              <span class="tag">AI Solutions</span>
+              
+              <!-- Semantic Status Pills -->
+              <span class="inline-flex items-center px-3 py-1 rounded-md bg-success-bg text-success text-[10px] font-bold uppercase tracking-wider border border-success/20">Success</span>
+              <span class="inline-flex items-center px-3 py-1 rounded-md bg-warning-bg text-warning text-[10px] font-bold uppercase tracking-wider border border-warning/20">Warning</span>
+              <span class="inline-flex items-center px-3 py-1 rounded-md bg-error-bg text-error text-[10px] font-bold uppercase tracking-wider border border-error/20">Error</span>
+              <span class="inline-flex items-center px-3 py-1 rounded-md bg-info-bg text-info text-[10px] font-bold uppercase tracking-wider border border-info/20">Info</span>
+
+              <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-xs text-text-muted-dark">
+                <span class="w-2 h-2 rounded-full bg-accent"></span>
+                Status Badge
+              </div>
+            </div>
+          </div>
+          <!-- Card Elements -->
+          <div>
+            <p class="text-[10px] uppercase tracking-widest text-text-muted-dark mb-6">Cards (Grid / Lead)</p>
+            <div class="grid md:grid-cols-2 gap-4">
+               <div class="lead-card">
+                  <p class="text-2xl mb-3">🧭</p>
+                  <h3 class="font-semibold mb-2">Leadership &amp; Culture</h3>
+                  <p class="text-sm text-text-muted-dark leading-relaxed">Exemplo de card de atuação em área de liderança.</p>
+               </div>
+               <div class="case-card reveal group bg-white border border-black/06 visible">
+                  <div class="aspect-video w-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-4xl">🖼️</div>
+                  <div class="p-6">
+                    <p class="text-xs font-medium text-text-muted-light uppercase tracking-widest mb-2">Preview Case</p>
+                    <h3 class="font-serif text-xl font-bold mb-2 text-text-primary-light">Título do Projeto</h3>
+                    <p class="text-sm text-text-muted-light">Descrição curta do caso de estudo.</p>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <!-- Icons Standard -->
+          <div>
+            <p class="text-[10px] uppercase tracking-widest text-text-muted-dark mb-6">Ícones (Tabler Icons)</p>
+            <p class="text-xs text-text-muted-dark mb-4 max-w-lg leading-relaxed">
+              Utilizamos <a href="https://tablericons.com" target="_blank" class="text-accent hover:underline">Tabler Icons</a> (versão webfont). A classe base é <code>ti</code> seguida de <code>ti-*nome-do-icone*</code>. Os ícones herdam cor e tamanho do texto local (ex: `<i class="ti ti-brand-linkedin text-2xl"></i>`).
+            </p>
+            <div class="flex flex-wrap items-center gap-8 bg-surface border border-white/10 rounded-2xl p-6">
+              <div class="flex flex-col items-center gap-2">
+                <i class="ti ti-brand-linkedin text-3xl hover:text-accent transition-colors"></i>
+                <span class="text-[10px] font-mono text-text-muted-dark">ti-brand-linkedin</span>
+              </div>
+              <div class="flex flex-col items-center gap-2">
+                <i class="ti ti-brand-behance text-3xl hover:text-accent transition-colors"></i>
+                <span class="text-[10px] font-mono text-text-muted-dark">ti-brand-behance</span>
+              </div>
+              <div class="flex flex-col items-center gap-2">
+                <i class="ti ti-mail text-3xl hover:text-accent transition-colors"></i>
+                <span class="text-[10px] font-mono text-text-muted-dark">ti-mail</span>
+              </div>
+              <div class="flex flex-col items-center gap-2">
+                <i class="ti ti-arrow-right text-3xl hover:text-accent transition-colors"></i>
+                <span class="text-[10px] font-mono text-text-muted-dark">ti-arrow-right</span>
+              </div>
+              <div class="flex flex-col items-center gap-2">
+                <i class="ti ti-briefcase text-3xl hover:text-accent transition-colors"></i>
+                <span class="text-[10px] font-mono text-text-muted-dark">ti-briefcase</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Radius -->
+    <section class="py-16">
+      <div class="grid md:grid-cols-4 gap-12">
+        <div class="md:col-span-1">
+          <h2 class="font-serif text-3xl font-bold mb-4">Raio (Borders)</h2>
+          <p class="text-xs text-text-muted-dark leading-relaxed">
+            Scalas de arredondamento suaves para botões e containers.
+          </p>
+        </div>
+        <div class="md:col-span-3 space-y-8">
+          <div class="flex items-center gap-6">
+            <div class="w-16 h-16 bg-surface border border-white/10 rounded-sm"></div>
+            <div>
+              <p class="text-xs font-semibold">Small (0.5rem)</p>
+              <p class="text-[10px] font-mono text-text-muted-dark">--radius-sm</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-6">
+            <div class="w-16 h-16 bg-surface border border-white/10 rounded-md"></div>
+            <div>
+              <p class="text-xs font-semibold">Medium (1rem)</p>
+              <p class="text-[10px] font-mono text-text-muted-dark">--radius-md</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-6">
+            <div class="w-16 h-16 bg-surface border border-white/10 rounded-lg"></div>
+            <div>
+              <p class="text-xs font-semibold">Large (1.5rem)</p>
+              <p class="text-[10px] font-mono text-text-muted-dark">--radius-lg</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-6">
+            <div class="w-32 h-16 bg-surface border border-white/10 rounded-full"></div>
+            <div>
+              <p class="text-xs font-semibold">Pill (999px)</p>
+              <p class="text-[10px] font-mono text-text-muted-dark">--radius-pill</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="py-20 border-t border-white/10 text-center">
+    <p class="text-[10px] uppercase tracking-widest text-text-muted-dark">Design System Proprietary — Raul Lima 2026</p>
+  </footer>
+
+  <script type="module" src="/src/main.ts"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const tabDark = document.getElementById("tab-dark");
+      const tabLight = document.getElementById("tab-light");
+
+      function updateTabs(isLight) {
+        if (isLight) {
+          tabLight.className = "px-6 py-2 rounded-full text-sm font-semibold transition-colors bg-accent text-[#111]";
+          tabDark.className = "px-6 py-2 rounded-full text-sm font-medium text-text-muted-dark hover:text-text-primary-dark transition-colors";
+        } else {
+          tabDark.className = "px-6 py-2 rounded-full text-sm font-semibold transition-colors bg-accent text-[#111]";
+          tabLight.className = "px-6 py-2 rounded-full text-sm font-medium text-text-muted-dark hover:text-text-primary-dark transition-colors";
+        }
+      }
+
+      tabDark.addEventListener("click", () => {
+        document.documentElement.removeAttribute("data-theme");
+        localStorage.setItem("app-theme", "dark");
+        updateTabs(false);
+      });
+
+      tabLight.addEventListener("click", () => {
+        document.documentElement.setAttribute("data-theme", "light");
+        localStorage.setItem("app-theme", "light");
+        updateTabs(true);
+      });
+
+      // Initialize tab state correctly
+      updateTabs(document.documentElement.getAttribute("data-theme") === "light");
+    });
+  </script>
+</body>
+</html>

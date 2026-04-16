@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>No Friction AI — De Feedback do Cliente a Impacto no Negócio | Raul Lima</title>
+  <meta name="description"
+    content="Plataforma de IA que transforma feedback de clientes em decisões estratégicas, reduzindo custos operacionais e acelerando resultados." />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>R</text></svg>" />
+  <!-- Tabler Icons Standard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+
+<body>
+
+  <!-- ======================================
+       NAVIGATION (same as index.html)
+  ======================================= -->
+  <header id="home" class="fixed top-0 inset-x-0 z-50 glass-nav">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
+      <a href="../index.html"
+        class="flex items-center justify-center w-9 h-9 rounded-full bg-accent font-bold text-sm text-black leading-none select-none transition-transform hover:scale-105">R</a>
+
+      <!-- Nav links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-text-muted-dark">
+        <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+        <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+          data-i18n="nav.experience">Experiência</a>
+        <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.skills">Competências</a>
+        <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+      </nav>
+
+      <!-- Social + CTA + Lang Toggle -->
+      <div class="flex items-center gap-4">
+        <!-- Language Toggle -->
+        <div class="flex items-center gap-1 text-xs font-medium">
+          <button data-lang-btn="en"
+            class="px-2 py-1 rounded-full transition-all text-accent font-bold cursor-pointer hover:opacity-80">EN</button>
+          <span class="text-text-muted-dark opacity-50">|</span>
+          <button data-lang-btn="pt"
+            class="px-2 py-1 rounded-full transition-all text-text-muted-dark cursor-pointer hover:opacity-80">PT</button>
+        </div>
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="text-text-muted-dark hover:text-text-primary-dark transition-colors mx-1" aria-label="Toggle Theme">
+          <i class="ti ti-moon text-2xl" id="theme-icon"></i>
+        </button>
+        <!-- LinkedIn -->
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-linkedin text-2xl"></i>
+        </a>
+        <!-- Behance -->
+        <a href="https://behance.net" target="_blank" rel="noopener" aria-label="Behance"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-behance text-2xl"></i>
+        </a>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--alpha-15)] text-sm font-medium text-text-muted-dark hover:border-accent hover:text-accent transition-all">
+          <i class="ti ti-mail text-lg"></i> <span data-i18n="nav.contact">Contato</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <main class="pt-[72px]">
+
+    <!-- ======================================
+         CASE HERO
+    ======================================= -->
+    <section class="pt-[60px] pb-16">
+      <div class="max-w-7xl mx-auto px-6">
+        <!-- Back button -->
+        <a href="../index.html#cases"
+          class="inline-flex items-center gap-2 text-sm text-text-muted-dark hover:text-accent transition-colors mb-6 group">
+          <i class="ti ti-arrow-left text-lg transition-transform group-hover:-translate-x-1"></i>
+          <span data-i18n="case.back">Voltar</span>
+        </a>
+
+        <!-- Case title -->
+        <h1 class="font-serif text-4xl md:text-5xl font-bold mb-[60px] heading-accent reveal"
+          data-i18n="case.nofrictionai.title">
+          De Feedback do Cliente a Impacto no Negócio
+        </h1>
+      </div>
+
+      <!-- Hero banner — FULL WIDTH -->
+      <div class="case-hero-banner reveal" style="background-image: url('../img/cases/nofrictionai/bannerhero.png'); border-radius: 0;">
+        <!-- Overlay for contrast -->
+        <div class="absolute inset-0 bg-black/40 z-0"></div>
+
+        <div class="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-6">
+          <!-- Brand Name -->
+          <span class="text-6xl md:text-[8rem] font-bold text-white/10 font-serif tracking-widest select-none uppercase">
+            NO FRICTION AI
+          </span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         OVERVIEW
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-[280px_1fr] gap-12 items-start reveal">
+          <!-- Company icon -->
+          <style>
+            .nf-logo-light { display: none; }
+            .nf-logo-dark { display: block; }
+            :root[data-theme="light"] .nf-logo-light { display: block; }
+            :root[data-theme="light"] .nf-logo-dark { display: none; }
+          </style>
+          <div class="case-img-placeholder p-8 flex items-center justify-center">
+            <img src="../img/cases/nofrictionai/logo.svg" alt="No Friction AI Logo (Light)" class="max-w-full h-auto max-h-16 nf-logo-light" />
+            <img src="../img/cases/nofrictionai/logo2.svg" alt="No Friction AI Logo (Dark)" class="max-w-full h-auto max-h-16 nf-logo-dark" />
+          </div>
+          <!-- Description -->
+          <p class="text-lg md:text-xl leading-relaxed text-text-muted-dark" data-i18n="case.nofrictionai.overview.company">
+            No Friction AI é uma plataforma de Inteligência Artificial projetada para transformar grandes volumes de feedback de clientes em resultados mensuráveis de negócio, acelerando decisões e melhorando a experiência do usuário em escala.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         CONTEXT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-4xl reveal">
+          <h2 class="font-serif text-4xl md:text-5xl font-bold mb-8 heading-accent" data-i18n="case.nofrictionai.context.title">
+            Contexto
+          </h2>
+
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.nofrictionai.context.p1">
+            Empresas coletavam grandes volumes de dados de clientes (NPS, CSAT e reviews), mas não conseguiam transformar essas informações em valor estratégico para o negócio.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.nofrictionai.context.p2">
+            O processo era manual, caro e lento, dificultando a priorização de melhorias e atrasando decisões importantes de produto.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark" data-i18n="case.nofrictionai.context.p3">
+            Esse cenário resultava em decisões baseadas em intuição, aumento de churn e perda de oportunidades de receita.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         CHALLENGE
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
+
+          <!-- Image placeholder -->
+          <div class="reveal">
+            <div class="case-img-placeholder aspect-square" style="max-width: 400px;">
+              <img src="../img/cases/nofrictionai/imagem.png" alt="Challenge visual" />
+            </div>
+          </div>
+
+          <!-- Challenge text -->
+          <div class="reveal">
+            <span class="case-label mb-6" data-i18n="case.nofrictionai.challenge.label">Desafio</span>
+
+            <p class="text-lg md:text-xl leading-relaxed mt-6 mb-6" data-i18n="case.nofrictionai.challenge.intro">
+              O principal desafio foi <strong>transformar feedback de clientes em decisões rápidas e acionáveis</strong>.
+            </p>
+
+            <p class="text-base leading-relaxed text-text-muted-dark mb-6" data-i18n="case.nofrictionai.challenge.research">
+              A análise mostrou que <strong>o processo era altamente manual e ineficiente</strong>. Como resultado:
+            </p>
+
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.nofrictionai.challenge.list.1">Alto custo operacional com análise manual</span>
+              </li>
+              <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.nofrictionai.challenge.list.2">Baixa velocidade na resposta a problemas dos usuários</span>
+              </li>
+              <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.nofrictionai.challenge.list.3">Falta de priorização entre times de produto</span>
+              </li>
+            </ul>
+
+            <p class="text-base leading-relaxed text-text-muted-dark" data-i18n="case.nofrictionai.challenge.conclusion">
+              O desafio era <strong>reduzir o tempo entre insight e ação</strong> e criar uma <strong>plataforma orientada à tomada de decisão</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         PROCESS
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.nofrictionai.process.label">Processo</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.nofrictionai.process.intro">
+            O projeto seguiu um <strong>fluxo estratégico focado em transformar dados em decisões</strong>, alinhando produto, IA e negócio.
+          </p>
+        </div>
+
+        <!-- Timeline -->
+        <div class="process-timeline rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)] overflow-hidden reveal">
+          <!-- Step 1 -->
+          <div class="process-step">
+            <div class="step-number">01</div>
+            <h3 class="step-title" data-i18n="case.nofrictionai.process.step1.title">Descoberta</h3>
+            <p class="step-desc" data-i18n="case.nofrictionai.process.step1.desc">
+              Identificação dos problemas de negócio e análise de dados de clientes.
+            </p>
+          </div>
+          <!-- Step 2 -->
+          <div class="process-step">
+            <div class="step-number">02</div>
+            <h3 class="step-title" data-i18n="case.nofrictionai.process.step2.title">Estratégia</h3>
+            <p class="step-desc" data-i18n="case.nofrictionai.process.step2.desc">
+              Definição da visão do produto como plataforma de decision intelligence.
+            </p>
+          </div>
+          <!-- Step 3 -->
+          <div class="process-step">
+            <div class="step-number">03</div>
+            <h3 class="step-title" data-i18n="case.nofrictionai.process.step3.title">Proposta</h3>
+            <p class="step-desc" data-i18n="case.nofrictionai.process.step3.desc">
+              Criação da solução com foco em automação e priorização de insights.
+            </p>
+          </div>
+          <!-- Step 4 -->
+          <div class="process-step">
+            <div class="step-number">04</div>
+            <h3 class="step-title" data-i18n="case.nofrictionai.process.step4.title">Design & IA</h3>
+            <p class="step-desc" data-i18n="case.nofrictionai.process.step4.desc">
+              Desenvolvimento da experiência e integração de capacidades de IA.
+            </p>
+          </div>
+          <!-- Step 5 -->
+          <div class="process-step">
+            <div class="step-number">05</div>
+            <h3 class="step-title" data-i18n="case.nofrictionai.process.step5.title">Entrega</h3>
+            <p class="step-desc" data-i18n="case.nofrictionai.process.step5.desc">
+              Lançamento da plataforma com insights acionáveis em tempo real.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         PROJECT GALLERY
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.nofrictionai.gallery.label">Projeto</span>
+        </div>
+
+        <div class="case-gallery reveal">
+          <!-- Gallery item 1 -->
+          <div class="case-gallery-item">
+            <img src="../img/cases/nofrictionai/1.png" alt="Dashboard de insights em tempo real" />
+          </div>
+          <!-- Gallery item 2 -->
+          <div class="case-gallery-item">
+            <img src="../img/cases/nofrictionai/2.png" alt="Clusterização de feedback de usuários" />
+          </div>
+          <!-- Gallery item 3 -->
+          <div class="case-gallery-item">
+            <img src="../img/cases/nofrictionai/3.png" alt="Interface de análise de sentimentos" />
+          </div>
+          <!-- Gallery item 4 -->
+          <div class="case-gallery-item">
+            <img src="../img/cases/nofrictionai/4.png" alt="Recomendações de ações do sistema" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         IMPACT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.nofrictionai.impact.label">Impacto</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-4xl" data-i18n="case.nofrictionai.impact.intro">
+            A solução demonstrou forte impacto na eficiência operacional e na tomada de decisão, com ganhos diretos em velocidade e redução de custos.
+          </p>
+        </div>
+
+        <!-- Metrics grid -->
+        <div class="grid md:grid-cols-3 gap-6 reveal">
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value text-accent" data-i18n="case.nofrictionai.impact.metric1.value">-70%</p>
+            <p class="metric-desc" data-i18n="case.nofrictionai.impact.metric1.desc">
+              <strong>redução no tempo de análise manual</strong>, automatizando grande parte do processo
+            </p>
+          </div>
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value metric-value-sm" data-i18n="case.nofrictionai.impact.metric2.value">Tempo real</p>
+            <p class="metric-desc" data-i18n="case.nofrictionai.impact.metric2.desc">
+              <strong>geração contínua de insights</strong> permitindo respostas rápidas a problemas
+            </p>
+          </div>
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value metric-value-sm text-accent" data-i18n="case.nofrictionai.impact.metric3.value">+Eficiência</p>
+            <p class="metric-desc" data-i18n="case.nofrictionai.impact.metric3.desc">
+              <strong>melhor priorização de produto</strong> com base em dados reais de clientes
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         BACK TO HOME
+    ======================================= -->
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-6">
+        <hr class="border-[var(--color-border)] mb-10" />
+        <div class="text-center">
+          <a href="../index.html#cases"
+            class="inline-flex items-center gap-2 text-base font-medium hover:text-accent transition-colors underline underline-offset-4"
+            data-i18n="case.nofrictionai.back_home">
+            voltar para home
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ======================================
+       FOOTER (same as index.html)
+  ======================================= -->
+  <footer id="contact" class="py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="mb-16 reveal">
+        <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-8" data-i18n="footer.cta.label">
+          Vamos conversar?</p>
+        <h2 class="font-serif text-5xl md:text-7xl font-bold leading-[0.95] mb-10" data-i18n="footer.cta.heading">
+          Let's work<br /><em>together.</em>
+        </h2>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-bg-dark font-semibold text-base hover:opacity-90 transition-all active:scale-95">
+          raul.sousa.work@gmail.com →
+        </a>
+      </div>
+
+      <hr class="border-[var(--color-border)] mb-10" />
+
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <p class="text-xs text-text-muted-dark" data-i18n="footer.copyright">© 2026 Raul Lima. Todos os direitos
+          reservados.</p>
+        <nav class="flex flex-wrap gap-6 text-xs text-text-muted-dark">
+          <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+          <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.experience">Experiência</a>
+          <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.skills">Competências</a>
+          <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+          <a href="../styleguide.html" class="text-accent hover:underline transition-colors">Styleguide</a>
+          <a href="https://calendly.com" target="_blank" rel="noopener" class="hover:text-accent transition-colors"
+            data-i18n="footer.schedule">Minha Agenda</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raul Lima — Product Designer Specialist</title>
+  <meta name="description"
+    content="15 years of experience in digital products, Fintech, Retail and AI. Connecting people, products and business strategy through design." />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>R</text></svg>" />
+  <!-- Tabler Icons Standard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+
+<body>
+
+  <!-- ======================================
+       NAVIGATION
+  ======================================= -->
+  <header id="home" class="fixed top-0 inset-x-0 z-50 glass-nav">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
+      <a href="#home"
+        class="flex items-center justify-center w-9 h-9 rounded-full bg-accent font-bold text-sm text-black leading-none select-none transition-transform hover:scale-105">R</a>
+
+      <!-- Nav links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-text-muted-dark">
+        <a href="#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+        <a href="#experience" class="hover:text-text-primary-dark transition-colors"
+          data-i18n="nav.experience">Experiência</a>
+        <a href="#skills" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.skills">Competências</a>
+        <a href="#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+      </nav>
+
+      <!-- Social + CTA + Lang Toggle -->
+      <div class="flex items-center gap-4">
+        <!-- Language Toggle -->
+        <div class="flex items-center gap-1 text-xs font-medium">
+          <button data-lang-btn="en"
+            class="px-2 py-1 rounded-full transition-all text-accent font-bold cursor-pointer hover:opacity-80">EN</button>
+          <span class="text-text-muted-dark opacity-50">|</span>
+          <button data-lang-btn="pt"
+            class="px-2 py-1 rounded-full transition-all text-text-muted-dark cursor-pointer hover:opacity-80">PT</button>
+        </div>
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="text-text-muted-dark hover:text-text-primary-dark transition-colors mx-1" aria-label="Toggle Theme">
+          <i class="ti ti-moon text-2xl" id="theme-icon"></i>
+        </button>
+        <!-- LinkedIn -->
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-linkedin text-2xl"></i>
+        </a>
+        <!-- Behance -->
+        <a href="https://behance.net" target="_blank" rel="noopener" aria-label="Behance"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-behance text-2xl"></i>
+        </a>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--alpha-15)] text-sm font-medium text-text-muted-dark hover:border-accent hover:text-accent transition-all">
+          <i class="ti ti-mail text-lg"></i> <span data-i18n="nav.contact">Contato</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ======================================
+       HERO
+  ======================================= -->
+  <section class="relative min-h-screen dot-grid flex flex-col justify-center overflow-hidden">
+    <!-- Gradient overlay for depth -->
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-bg-dark pointer-events-none">
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-24">
+      <!-- Status badge -->
+      <div
+        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--alpha-10)] bg-[var(--alpha-5)] text-xs text-text-muted-dark mb-10">
+        <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+        <span data-i18n="hero.badge">Disponível para novas oportunidades</span>
+      </div>
+
+      <!-- Main headline -->
+      <h1 class="font-serif text-[clamp(3.5rem,10vw,8rem)] leading-[0.92] font-bold tracking-tight mb-8">
+        Raul<br />
+        <span class="italic">Lima.</span>
+      </h1>
+
+      <!-- Role + description in grid -->
+      <div class="grid md:grid-cols-2 gap-x-16 gap-y-6 max-w-4xl">
+        <div>
+          <p class="text-sm uppercase tracking-widest text-accent font-medium mb-3 flex flex-wrap items-center">
+            <span data-i18n="hero.role_base">Product Designer</span>
+            <span class="inline-flex items-center">
+              &nbsp;<span id="typewriter-text">Specialist</span><span class="typewriter-cursor"></span>
+            </span>
+            <span id="typewriter-words-source" data-i18n="hero.role_typewriter" class="hidden"></span>
+          </p>
+          <p class="text-base text-text-muted-dark leading-relaxed" data-i18n="hero.description">
+            15 anos criando produtos digitais que conectam pessoas, negócios e estratégia. Especialista em Fintech,
+            Retail e AI.
+          </p>
+        </div>
+        <div class="flex items-end">
+          <div class="flex flex-wrap gap-3">
+            <a href="#cases"
+              class="px-6 py-3 rounded-full bg-accent text-black font-semibold text-sm hover:opacity-90 transition-all active:scale-95"
+              data-i18n="hero.cta.projects">
+              Ver projetos →
+            </a>
+            <a href="https://calendly.com" target="_blank"
+              class="px-6 py-3 rounded-full border border-[var(--alpha-15)] text-sm font-medium hover:border-white/40 transition-all"
+              data-i18n="hero.cta.schedule">
+              Agendar conversa
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="mt-20 flex items-center gap-3 text-xs text-text-muted-dark">
+        <div class="w-12 h-px bg-[var(--alpha-20)]"></div>
+        <span data-i18n="hero.scroll">Role para explorar</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ======================================
+       ABOUT
+  ======================================= -->
+  <section id="about" class="section-light py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+
+      <!-- Section label -->
+      <p class="text-xs uppercase tracking-widest text-text-muted-light font-medium mb-16" data-i18n="about.label">01 —
+        Sobre</p>
+
+      <div class="grid md:grid-cols-2 gap-16 items-start">
+
+        <!-- Left: text -->
+        <div class="reveal">
+          <h2 class="font-serif text-5xl md:text-6xl font-bold leading-[1.05] mb-8 text-text-primary-light"
+            data-i18n="about.heading">
+            Design como<br /><em>ponte</em> entre<br />empatia e resultado.
+          </h2>
+          <p class="text-text-muted-light text-base leading-relaxed mb-6" data-i18n="about.p1">
+            Tenho 15 anos de experiência trabalhando com produtos digitais — criando experiências que conectam pessoas,
+            produtos e estratégia de negócios.
+          </p>
+          <p class="text-text-muted-light text-base leading-relaxed mb-10" data-i18n="about.p2">
+            Minha trajetória mistura Fintech, Retail, Edtech e Healthtech. O que me move é entender como o design pode
+            trazer clareza — transformar complexidade em algo tangível, significativo e valioso.
+          </p>
+
+          <!-- Stats row -->
+          <div class="flex gap-10">
+            <div>
+              <p class="text-4xl font-bold font-serif" style="color:#111">15+</p>
+              <p class="text-xs text-text-muted-light mt-1" data-i18n="about.stat1.label">Anos de experiência</p>
+            </div>
+            <div>
+              <p class="text-4xl font-bold font-serif" style="color:#111">50+</p>
+              <p class="text-xs text-text-muted-light mt-1" data-i18n="about.stat2.label">Produtos entregues</p>
+            </div>
+            <div>
+              <p class="text-4xl font-bold font-serif" style="color:#111">4</p>
+              <p class="text-xs text-text-muted-light mt-1" data-i18n="about.stat3.label">Segmentos de mercado</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: profile card -->
+        <div class="reveal">
+          <div class="rounded-2xl overflow-hidden bg-white p-8 shadow-sm border border-black/5">
+            <!-- Avatar -->
+            <img src="/img/iconraul.png" alt="Raul Lima"
+              class="w-20 h-20 rounded-full mb-6 object-cover shadow-sm border border-black/05" />
+            <h3 class="text-lg font-semibold mb-1" style="color:#111">Raul Lima</h3>
+            <p class="text-sm text-text-muted-light mb-5" data-i18n="about.card.role">Product Design Specialist &amp;
+              Leadership</p>
+            <hr class="border-black/06 mb-5" />
+            <ul class="space-y-3 text-sm text-text-muted-light">
+              <li class="flex items-center gap-3">
+                <i class="ti ti-building-skyscraper text-lg"></i> <span data-i18n="about.card.company">Daycoval
+                  Investimentos — Atual</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <i class="ti ti-school text-lg"></i> <span data-i18n="about.card.education">Pós PUC-RS — UX Design &amp;
+                  Beyond (Nota 10.0)</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <i class="ti ti-map-pin text-lg"></i> <span data-i18n="about.card.location">Brasil</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <i class="ti ti-mail text-lg"></i>
+                <a href="mailto:raul.sousa.work@gmail.com"
+                  class="hover:text-text-primary-light transition-colors">raul.sousa.work@gmail.com</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ======================================
+       EXPERIENCE & EDUCATION
+  ======================================= -->
+  <section id="experience" class="section-light py-24 md:py-32 border-t border-black/06">
+    <div class="max-w-7xl mx-auto px-6">
+      <p class="text-xs uppercase tracking-widest text-text-muted-light font-medium mb-16" data-i18n="experience.label">
+        02 — Experiência &amp; Educação</p>
+
+      <div class="grid md:grid-cols-3 gap-12">
+
+        <!-- Experience -->
+        <div class="reveal md:col-span-1">
+          <h3 class="font-serif text-2xl font-bold mb-8" style="color:#111" data-i18n="experience.title">Experiência
+          </h3>
+          <div class="space-y-6">
+            <!-- item -->
+            <div class="flex gap-4">
+              <div class="pt-1.5 flex-shrink-0">
+                <div class="w-2 h-2 rounded-full bg-black/20"></div>
+              </div>
+              <div>
+                <p class="font-semibold text-sm" style="color:#111">Daycoval</p>
+                <p class="text-xs text-text-muted-light mb-0.5" data-i18n="experience.daycoval.period">2025 – Atual ·
+                  Banking</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="pt-1.5 flex-shrink-0">
+                <div class="w-2 h-2 rounded-full bg-black/20"></div>
+              </div>
+              <div>
+                <p class="font-semibold text-sm" style="color:#111">Decathlon</p>
+                <p class="text-xs text-text-muted-light" data-i18n="experience.decathlon.period">2025 – 2025 · 6 meses ·
+                  Retail Platform</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="pt-1.5 flex-shrink-0">
+                <div class="w-2 h-2 rounded-full bg-black/20"></div>
+              </div>
+              <div>
+                <p class="font-semibold text-sm" style="color:#111">GOK. Digital</p>
+                <p class="text-xs text-text-muted-light" data-i18n="experience.gok.period">2012 – 2025 · 13 anos · Tech
+                  &amp; Innovation</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="pt-1.5 flex-shrink-0">
+                <div class="w-2 h-2 rounded-full bg-black/20"></div>
+              </div>
+              <div>
+                <p class="font-semibold text-sm" style="color:#111">Buscapé Company</p>
+                <p class="text-xs text-text-muted-light" data-i18n="experience.buscape.period">2011 – 2012 · 1 ano ·
+                  Retail Platform</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="pt-1.5 flex-shrink-0">
+                <div class="w-2 h-2 rounded-full bg-black/20"></div>
+              </div>
+              <div>
+                <p class="font-semibold text-sm" style="color:#111">Inverthia</p>
+                <p class="text-xs text-text-muted-light" data-i18n="experience.inverthia.period">2011 – 2011 · 9 meses ·
+                  Digital Agency</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div class="reveal md:col-span-1">
+          <h3 class="font-serif text-2xl font-bold mb-8" style="color:#111" data-i18n="education.title">Educação</h3>
+          <div class="space-y-6">
+            <div class="flex gap-4">
+              <div class="pt-1.5 flex-shrink-0">
+                <div class="w-2 h-2 rounded-full bg-black/20"></div>
+              </div>
+              <div>
+                <p class="font-semibold text-sm" style="color:#111" data-i18n="education.puc.name">Pós-graduação —
+                  PUC-RS</p>
+                <p class="text-xs text-text-muted-light" data-i18n="education.puc.period">2023 – 2024 · UX Design &amp;
+                  Beyond</p>
+                <p class="text-xs font-medium mt-0.5" style="color:#111" data-i18n="education.puc.grade">Nota final:
+                  10.0</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="pt-1.5 flex-shrink-0">
+                <div class="w-2 h-2 rounded-full bg-black/20"></div>
+              </div>
+              <div>
+                <p class="font-semibold text-sm" style="color:#111" data-i18n="education.uninove.name">Universidade Nove
+                  de Julho</p>
+                <p class="text-xs text-text-muted-light" data-i18n="education.uninove.period">2010 – 2014 · Publicidade
+                  e Marketing</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certifications -->
+        <div class="reveal md:col-span-1">
+          <h3 class="font-serif text-2xl font-bold mb-8" style="color:#111" data-i18n="certifications.title">
+            Certificações</h3>
+          <div class="space-y-4">
+            <div class="p-4 rounded-xl bg-white border border-black/06">
+              <p class="text-sm font-medium" style="color:#111">Communication &amp; Public Speaking</p>
+              <p class="text-xs text-text-muted-light">Evolve — 2023</p>
+            </div>
+            <div class="p-4 rounded-xl bg-white border border-black/06">
+              <p class="text-sm font-medium" style="color:#111">Exponential Leadership</p>
+              <p class="text-xs text-text-muted-light">StartSe — 2021</p>
+            </div>
+            <div class="p-4 rounded-xl bg-white border border-black/06">
+              <p class="text-sm font-medium" style="color:#111">Product Analysis</p>
+              <p class="text-xs text-text-muted-light">Product School — 2021</p>
+            </div>
+            <div class="p-4 rounded-xl bg-white border border-black/06">
+              <p class="text-sm font-medium" style="color:#111">Design Thinking</p>
+              <p class="text-xs text-text-muted-light">Echos Lab — 2018</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ======================================
+       SKILLS
+  ======================================= -->
+  <section id="skills" class="py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+      <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-4" data-i18n="skills.label">03 —
+        Competências</p>
+      <h2 class="font-serif text-4xl md:text-5xl font-bold mb-16 heading-accent" data-i18n="skills.heading">Competências
+      </h2>
+
+      <!-- Dark container with tags -->
+      <div class="rounded-2xl border border-[var(--color-border)] bg-surface p-8 md:p-12 reveal">
+        <div class="flex flex-wrap gap-3">
+          <span class="tag">User-Centered Design (UCD)</span>
+          <span class="tag">Collaboration</span>
+          <span class="tag">Data-Driven Decisions</span>
+          <span class="tag">Innovation &amp; Creativity</span>
+          <span class="tag">Stakeholder Management</span>
+          <span class="tag">Mentoring</span>
+          <span class="tag">Agile Methodologies</span>
+          <span class="tag">Design Thinking</span>
+          <span class="tag">AI</span>
+          <span class="tag">No-Code</span>
+          <span class="tag">Talent Development</span>
+          <span class="tag">OKRs</span>
+          <span class="tag">Figma</span>
+          <span class="tag">Service Design</span>
+          <span class="tag">Research &amp; Discovery</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ======================================
+       CASES
+  ======================================= -->
+  <section id="cases" class="section-light py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+      <p class="text-xs uppercase tracking-widest text-text-muted-light font-medium mb-4" data-i18n="cases.label">04 —
+        Cases</p>
+      <div class="flex items-end justify-between mb-16">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold" style="color:#111" data-i18n="cases.heading">Projetos</h2>
+        <p class="text-text-muted-light text-sm hidden md:block" data-i18n="cases.subtitle">Casos selecionados</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+
+
+        <!-- Case 2 -->
+        <a href="case/decathlon.html" class="case-card reveal group bg-white border border-black/06 block">
+          <div class="aspect-video w-full overflow-hidden bg-gray-100 relative">
+            <div class="absolute inset-0 bg-black/20 z-10 group-hover:bg-black/10 transition-colors duration-500"></div>
+            <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2938&auto=format&fit=crop" alt="Decathlon cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-0" />
+          </div>
+          <div class="p-6">
+            <p class="text-xs font-medium text-text-muted-light uppercase tracking-widest mb-2">Retail · Loyalty UX</p>
+            <h3 class="font-serif text-xl font-bold mb-2" style="color:#111">Decathlon</h3>
+            <p class="text-sm text-text-muted-light leading-relaxed" data-i18n="cases.decathlon.desc">Redesenho do
+              Programa de Fidelidade.</p>
+            <div class="mt-4 inline-flex items-center gap-1 text-sm font-medium group-hover:gap-2 transition-all"
+              style="color:#111">
+              <span data-i18n="cases.decathlon.link">Ver case</span> <span>→</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Case 3 -->
+        <a href="case/nofrictionai.html" class="case-card reveal group bg-white border border-black/06 block">
+          <div class="aspect-video w-full overflow-hidden bg-gray-100 relative">
+            <div class="absolute inset-0 bg-black/20 z-10 group-hover:bg-black/10 transition-colors duration-500"></div>
+            <img src="img/cases/nofrictionai/bannerhero.png" alt="No Friction AI cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-0" />
+          </div>
+          <div class="p-6">
+            <p class="text-xs font-medium text-text-muted-light uppercase tracking-widest mb-2">AI · Zero-to-One</p>
+            <h3 class="font-serif text-xl font-bold mb-2" style="color:#111">No Friction AI</h3>
+            <p class="text-sm text-text-muted-light leading-relaxed" data-i18n="cases.nofriction.desc">Criando uma
+              plataforma de IA do zero.</p>
+            <div class="mt-4 inline-flex items-center gap-1 text-sm font-medium group-hover:gap-2 transition-all"
+              style="color:#111">
+              <span data-i18n="cases.nofriction.link">Ver case</span> <span>→</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ======================================
+       LEADERSHIP
+  ======================================= -->
+  <section class="py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+      <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-4" data-i18n="leadership.label">05
+        — Liderança</p>
+      <h2 class="font-serif text-4xl md:text-5xl font-bold mb-16 heading-accent" data-i18n="leadership.heading">Áreas de
+        Atuação</h2>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="lead-card reveal">
+          <i class="ti ti-users text-3xl text-accent mb-4 block"></i>
+          <h3 class="font-semibold mb-2" data-i18n="leadership.card1.title">Design Manager</h3>
+          <p class="text-sm text-text-muted-dark leading-relaxed" data-i18n="leadership.card1.desc">Criação de times de
+            alta performance com cultura centrada em pessoas e clareza estratégica.</p>
+        </div>
+        <div class="lead-card reveal">
+          <i class="ti ti-target-arrow text-3xl text-accent mb-4 block"></i>
+          <h3 class="font-semibold mb-2" data-i18n="leadership.card2.title">Design Strategy</h3>
+          <p class="text-sm text-text-muted-dark leading-relaxed" data-i18n="leadership.card2.desc">Alinhamento de metas
+            e métricas de produto com visão de negócio de longo prazo.</p>
+        </div>
+        <div class="lead-card reveal">
+          <i class="ti ti-award text-3xl text-accent mb-4 block"></i>
+          <h3 class="font-semibold mb-2" data-i18n="leadership.card3.title">Design Specialist</h3>
+          <p class="text-sm text-text-muted-dark leading-relaxed" data-i18n="leadership.card3.desc">Implementação de
+            frameworks ágeis e processos de design escaláveis em equipes multidisciplinares.</p>
+        </div>
+        <div class="lead-card reveal">
+          <i class="ti ti-code text-3xl text-accent mb-4 block"></i>
+          <h3 class="font-semibold mb-2" data-i18n="leadership.card4.title">Designer Engineer</h3>
+          <p class="text-sm text-text-muted-dark leading-relaxed" data-i18n="leadership.card4.desc">Integração de
+            cultura de code no fluxo criativo do design para entregas mais rápidas.</p>
+        </div>
+        <div class="lead-card reveal">
+          <i class="ti ti-chart-line text-3xl text-accent mb-4 block"></i>
+          <h3 class="font-semibold mb-2" data-i18n="leadership.card5.title">Design Scale</h3>
+          <p class="text-sm text-text-muted-dark leading-relaxed" data-i18n="leadership.card5.desc">Desenvolvimento de
+            talentos, mentoring e estruturação de squads de design de alto impacto.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ======================================
+       POSTGRADUATE HIGHLIGHT
+  ======================================= -->
+  <section class="section-light py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+      <p class="text-xs uppercase tracking-widest text-text-muted-light font-medium mb-16" data-i18n="academic.label">06
+        — Trabalho Acadêmico</p>
+
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div class="reveal">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-black text-white mb-6"
+            data-i18n="academic.badge">Nota Final: 10.0</span>
+          <h2 class="font-serif text-4xl md:text-5xl font-bold leading-tight mb-6" style="color:#111"
+            data-i18n="academic.heading">
+            Pós-graduação em UX Design &amp; Beyond
+          </h2>
+          <p class="text-text-muted-light text-base leading-relaxed mb-4" data-i18n="academic.thesis">
+            <strong style="color:#111">Tese 2024:</strong> Estratégia Visual para o Desenvolvimento Profissional em
+            Design: Um Estudo de Visual Analytics e Data-Driven.
+          </p>
+          <p class="text-text-muted-light text-base leading-relaxed" data-i18n="academic.project">
+            Projeto: Dashboard para gestão estratégica de design focado em eficiência operacional orientada a dados.
+          </p>
+        </div>
+        <!-- Visual placeholder card -->
+        <div
+          class="reveal rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 aspect-video flex items-center justify-center border border-black/06">
+          <div class="text-center">
+            <p class="text-4xl mb-2">📈</p>
+            <p class="text-sm text-text-muted-light font-medium" data-i18n="academic.visual">Dashboard — Visual
+              Analytics</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ======================================
+       FOOTER / CTA
+  ======================================= -->
+  <footer id="contact" class="py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="mb-16 reveal">
+        <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-8" data-i18n="footer.cta.label">
+          Vamos conversar?</p>
+        <h2 class="font-serif text-5xl md:text-7xl font-bold leading-[0.95] mb-10" data-i18n="footer.cta.heading">
+          Let's work<br /><em>together.</em>
+        </h2>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-bg-dark font-semibold text-base hover:opacity-90 transition-all active:scale-95">
+          raul.sousa.work@gmail.com →
+        </a>
+      </div>
+
+      <hr class="border-[var(--color-border)] mb-10" />
+
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <p class="text-xs text-text-muted-dark" data-i18n="footer.copyright">© 2026 Raul Lima. Todos os direitos
+          reservados.</p>
+        <nav class="flex flex-wrap gap-6 text-xs text-text-muted-dark">
+          <a href="#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+          <a href="#experience" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.experience">Experiência</a>
+          <a href="#skills" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.skills">Competências</a>
+          <a href="#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+          <a href="/styleguide.html" class="text-accent hover:underline transition-colors">Styleguide</a>
+          <a href="https://calendly.com" target="_blank" rel="noopener" class="hover:text-accent transition-colors"
+            data-i18n="footer.schedule">Minha Agenda</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

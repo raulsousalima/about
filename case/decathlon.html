@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decathlon — Redesenho do Programa de Fidelidade | Raul Lima</title>
+  <meta name="description"
+    content="Case study: Redesenho do programa de fidelidade Decathlon Club. Aumento de +35% na ativação de membros e 25% de redução em consultas ao suporte." />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>R</text></svg>" />
+  <!-- Tabler Icons Standard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+
+<body>
+
+  <!-- ======================================
+       NAVIGATION (same as index.html)
+  ======================================= -->
+  <header id="home" class="fixed top-0 inset-x-0 z-50 glass-nav">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
+      <a href="../index.html"
+        class="flex items-center justify-center w-9 h-9 rounded-full bg-accent font-bold text-sm text-black leading-none select-none transition-transform hover:scale-105">R</a>
+
+      <!-- Nav links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-text-muted-dark">
+        <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+        <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+          data-i18n="nav.experience">Experiência</a>
+        <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.skills">Competências</a>
+        <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+      </nav>
+
+      <!-- Social + CTA + Lang Toggle -->
+      <div class="flex items-center gap-4">
+        <!-- Language Toggle -->
+        <div class="flex items-center gap-1 text-xs font-medium">
+          <button data-lang-btn="en"
+            class="px-2 py-1 rounded-full transition-all text-accent font-bold cursor-pointer hover:opacity-80">EN</button>
+          <span class="text-text-muted-dark opacity-50">|</span>
+          <button data-lang-btn="pt"
+            class="px-2 py-1 rounded-full transition-all text-text-muted-dark cursor-pointer hover:opacity-80">PT</button>
+        </div>
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="text-text-muted-dark hover:text-text-primary-dark transition-colors mx-1" aria-label="Toggle Theme">
+          <i class="ti ti-moon text-2xl" id="theme-icon"></i>
+        </button>
+        <!-- LinkedIn -->
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-linkedin text-2xl"></i>
+        </a>
+        <!-- Behance -->
+        <a href="https://behance.net" target="_blank" rel="noopener" aria-label="Behance"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-behance text-2xl"></i>
+        </a>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--alpha-15)] text-sm font-medium text-text-muted-dark hover:border-accent hover:text-accent transition-all">
+          <i class="ti ti-mail text-lg"></i> <span data-i18n="nav.contact">Contato</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <main class="pt-[72px]">
+
+    <!-- ======================================
+         CASE HERO
+    ======================================= -->
+    <section class="pt-[60px] pb-16">
+      <div class="max-w-7xl mx-auto px-6">
+        <!-- Back button -->
+        <a href="../index.html#cases"
+          class="inline-flex items-center gap-2 text-sm text-text-muted-dark hover:text-accent transition-colors mb-6 group">
+          <i class="ti ti-arrow-left text-lg transition-transform group-hover:-translate-x-1"></i>
+          <span data-i18n="case.back">Voltar</span>
+        </a>
+
+        <!-- Case title -->
+        <h1 class="font-serif text-4xl md:text-5xl font-bold mb-[60px] heading-accent reveal"
+          data-i18n="case.decathlon.title">
+          Redesenho do Programa de Fidelidade
+        </h1>
+      </div>
+
+      <!-- Hero banner — FULL WIDTH -->
+      <div class="case-hero-banner reveal" style="background-image: url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2938&auto=format&fit=crop'); border-radius: 0;">
+        <!-- Overlay for contrast -->
+        <div class="absolute inset-0 bg-black/40 z-0"></div>
+
+        <div class="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-6">
+          <!-- Brand Name -->
+          <span class="text-6xl md:text-[8rem] font-bold text-white/10 font-serif tracking-widest select-none uppercase">
+            DECATHLON
+          </span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         OVERVIEW
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-[280px_1fr] gap-12 items-start reveal">
+          <!-- Company icon -->
+          <div class="case-img-placeholder p-8">
+            <!-- Logo Daycoval (Dinâmico Dark/Light) -->
+            <svg width="268" height="40" viewBox="0 0 537 81" fill="none"
+                 xmlns="http://www.w3.org/2000/svg" aria-label="Daycoval">
+              <path d="M164.669 68.0986H202.564V55.9209H179.09V45.7061H199.88V34.3697H179.09V24.155H202.564V12.0174H164.669V68.0986ZM249.592 43.9436C244.104 52.6762 238.777 56.3215 231.927 56.3215C223.034 56.3215 217.866 50.0725 217.866 39.2167C217.866 28.9219 222.633 23.7944 229.964 23.7944C234.811 23.7944 238.817 25.9576 240.058 33.168H254.479C252.917 19.4281 244.144 10.8958 230.124 10.8958C213.86 10.8958 203.165 22.3924 203.165 40.0179C203.165 57.7636 213.86 69.2202 231.446 69.2202C242.943 69.2202 250.754 64.4132 255.921 57.9238H275.59V68.0985H289.931V12.0174H269.581L249.592 43.9436ZM275.59 46.6675H262.891L275.59 26.0377V46.6675ZM133.905 12.0174H112.834V68.0986H133.905C150.609 68.0986 161.385 57.0826 161.385 40.058C161.385 23.0333 150.609 12.0174 133.905 12.0174ZM133.704 55.9209H127.255V24.155H133.704C142.037 24.155 146.723 30.0435 146.723 40.058C146.723 50.0324 142.037 55.9209 133.704 55.9209ZM455.45 10.8958C438.506 10.8958 427.129 22.3924 427.129 40.058C427.129 57.7235 438.506 69.2202 455.45 69.2202C472.435 69.2202 483.771 57.7235 483.771 40.058C483.771 22.3924 472.435 10.8958 455.45 10.8958ZM455.45 56.3215C447.118 56.3215 441.87 50.7535 441.87 40.058C441.87 29.3625 447.118 23.7944 455.45 23.7944C463.822 23.7944 469.03 29.3625 469.03 40.058C469.03 50.7535 463.822 56.3215 455.45 56.3215ZM293.536 24.155H307.676V68.0986H322.097V24.155H336.238V12.0174H293.536L293.536 24.155ZM520.584 12.0174V42.9021L501.997 12.0174H487.056V68.0986H500.996V35.932L520.344 68.0986H534.525V12.0174L520.584 12.0174ZM406.7 12.0174H392.279V68.0986H428.451V55.961H406.7V12.0174ZM373.692 33.4083H354.264V12.0174H339.843V68.0986H354.264V45.5059H373.692V68.0986H388.113V12.0174H373.692V33.4083Z"
+                    fill="var(--color-logo-daycoval)"/>
+              <path d="M72.136 0C40.8212 0 1.86865 32.4001 1.86865 59.2528C1.86865 73.1214 12.5213 80.1159 26.5908 80.1159C36.9219 80.1159 49.4237 76.3373 61.4833 69.0613V15.4765C58.2674 20.9837 43.1527 43.1734 31.0127 54.9918C24.8221 61.0216 19.9179 63.6345 15.697 63.6345C10.9536 63.6345 8.70245 60.4186 8.70245 55.635C8.70245 33.9277 45.243 5.70821 69.4426 5.70821C79.4119 5.70821 85.8437 10.1301 85.8437 18.7326C85.8437 26.6115 80.4973 36.5004 71.3722 45.6255V62.2275C87.2909 49.6453 96.8179 33.6061 96.8179 20.6621C96.8179 7.03476 86.2055 0 72.136 0Z"
+                    fill="var(--color-logo-daycoval)"/>
+            </svg>
+          </div>
+          <!-- Description -->
+          <p class="text-lg md:text-xl leading-relaxed text-text-muted-dark" data-i18n="case.decathlon.overview.company">
+            Decathlon é uma grande varejista francesa de artigos esportivos, conhecida por oferecer uma ampla gama de
+            produtos em diversas modalidades, desde equipamentos de nível iniciante até avançado, todos sob suas próprias
+            marcas, tornando o esporte mais acessível a todos. Presente em mais de 60 países, com lojas físicas,
+            e-commerce e operações de marketplace, a empresa projeta, desenvolve e vende seus próprios produtos com o
+            objetivo de compartilhar a alegria e os benefícios do esporte com o maior número de pessoas possível.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         CONTEXT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-4xl reveal">
+          <h2 class="font-serif text-4xl md:text-5xl font-bold mb-8 heading-accent" data-i18n="case.decathlon.context.title">
+            Contexto
+          </h2>
+
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.decathlon.context.p1">
+            O <strong class="text-text-primary-dark">Decathlon Club</strong> é o programa de fidelidade da marca,
+            projetado para fortalecer o relacionamento com clientes por meio de benefícios exclusivos e engajamento de
+            longo prazo.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.decathlon.context.p2">
+            Durante meu tempo no projeto, trabalhei diretamente no <strong class="text-text-primary-dark">redesenho e
+            reestruturação do programa</strong>, com o objetivo de melhorar a <strong class="text-text-primary-dark">compreensão
+            do usuário, engajamento e valor percebido</strong>.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark" data-i18n="case.decathlon.context.p3">
+            A análise inicial de dados mostrou que, embora uma parcela significativa dos clientes conhecesse o Club,
+            muitos não entendiam completamente como funcionava ou quais benefícios oferecia. Essa lacuna afetou
+            diretamente a ativação, retenção e uso do programa.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         CHALLENGE
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
+
+          <!-- Image placeholder -->
+          <div class="reveal">
+            <div class="case-img-placeholder aspect-square" style="max-width: 400px;">
+              <img src="https://images.unsplash.com/photo-1601412436405-1f0c6b50921f?q=80&w=928&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Challenge visual" />
+            </div>
+          </div>
+
+          <!-- Challenge text -->
+          <div class="reveal">
+            <span class="case-label mb-6" data-i18n="case.decathlon.challenge.label">Desafio</span>
+
+            <p class="text-lg md:text-xl leading-relaxed mt-6 mb-6" data-i18n="case.decathlon.challenge.intro">
+              O principal desafio foi <strong>transformar conhecimento em engajamento real</strong>.
+            </p>
+
+            <p class="text-base leading-relaxed text-text-muted-dark mb-6" data-i18n="case.decathlon.challenge.research">
+              A pesquisa revelou que aproximadamente <strong class="text-text-primary-dark">40% dos usuários conheciam o
+              Decathlon Club, mas não conseguiam explicar claramente seus benefícios</strong>. Como resultado:
+            </p>
+
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.decathlon.challenge.list.1">Usuários não estavam ativando o programa após a inscrição</span>
+              </li>
+              <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.decathlon.challenge.list.2">Benefícios eram percebidos como pouco claros ou de baixo valor</span>
+              </li>
+              <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.decathlon.challenge.list.3">Equipes de suporte recebiam perguntas recorrentes sobre o funcionamento do Club</span>
+              </li>
+            </ul>
+
+            <p class="text-base leading-relaxed text-text-muted-dark" data-i18n="case.decathlon.challenge.conclusion">
+              O desafio era <strong class="text-text-primary-dark">simplificar a experiência</strong>, clarificar a
+              proposta de valor e criar uma <strong class="text-text-primary-dark">jornada mais intuitiva e
+              envolvente</strong>, alinhando objetivos de negócio como aumento de retenção e ticket médio.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         PROCESS
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.decathlon.process.label">Processo</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.decathlon.process.intro">
+            O projeto seguiu um <strong class="text-text-primary-dark">fluxo estruturado baseado em sprints</strong>,
+            combinando descoberta, validação e entrega.
+          </p>
+        </div>
+
+        <!-- Timeline -->
+        <div class="process-timeline rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)] overflow-hidden reveal">
+          <!-- Step 1 -->
+          <div class="process-step">
+            <div class="step-number">01</div>
+            <h3 class="step-title" data-i18n="case.decathlon.process.step1.title">Deep Dive</h3>
+            <p class="step-desc" data-i18n="case.decathlon.process.step1.desc">
+              Imersão em dados existentes, stakeholders e métricas de performance do programa de fidelidade.
+            </p>
+          </div>
+          <!-- Step 2 -->
+          <div class="process-step">
+            <div class="step-number">02</div>
+            <h3 class="step-title" data-i18n="case.decathlon.process.step2.title">Validação</h3>
+            <p class="step-desc" data-i18n="case.decathlon.process.step2.desc">
+              Pesquisa com usuários e testes de usabilidade para validar hipóteses e compreender dores reais.
+            </p>
+          </div>
+          <!-- Step 3 -->
+          <div class="process-step">
+            <div class="step-number">03</div>
+            <h3 class="step-title" data-i18n="case.decathlon.process.step3.title">Proposta</h3>
+            <p class="step-desc" data-i18n="case.decathlon.process.step3.desc">
+              Critérios de design e revisões com stakeholders. Iteração em ciclos de refinamento alinhando necessidades
+              dos usuários e regras de negócio.
+            </p>
+          </div>
+          <!-- Step 4 -->
+          <div class="process-step">
+            <div class="step-number">04</div>
+            <h3 class="step-title" data-i18n="case.decathlon.process.step4.title">Definição</h3>
+            <p class="step-desc" data-i18n="case.decathlon.process.step4.desc">
+              Estruturação final de fluxos, wireframes de alta fidelidade e documentação de especificações técnicas.
+            </p>
+          </div>
+          <!-- Step 5 -->
+          <div class="process-step">
+            <div class="step-number">05</div>
+            <h3 class="step-title" data-i18n="case.decathlon.process.step5.title">Desenvolvimento</h3>
+            <p class="step-desc" data-i18n="case.decathlon.process.step5.desc">
+              Acompanhamento da implementação, QA de design e ajustes iterativos com o time de engenharia.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         PROJECT GALLERY
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.decathlon.gallery.label">Projeto</span>
+        </div>
+
+        <div class="case-gallery reveal">
+          <!-- Gallery item 1 -->
+          <div class="case-gallery-item">
+            <div class="case-gallery-scroll">
+              <img src="../img/cases/decathlon/1.png" alt="Tela de login do aplicativo Decathlon" />
+            </div>
+          </div>
+          <!-- Gallery item 2 -->
+          <div class="case-gallery-item">
+            <div class="case-gallery-scroll">
+              <img src="../img/cases/decathlon/2.png" alt="Tela do aplicativo Decathlon 2" />
+            </div>
+          </div>
+          <!-- Gallery item 3 -->
+          <div class="case-gallery-item">
+            <div class="case-gallery-scroll">
+              <img src="../img/cases/decathlon/3.png" alt="Tela do aplicativo Decathlon 3" />
+            </div>
+          </div>
+          <!-- Gallery item 4 -->
+          <div class="case-gallery-item">
+            <div class="case-gallery-scroll">
+              <img src="../img/cases/decathlon/4.png" alt="Tela do aplicativo Decathlon 4" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         IMPACT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.decathlon.impact.label">Impacto</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-4xl" data-i18n="case.decathlon.impact.intro">
+            O Proof of Concept validou a viabilidade técnica da solução e demonstrou forte potencial de escala. O projeto
+            mostrou um ganho estimado de <strong class="text-text-primary-dark">30% a 40% de eficiência operacional</strong>
+            em tempo de execução, reforçando o papel do redesenho como motor de produtividade.
+          </p>
+        </div>
+
+        <!-- Metrics grid -->
+        <div class="grid md:grid-cols-3 gap-6 reveal">
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value text-accent" data-i18n="case.decathlon.impact.metric1.value">+35%</p>
+            <p class="metric-desc" data-i18n="case.decathlon.impact.metric1.desc">
+              <strong>aumento na ativação de novos membros</strong>, impulsionado por comunicação de benefícios mais
+              clara e jornada simplificada
+            </p>
+          </div>
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value" data-i18n="case.decathlon.impact.metric2.value">25%</p>
+            <p class="metric-desc" data-i18n="case.decathlon.impact.metric2.desc">
+              <strong>redução em consultas recorrentes ao suporte</strong> relacionadas ao programa de fidelidade
+            </p>
+          </div>
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value text-accent" data-i18n="case.decathlon.impact.metric3.value">+10%</p>
+            <p class="metric-desc" data-i18n="case.decathlon.impact.metric3.desc">
+              <strong>meta de aumento no Ticket Médio</strong>, de R$150 para R$200, impulsionado pelo engajamento via
+              Decathlon Club
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         BACK TO HOME
+    ======================================= -->
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-6">
+        <hr class="border-[var(--color-border)] mb-10" />
+        <div class="text-center">
+          <a href="../index.html#cases"
+            class="inline-flex items-center gap-2 text-base font-medium hover:text-accent transition-colors underline underline-offset-4"
+            data-i18n="case.decathlon.back_home">
+            voltar para home
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ======================================
+       FOOTER (same as index.html)
+  ======================================= -->
+  <footer id="contact" class="py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="mb-16 reveal">
+        <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-8" data-i18n="footer.cta.label">
+          Vamos conversar?</p>
+        <h2 class="font-serif text-5xl md:text-7xl font-bold leading-[0.95] mb-10" data-i18n="footer.cta.heading">
+          Let's work<br /><em>together.</em>
+        </h2>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-bg-dark font-semibold text-base hover:opacity-90 transition-all active:scale-95">
+          raul.sousa.work@gmail.com →
+        </a>
+      </div>
+
+      <hr class="border-[var(--color-border)] mb-10" />
+
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <p class="text-xs text-text-muted-dark" data-i18n="footer.copyright">© 2026 Raul Lima. Todos os direitos
+          reservados.</p>
+        <nav class="flex flex-wrap gap-6 text-xs text-text-muted-dark">
+          <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+          <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.experience">Experiência</a>
+          <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.skills">Competências</a>
+          <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+          <a href="../styleguide.html" class="text-accent hover:underline transition-colors">Styleguide</a>
+          <a href="https://calendly.com" target="_blank" rel="noopener" class="hover:text-accent transition-colors"
+            data-i18n="footer.schedule">Minha Agenda</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+
+  <script type="module" src="../src/main.ts"></script>
+</body>
+
+</html>
