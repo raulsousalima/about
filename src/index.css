@@ -37,6 +37,8 @@
   --color-info-bg:     rgba(96,165,250,0.15);
 
   --color-logo-daycoval: #FFFFFF;
+  --color-logo-decathlon: #FFFFFF;
+  --color-logo-starbem: #FFFFFF;
   --color-device-frame: #111111;
 
   --alpha-5:  rgba(255,255,255,0.05);
@@ -84,6 +86,8 @@
   --color-info-bg:     rgba(37,99,235,0.10);
 
   --color-logo-daycoval: #3643BA;
+  --color-logo-decathlon: #3643BA;
+  --color-logo-starbem: #00A651;
   --color-device-frame: #EAEAEA;
 
   --alpha-5:  rgba(0,0,0,0.03);
@@ -118,6 +122,13 @@ body {
 }
 
 /* ==================== Components =================== */
+
+/* Theme visibility toggles */
+.show-in-light { display: none; }
+.show-in-dark { display: block; }
+
+:root[data-theme="light"] .show-in-light { display: block; }
+:root[data-theme="light"] .show-in-dark { display: none; }
 
 /* Dot-grid hero background */
 .dot-grid {
@@ -333,15 +344,53 @@ body {
 }
 
 
-/* Gallery — horizontal scroll strip */
+/* Gallery container base */
 .case-gallery {
-  display: flex;
-  gap: 1.5rem;
-  overflow-x: auto;
   padding-bottom: 1.5rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border) transparent;
 }
+
+/* App view: 4-column grid of phone mockups */
+.case-gallery.show-grid {
+  display: grid !important;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .case-gallery.show-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .case-gallery.show-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Web view: desktop + mobile side by side */
+.gallery-web-view {
+  display: none;
+}
+.gallery-web-view:not(.hidden) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .gallery-web-view:not(.hidden) {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+}
+.gallery-web-view .case-gallery-item-wrapper:first-child {
+  flex: 900;
+}
+.gallery-web-view .case-gallery-item-wrapper:last-child {
+  flex: 393;
+}
+
 .case-gallery::-webkit-scrollbar {
   height: 4px;
 }
@@ -353,16 +402,37 @@ body {
   border-radius: 2px;
 }
 
+/* Wrapper for Title + Phone Frame */
+.case-gallery-item-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Title above mockup */
+.case-item-title {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.6); /* White with opacity */
+  text-align: center;
+  font-weight: 500;
+}
+:root[data-theme="light"] .case-item-title {
+  color: rgba(0, 0, 0, 0.6);
+}
+
 /* Phone frame — sized so 4 fit in the max-w-7xl container */
 .case-gallery-item {
   border-radius: 24px;
   overflow: hidden;
-  border: 8px solid var(--color-device-frame);
+  border: 4px solid var(--color-device-frame);
   background: var(--color-device-frame);
-  width: 290px;
-  height: 630px;
-  flex-shrink: 0;
+  width: 100%;
+  aspect-ratio: 393 / 850;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
 }
 .case-gallery-item:hover {
   transform: translateY(-4px);
@@ -382,11 +452,55 @@ body {
   display: none;
 }
 
-/* Image stretches to frame width, height is natural (enables scroll) */
 .case-gallery-item img {
-  width: 290px;
+  width: 100%;
   height: auto;
   display: block;
+}
+
+.case-gallery-item.web-desktop-format {
+  width: 100%;
+  aspect-ratio: 900 / 850;
+  border-width: 8px;
+  border-radius: 24px;
+}
+
+.case-gallery-item.web-mobile-format {
+  width: 100%;
+  aspect-ratio: 393 / 850;
+  border-width: 4px;
+  border-radius: 24px;
+}
+
+.case-gallery-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Strategic Description Section */
+.case-strategy-section {
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+}
+
+.case-strategy-content {
+  width: 100%;
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--color-text-muted-dark);
+}
+:root[data-theme="light"] .case-strategy-content {
+  color: var(--color-text-muted-light);
+}
+.case-strategy-content p {
+  margin-bottom: 1.5rem;
+}
+.case-strategy-content strong {
+  font-weight: 600;
 }
 
 /* Responsive: process timeline stacks on mobile */
@@ -401,12 +515,11 @@ body {
   }
   .process-step:first-child { border-top: none; }
 
-  /* Gallery items shrink proportionally on very small screens */
+  /* Gallery items scale automatically via grid */
   .case-gallery-item {
-    width: 280px;
-    height: 600px;
+    border-width: 6px;
   }
-  .case-gallery-item img {
-    width: 280px;
+  .case-gallery-item.web-format {
+    border-width: 6px;
   }
 }

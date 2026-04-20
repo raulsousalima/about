@@ -39,7 +39,8 @@ A página deve seguir **exatamente** a sequência de seções abaixo. Não remov
   §3 CONTEXT     → Texto corrido (até 3 parágrafos)
   §4 CHALLENGE   → 2 colunas: imagem + texto com bullet points
   §5 PROCESS     → Timeline horizontal de 5 etapas (process-timeline)
-  §6 GALLERY     → Grade de 4 screenshots (case-gallery)
+  §6 GALLERY     → Toggle App/Web + grid de screenshots (case-gallery)
+  §6.5 STRATEGY  → Texto estratégico aprofundado (OBRIGATÓRIO)
   §7 IMPACT      → 3 metric-cards com números e descrições
   §8 BACK HOME   → Divider + link de retorno centrado
 <footer>         → Footer idêntico ao template (FROZEN — não modificar)
@@ -90,19 +91,27 @@ Sempre use **CSS variables** definidas em `src/index.css`. Nunca use valores hex
 
 Definidas em `src/index.css`. **Não recriar inline**.
 
-| Classe                   | Onde usar                                               |
-|--------------------------|---------------------------------------------------------|
-| `.glass-nav`             | No `<header>` (FROZEN)                                  |
-| `.case-hero-banner`      | Div do hero banner (§1)                                 |
-| `.case-img-placeholder`  | Container do logo (§2) e da imagem do challenge (§4)    |
-| `.case-label`            | Pills de label: "Desafio", "Processo", "Impacto"        |
-| `.heading-accent`        | `<h1>` e `<h2>` — gera o underline accent automático    |
-| `.reveal`                | Todos os elementos com animação de entrada (scroll)     |
-| `.process-timeline`      | Container da timeline de process (§5)                   |
-| `.process-step`          | Cada etapa individual da timeline                       |
-| `.case-gallery`          | Grid das screenshots (§6)                               |
-| `.case-gallery-item`     | Cada item individual da galeria                         |
-| `.metric-card`           | Cards de impacto/métricas (§7)                          |
+| Classe                       | Onde usar                                                      |
+|------------------------------|----------------------------------------------------------------|
+| `.glass-nav`                 | No `<header>` (FROZEN)                                        |
+| `.case-hero-banner`          | Div do hero banner (§1)                                        |
+| `.case-img-placeholder`      | Container do logo (§2) e da imagem do challenge (§4)           |
+| `.case-label`                | Pills de label: "Desafio", "Processo", "Impacto", "Projeto"   |
+| `.heading-accent`            | `<h1>` e `<h2>` — gera o underline accent automático           |
+| `.reveal`                    | Todos os elementos com animação de entrada (scroll)            |
+| `.process-timeline`          | Container da timeline de process (§5)                          |
+| `.process-step`              | Cada etapa individual da timeline                              |
+| `.case-gallery`              | Container base da galeria (§6) — usado com `.show-grid`        |
+| `.case-gallery-item-wrapper` | Wrapper externo de cada item: título + frame                   |
+| `.case-item-title`           | `<h4>` com nome da tela acima do frame                         |
+| `.case-gallery-item`         | Frame do dispositivo (phone/desktop/web)                       |
+| `.case-gallery-scroll`       | Área interna scrollável da imagem dentro do frame              |
+| `.case-gallery-overlay`      | Imagem sobreposta no frame (ex: menu inferior, navegador)      |
+| `.web-desktop-format`        | Variante de frame para desktop web (aspect-ratio 900/850)      |
+| `.web-mobile-format`         | Variante de frame para mobile web (aspect-ratio 393/850)       |
+| `.case-strategy-section`     | Container da seção Strategy (§6.5)                             |
+| `.case-strategy-content`     | Wrapper do texto estratégico — tipografia e espaçamento        |
+| `.metric-card`               | Cards de impacto/métricas (§7)                                 |
 
 ---
 
@@ -157,6 +166,9 @@ case.[slug].process.intro
 case.[slug].process.step1.title  → case.[slug].process.step5.title
 case.[slug].process.step1.desc   → case.[slug].process.step5.desc
 case.[slug].gallery.label
+case.[slug].gallery.title1  → case.[slug].gallery.title4   ← títulos acima de cada frame
+case.[slug].strategy.p1  → case.[slug].strategy.p6           ← parágrafos da seção Strategy
+case.[slug].strategy.item1  → case.[slug].strategy.item3     ← lista de itens da Strategy
 case.[slug].impact.label
 case.[slug].impact.intro
 case.[slug].impact.metric1.value
@@ -218,16 +230,9 @@ Em `src/translations.json`, adicionar dentro dos blocos `"pt"` **e** `"en"`:
 
   <!-- Hero banner FULL WIDTH — border-radius: 0 obrigatório -->
   <div class="case-hero-banner reveal"
-    style="background-image: url('[URL_UNSPLASH]'); border-radius: 0;">
+    style="background-image: url('[URL_IMAGEM]'); border-radius: 0;">
     <div class="absolute inset-0 bg-black/40 z-0"></div>
     <div class="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-6">
-      <div class="mb-4 flex flex-col items-center gap-3">
-        <i class="ti ti-[icone] text-accent text-5xl drop-shadow-lg"></i>
-        <p class="text-xs md:text-sm uppercase tracking-[0.2em] font-semibold text-white/80 drop-shadow-md"
-          data-i18n="case.[slug].hero_subtitle">
-          [Subtítulo do setor]
-        </p>
-      </div>
       <span class="text-6xl md:text-[8rem] font-bold text-white/10 font-serif tracking-widest select-none uppercase">
         [NOME DA EMPRESA]
       </span>
@@ -236,33 +241,23 @@ Em `src/translations.json`, adicionar dentro dos blocos `"pt"` **e** `"en"`:
 </section>
 ```
 
-- Imagem Unsplash: `?q=80&w=2938&auto=format&fit=crop`
-- Ícone Tabler: tematicamente relacionado ao setor do case.
+- Imagem do hero: preferencialmente da pasta `img/cases/[slug]/bannerhero.png`.
+- O ícone Tabler e o subtítulo (`hero_subtitle`) foram **removidos** do template — não adicionar.
 
 ---
 
 ## 9. Logo com Suporte Dark/Light (§2 — OVERVIEW)
 
-Para logos SVG que precisam mudar de cor entre temas:
+Para logos que precisam mudar de cor entre temas (Dark/Light Mode), o padrão atual utiliza duas imagens SVG distintas, controladas por classes CSS globais de visibilidade.
 
-**1. Adicionar em `src/index.css` no bloco `:root` (dark):**
-```css
---color-logo-[slug]: #FFFFFF;
-```
-
-**2. Adicionar no bloco `:root[data-theme="light"]`:**
-```css
---color-logo-[slug]: #[cor-original-do-brand];
-```
-
-**3. No SVG:**
+**No HTML (dentro do `.case-img-placeholder`):**
 ```html
-<svg ... aria-label="[Nome da empresa]">
-  <path ... fill="var(--color-logo-[slug])"/>
-</svg>
+<!-- Logo (Dinâmico Dark/Light) -->
+<img src="../img/cases/[slug]/logo_dark.svg" alt="[Nome da empresa]" class="show-in-dark" style="max-width: 220px; height: auto;" />
+<img src="../img/cases/[slug]/logo_light.svg" alt="[Nome da empresa]" class="show-in-light" style="max-width: 220px; height: auto;" />
 ```
 
-> ⚠️ **Atenção:** o token deve estar declarado em `:root` (dark) E em `:root[data-theme="light"]`. Declarar apenas no tema light causa bug de `undefined` no modo dark.
+> ⚠️ **Atenção:** As classes `.show-in-dark` e `.show-in-light` já estão predefinidas no `src/index.css` e respondem automaticamente ao atributo `[data-theme="light"]`. **Não** utilize `<svg>` inline e não crie tokens CSS `--color-logo-[slug]`.
 
 ---
 
@@ -283,24 +278,121 @@ A timeline tem sempre **exatamente 5 etapas** (condensar ou expandir descritivam
 
 ---
 
-## 11. Seção §7 — IMPACT (sempre 3 métricas)
+---
+
+## 11. Seção §6 — GALLERY (Toggle App/Web)
+
+A galeria sempre tem toggle **App / Web**. O padrão App mostra 4 telas em grid; o padrão Web mostra desktop + mobile lado a lado.
+
+```html
+<section class="py-16 md:py-24">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- Header da seção com toggle -->
+    <div class="mb-12 reveal flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <span class="case-label mb-4 md:mb-0" data-i18n="case.[slug].gallery.label">Projeto</span>
+      <div class="flex items-center bg-[var(--alpha-5)] rounded-full p-1 border border-[var(--alpha-10)]" id="gallery-view-toggle">
+        <button id="view-mode-app-btn" class="px-5 py-2 rounded-full text-sm font-medium bg-surface text-[var(--color-text-primary-dark)] shadow-sm transition-all">App</button>
+        <button id="view-mode-web-btn" class="px-5 py-2 rounded-full text-sm font-medium text-[var(--color-text-muted-dark)] hover:text-[var(--color-text-primary-dark)] transition-all">Web</button>
+      </div>
+    </div>
+
+    <!-- App View (default) -->
+    <div id="gallery-app-view" class="case-gallery show-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 xl:gap-6 pb-8 reveal">
+      <!-- Gallery item (repetir 4x) -->
+      <div class="case-gallery-item-wrapper">
+        <h4 class="case-item-title" data-i18n="case.[slug].gallery.title1">Nome da Tela</h4>
+        <div class="case-gallery-item">
+          <div class="case-gallery-scroll">
+            <img src="../img/cases/[slug]/1.png" alt="Descrição da tela" />
+          </div>
+          <!-- Opcional: overlay do menu/navegador -->
+          <!-- <img src="../img/cases/[slug]/menuinferior.png" class="case-gallery-overlay" alt="Menu inferior" /> -->
+        </div>
+      </div>
+      <!-- items 2, 3, 4 seguem o mesmo padrão -->
+    </div>
+
+    <!-- Web View (hidden by default) -->
+    <div id="gallery-web-view" class="hidden flex flex-col md:flex-row items-stretch justify-center gap-4 lg:gap-6 reveal pb-8 w-full">
+      <!-- Desktop Mockup -->
+      <div class="case-gallery-item-wrapper w-full" style="flex: 900;">
+        <h4 class="case-item-title">Desktop View</h4>
+        <div class="case-gallery-item web-desktop-format">
+          <div class="case-gallery-scroll">
+            <img src="../img/cases/[slug]/web1.png" alt="Tela Web Desktop" />
+          </div>
+        </div>
+      </div>
+      <!-- Mobile Web Mockup -->
+      <div class="case-gallery-item-wrapper w-full" style="flex: 393;">
+        <h4 class="case-item-title">Mobile Web View</h4>
+        <div class="case-gallery-item web-mobile-format">
+          <div class="case-gallery-scroll">
+            <img src="../img/cases/[slug]/web2.png" alt="Tela Web Mobile" />
+          </div>
+          <!-- <img src="../img/cases/[slug]/navegador.png" class="case-gallery-overlay" alt="Navegador mobile" /> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+> A lógica JS de toggle (`view-mode-app-btn` / `view-mode-web-btn`) já está em `src/main.ts` — os IDs devem ser **exatamente** esses.
+
+---
+
+## 12. Seção §6.5 — STRATEGY (OBRIGATÓRIA)
+
+Vem imediatamente após o gallery, dentro da mesma `<section>` do Gallery ou como bloco separado, **antes** da seção Impact.
+
+```html
+<!-- Estratégia / Solução Section -->
+<div class="case-strategy-section reveal">
+  <div class="case-strategy-content">
+    <p data-i18n="case.[slug].strategy.p1">[Parágrafo 1: contexto estratégico]</p>
+    <p data-i18n="case.[slug].strategy.p2">[Parágrafo 2: diagnóstico / problema identificado]</p>
+    <p data-i18n="case.[slug].strategy.p3">[Parágrafo 3: proposta de solução]</p>
+
+    <!-- Lista opcional de itens -->
+    <ul class="space-y-4 my-8">
+      <li class="flex items-start gap-3">
+        <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+        <strong data-i18n="case.[slug].strategy.item1">[item 1]</strong>
+      </li>
+      <!-- item2, item3 -->
+    </ul>
+
+    <p data-i18n="case.[slug].strategy.p4">[Parágrafo 4: detalhe da solução]</p>
+    <p data-i18n="case.[slug].strategy.p5">[Parágrafo 5: modelo de engajamento / continuidade]</p>
+    <p data-i18n="case.[slug].strategy.p6">[Parágrafo 6: resultado / connect com metas de negócio]</p>
+  </div>
+</div>
+```
+
+- Mínimo de **3 parágrafos** (`p1` a `p3`). P4, P5 e P6 são opcionais mas recomendados.
+- A lista de itens (`strategy.item1-3`) é opcional.
+- Deve estar dentro do `max-w-7xl` da seção Gallery ou em uma `<section>` própria, conforme necessidade.
+
+---
+
+## 13. Seção §7 — IMPACT (sempre 3 métricas)
 
 ```html
 <div class="grid md:grid-cols-3 gap-6 reveal">
-  <!-- Métrica 1 e 3: text-accent (positivo). Métrica 2: sem classe de cor (contraste) -->
   <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
-    <p class="metric-value text-accent" data-i18n="case.[slug].impact.metric1.value">+35%</p>
+    <p class="metric-value" data-i18n="case.[slug].impact.metric1.value">+35%</p>
     <p class="metric-desc" data-i18n="case.[slug].impact.metric1.desc">
       <strong>descrição</strong>, contexto adicional
     </p>
   </div>
-  <!-- metric2 sem text-accent, metric3 com text-accent -->
+  <!-- metric2 e metric3 seguem o mesmo padrão -->
 </div>
 ```
 
----
+> A cor de `metric-value` é heredada do design system, sem necessidade de classe de cor específica.
 
-## 12. ATUALIZAÇÃO DA HOME (index.html)
+## 14. ATUALIZAÇÃO DA HOME (index.html)
 
 Sempre que criar um novo case, é **obrigatório** atualizar ou adicionar o card correspondente na seção de Cases na Home (`index.html`).
 
@@ -329,19 +421,18 @@ O card do case na `index.html` deve usar:
 
 ---
 
-## 13. Checklist de Validação Antes de Publicar
+## 15. Checklist de Validação Antes de Publicar
 
 ### ✅ Estrutura
 - [ ] Arquivo em `case/[slug].html`
-- [ ] Imagens em `img/cases/[slug]/1.png` a `4.png`
+- [ ] Imagens em `img/cases/[slug]/1.png` a `4.png` + `bannerhero.png`
 - [ ] Header e Footer copiados literalmente do template (não modificados)
 - [ ] `<script type="module" src="/src/main.ts"></script>` único e ao final do `<body>`
 
 ### ✅ Design System
 - [ ] Nenhuma cor hexadecimal hardcoded no HTML
 - [ ] Todos os cards usam `border-[var(--color-border)]` e `bg-[var(--alpha-5)]`
-- [ ] Logo SVG usa `fill="var(--color-logo-[slug])"` com token em `index.css`
-- [ ] Token `--color-logo-[slug]` definido em `:root` E em `:root[data-theme="light"]`
+- [ ] Logo dinâmico da empresa usa duas tags `<img>` e as classes `.show-in-dark` e `.show-in-light`
 
 ### ✅ i18n
 - [ ] Todas as strings visíveis têm `data-i18n` correspondente
@@ -368,7 +459,7 @@ O card do case na `index.html` deve usar:
 
 ---
 
-## 14. O que NÃO fazer
+## 16. O que NÃO fazer
 
 | ❌ Proibido                                       | ✅ Correto                                            |
 |---------------------------------------------------|-------------------------------------------------------|

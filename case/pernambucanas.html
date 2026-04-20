@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pernambucanas — Scaling Design to Enable a Phygital Ecosystem | Raul Lima</title>
+  <meta name="description"
+    content="Case study: Design leadership at Pernambucanas. Scaled design across 6+ Business Units, launched the first digital account, and built a phygital omnichannel ecosystem." />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>R</text></svg>" />
+  <!-- Tabler Icons Standard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+
+<body>
+
+  <!-- ======================================
+       NAVIGATION (same as index.html)
+  ======================================= -->
+  <header id="home" class="fixed top-0 inset-x-0 z-50 glass-nav">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
+      <a href="../index.html"
+        class="flex items-center justify-center w-9 h-9 rounded-full bg-accent font-bold text-sm text-black leading-none select-none transition-transform hover:scale-105">R</a>
+
+      <!-- Nav links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-text-muted-dark">
+        <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+        <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+          data-i18n="nav.experience">Experiência</a>
+        <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.skills">Competências</a>
+        <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+      </nav>
+
+      <!-- Social + CTA + Lang Toggle -->
+      <div class="flex items-center gap-4">
+        <!-- Language Toggle -->
+        <div class="flex items-center gap-1 text-xs font-medium">
+          <button data-lang-btn="en"
+            class="px-2 py-1 rounded-full transition-all text-accent font-bold cursor-pointer hover:opacity-80">EN</button>
+          <span class="text-text-muted-dark opacity-50">|</span>
+          <button data-lang-btn="pt"
+            class="px-2 py-1 rounded-full transition-all text-text-muted-dark cursor-pointer hover:opacity-80">PT</button>
+        </div>
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="text-text-muted-dark hover:text-text-primary-dark transition-colors mx-1" aria-label="Toggle Theme">
+          <i class="ti ti-moon text-2xl" id="theme-icon"></i>
+        </button>
+        <!-- LinkedIn -->
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-linkedin text-2xl"></i>
+        </a>
+        <!-- Behance -->
+        <a href="https://behance.net" target="_blank" rel="noopener" aria-label="Behance"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-behance text-2xl"></i>
+        </a>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--alpha-15)] text-sm font-medium text-text-muted-dark hover:border-accent hover:text-accent transition-all">
+          <i class="ti ti-mail text-lg"></i> <span data-i18n="nav.contact">Contato</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <main class="pt-[72px]">
+
+    <!-- ======================================
+         §1 CASE HERO
+    ======================================= -->
+    <section class="pt-[60px] pb-16">
+      <div class="max-w-7xl mx-auto px-6">
+        <!-- Back button -->
+        <a href="../index.html#cases"
+          class="inline-flex items-center gap-2 text-sm text-text-muted-dark hover:text-accent transition-colors mb-6 group">
+          <i class="ti ti-arrow-left text-lg transition-transform group-hover:-translate-x-1"></i>
+          <span data-i18n="case.back">Voltar</span>
+        </a>
+
+        <!-- Case title -->
+        <h1 class="font-serif text-4xl md:text-5xl font-bold mb-[60px] heading-accent reveal"
+          data-i18n="case.pernambucanas.title">
+          Escalando Design para Habilitar um Ecossistema Phygital
+        </h1>
+      </div>
+
+      <!-- Hero banner — FULL WIDTH -->
+      <div class="case-hero-banner reveal" style="background-image: url('../img/cases/pernambucanas/bannerhero.png'); border-radius: 0;">
+        <!-- Overlay for contrast -->
+        <div class="absolute inset-0 bg-black/40 z-0"></div>
+
+        <div class="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-6">
+          <!-- Brand Name -->
+          <span class="text-6xl md:text-[8rem] font-bold text-white/10 font-serif tracking-widest select-none uppercase">
+            PERNAMBUCANAS
+          </span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         §2 OVERVIEW
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-[280px_1fr] gap-12 items-start reveal">
+          <!-- Company logo -->
+          <div class="case-img-placeholder p-8">
+            <!-- Logo Pernambucanas (Dinâmico Dark/Light) -->
+            <img src="../img/cases/pernambucanas/logo_dark.svg" alt="Pernambucanas" class="show-in-dark" style="max-width: 220px; height: auto;" />
+            <img src="../img/cases/pernambucanas/logo_light.svg" alt="Pernambucanas" class="show-in-light" style="max-width: 220px; height: auto;" />
+          </div>
+          <!-- Description -->
+          <p class="text-lg md:text-xl leading-relaxed text-text-muted-dark" data-i18n="case.pernambucanas.overview.company">
+            Pernambucanas é uma das maiores redes varejistas do Brasil, reconhecida como empresa phygital por integrar de forma fluida lojas físicas com experiências digitais. Com forte presença no varejo e em serviços financeiros, a empresa tem evoluído seu ecossistema para oferecer soluções mais conectadas, eficientes e centradas no usuário.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         §3 CONTEXT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-4xl reveal">
+          <h2 class="font-serif text-4xl md:text-5xl font-bold mb-8 heading-accent" data-i18n="case.pernambucanas.context.title">
+            Contexto
+          </h2>
+
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.pernambucanas.context.p1">
+            Entrei na Pernambucanas em um momento inicial de maturidade em UX, quando o design ainda estava emergindo como disciplina dentro da organização. Com o tempo, evoluí para o cargo de <strong class="text-text-primary-dark">Design Coordinator</strong>, liderando uma equipe de 12 designers em múltiplas unidades de negócio e desempenhando papel central na transformação digital da empresa.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.pernambucanas.context.p2">
+            Acompanhei a transição da <strong class="text-text-primary-dark">evangelização do design para a habilitação estratégica</strong>, ajudando a estruturar times, processos e formas de trabalho para suportar um ecossistema de produto crescente e complexo.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark" data-i18n="case.pernambucanas.context.p3">
+            Minha jornada refletiu a evolução de uma empresa que transformou o design de uma função operacional em um motor estratégico de entrega de valor para o cliente.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         §4 CHALLENGE
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
+
+          <!-- Image placeholder -->
+          <div class="reveal">
+            <div class="case-img-placeholder aspect-square" style="max-width: 400px;">
+              <img src="../img/cases/pernambucanas/Imagem.png" alt="Challenge visual — ecossistema phygital Pernambucanas" />
+            </div>
+          </div>
+
+          <!-- Challenge text -->
+          <div class="reveal">
+            <span class="case-label mb-6" data-i18n="case.pernambucanas.challenge.label">Desafio</span>
+
+            <p class="text-lg md:text-xl leading-relaxed mt-6 mb-6" data-i18n="case.pernambucanas.challenge.intro">
+              O principal desafio foi <strong>escalar o design em um ambiente fragmentado e complexo</strong>.
+            </p>
+
+            <p class="text-base leading-relaxed text-text-muted-dark mb-6" data-i18n="case.pernambucanas.challenge.research">
+              O ecossistema era composto por <strong class="text-text-primary-dark">múltiplas Unidades de Negócio com regras, tecnologias e sistemas distintos</strong>. Como resultado:
+            </p>
+
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.pernambucanas.challenge.list.1">Falta de consistência entre produtos e jornadas</span>
+              </li>
+              <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.pernambucanas.challenge.list.2">Experiências desconectadas entre canais físicos e digitais</span>
+              </li>
+              <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.pernambucanas.challenge.list.3">Necessidade de acelerar entregas sem comprometer a qualidade</span>
+              </li>
+            </ul>
+
+            <p class="text-base leading-relaxed text-text-muted-dark" data-i18n="case.pernambucanas.challenge.conclusion">
+              O objetivo era <strong class="text-text-primary-dark">transformar essa complexidade em um ecossistema de experiência coeso, escalável e centrado no usuário</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         §5 PROCESS
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.pernambucanas.process.label">Processo</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.pernambucanas.process.intro">
+            O processo de design foi refinado em uma <strong class="text-text-primary-dark">estrutura adaptável</strong> para suportar diferentes contextos de negócio, com foco em clareza, autonomia e alinhamento.
+          </p>
+        </div>
+
+        <!-- Timeline -->
+        <div class="process-timeline rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)] overflow-hidden reveal">
+          <!-- Step 1 -->
+          <div class="process-step">
+            <div class="step-number">01</div>
+            <h3 class="step-title" data-i18n="case.pernambucanas.process.step1.title">Kickoff</h3>
+            <p class="step-desc" data-i18n="case.pernambucanas.process.step1.desc">
+              Alinhamento com stakeholders para definição de objetivos, expectativas e escopo de cada iniciativa nas BUs.
+            </p>
+          </div>
+          <!-- Step 2 -->
+          <div class="process-step">
+            <div class="step-number">02</div>
+            <h3 class="step-title" data-i18n="case.pernambucanas.process.step2.title">Discovery</h3>
+            <p class="step-desc" data-i18n="case.pernambucanas.process.step2.desc">
+              Entrevistas internas e pesquisa para mapear regras de negócio, fluxos existentes e oportunidades de melhoria.
+            </p>
+          </div>
+          <!-- Step 3 -->
+          <div class="process-step">
+            <div class="step-number">03</div>
+            <h3 class="step-title" data-i18n="case.pernambucanas.process.step3.title">Prototipagem</h3>
+            <p class="step-desc" data-i18n="case.pernambucanas.process.step3.desc">
+              Planejamento de fluxos e prototipagem colaborativa com times de produto, engenharia e negócio.
+            </p>
+          </div>
+          <!-- Step 4 -->
+          <div class="process-step">
+            <div class="step-number">04</div>
+            <h3 class="step-title" data-i18n="case.pernambucanas.process.step4.title">Validação</h3>
+            <p class="step-desc" data-i18n="case.pernambucanas.process.step4.desc">
+              Testes de usabilidade com usuários reais para validar hipóteses e refinar fluxos antes da entrega.
+            </p>
+          </div>
+          <!-- Step 5 -->
+          <div class="process-step">
+            <div class="step-number">05</div>
+            <h3 class="step-title" data-i18n="case.pernambucanas.process.step5.title">Iteração</h3>
+            <p class="step-desc" data-i18n="case.pernambucanas.process.step5.desc">
+              Ciclos contínuos de refinamento e alinhamento com metas de negócio, acompanhando a implementação e evolução dos produtos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         §6 PROJECT GALLERY
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <span class="case-label mb-4 md:mb-0" data-i18n="case.pernambucanas.gallery.label">Projeto</span>
+          <div class="flex items-center bg-[var(--alpha-5)] rounded-full p-1 border border-[var(--alpha-10)]" id="gallery-view-toggle">
+            <button id="view-mode-app-btn" class="px-5 py-2 rounded-full text-sm font-medium bg-surface text-[var(--color-text-primary-dark)] shadow-sm transition-all">App</button>
+            <button id="view-mode-web-btn" class="px-5 py-2 rounded-full text-sm font-medium text-[var(--color-text-muted-dark)] hover:text-[var(--color-text-primary-dark)] transition-all">Web</button>
+          </div>
+        </div>
+
+        <!-- App View (default) -->
+        <div id="gallery-app-view" class="case-gallery show-grid pb-8 reveal">
+          <!-- Gallery item 1 -->
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.pernambucanas.gallery.title1">Pernambucanas Pay</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/pernambucanas/1.png" alt="Tela do aplicativo Pernambucanas — Pernambucanas Pay" />
+              </div>
+            </div>
+          </div>
+          <!-- Gallery item 2 -->
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.pernambucanas.gallery.title2">Pefisa Pay</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/pernambucanas/2.png" alt="Tela do aplicativo Pernambucanas — Pefisa Pay" />
+              </div>
+            </div>
+          </div>
+          <!-- Gallery item 3 -->
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.pernambucanas.gallery.title3">Palmeiras Pay</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/pernambucanas/3.png" alt="Tela do aplicativo Pernambucanas — Palmeiras Pay" />
+              </div>
+            </div>
+          </div>
+          <!-- Gallery item 4 -->
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.pernambucanas.gallery.title4">Leroy Merlin Pay</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/pernambucanas/4.png" alt="Tela do aplicativo Pernambucanas — Leroy Merlin Pay" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Web View (Hidden by default) -->
+        <div id="gallery-web-view" class="gallery-web-view hidden pb-8">
+          <!-- Desktop Mockup -->
+          <div class="case-gallery-item-wrapper w-full" style="flex: 900;">
+            <h4 class="case-item-title" data-i18n="case.pernambucanas.gallery.web_title1">E-Commerce Pernambucanas</h4>
+            <div class="case-gallery-item web-desktop-format">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/pernambucanas/web1.png" alt="Tela Web Pernambucanas — E-Commerce" />
+              </div>
+            </div>
+          </div>
+          <!-- Mobile Web Mockup -->
+          <div class="case-gallery-item-wrapper w-full" style="flex: 393;">
+            <h4 class="case-item-title" data-i18n="case.pernambucanas.gallery.web_title2">M-Commerce Pernambucanas</h4>
+            <div class="case-gallery-item web-mobile-format">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/pernambucanas/web2.png" alt="Tela Web Pernambucanas — M-Commerce" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- §6.5 STRATEGY -->
+        <div class="case-strategy-section reveal">
+          <div class="case-strategy-content">
+            <p data-i18n="case.pernambucanas.strategy.p1">Atuei como líder estratégico na Pernambucanas em um momento crítico de transformação: o design precisava deixar de ser uma função de execução e passar a ser um motor de decisões — capaz de conectar múltiplas unidades de negócio em torno de uma experiência coerente e escalável.</p>
+
+            <p data-i18n="case.pernambucanas.strategy.p2">A fragmentação do ecossistema revelou um problema estrutural: <strong>cada Business Unit operava com suas próprias regras, tecnologias e processos de design</strong> — o que gerava inconsistências visíveis na jornada do cliente e atritava a capacidade de entrega dos times.</p>
+
+            <p data-i18n="case.pernambucanas.strategy.p3">Para resolver isso, organizei a atuação em três pilares estratégicos:</p>
+
+            <ul class="space-y-4 my-8">
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <strong data-i18n="case.pernambucanas.strategy.item1">Estrutura de times — construção e escalonamento de squads de design em 6+ BUs, com papéis complementares e cultura de produto.</strong>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <strong data-i18n="case.pernambucanas.strategy.item2">Processo e operações — implementação de um fluxo de design adaptável que harmonizou diferentes contextos sem perder velocidade de entrega.</strong>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <strong data-i18n="case.pernambucanas.strategy.item3">Sistema de experiência — evolução do Design System como camada de consistência entre digital e físico, padronizando sem engessar.</strong>
+              </li>
+            </ul>
+
+            <p data-i18n="case.pernambucanas.strategy.p4">A criação da primeira conta digital da Pernambucanas foi um marco estratégico: exigiu integração entre varejo, financeiro e tecnologia, com design como fio condutor entre as jornadas. Liderei o processo do início ao fim — da definição de escopo à validação com usuários reais.</p>
+
+            <p data-i18n="case.pernambucanas.strategy.p5">Paralelamente, estruturei a liderança de design como função de habilitação: 1:1s, planos de carreira, mentoria e rituais de alinhamento que fortaleceram a autonomia dos times e a cultura de design na organização.</p>
+
+            <p data-i18n="case.pernambucanas.strategy.p6">O resultado foi a transformação da complexidade em vantagem competitiva — com um ecossistema phygital mais coeso, times mais maduros e uma experiência omnichannel capaz de conectar canais físicos e digitais em torno da jornada do cliente.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         §7 IMPACT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.pernambucanas.impact.label">Impacto</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-4xl" data-i18n="case.pernambucanas.impact.intro">
+            A atuação estratégica em design resultou em marcos concretos de transformação digital, fortalecendo o ecossistema phygital da Pernambucanas e expandindo sua presença em serviços financeiros.
+          </p>
+        </div>
+
+        <!-- Metrics grid -->
+        <div class="grid md:grid-cols-3 gap-6 reveal">
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value" data-i18n="case.pernambucanas.impact.metric1.value">6+ BUs</p>
+            <p class="metric-desc" data-i18n="case.pernambucanas.impact.metric1.desc">
+              <strong>unidades de negócio alinhadas</strong>, com times de design estruturados, processos escaláveis e entrega consistente
+            </p>
+          </div>
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value" data-i18n="case.pernambucanas.impact.metric2.value">1º</p>
+            <p class="metric-desc" data-i18n="case.pernambucanas.impact.metric2.desc">
+              <strong>conta digital lançada</strong> na história da Pernambucanas, expandindo o ecossistema financeiro e habilitando banking digital
+            </p>
+          </div>
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value" data-i18n="case.pernambucanas.impact.metric3.value">Omni</p>
+            <p class="metric-desc" data-i18n="case.pernambucanas.impact.metric3.desc">
+              <strong>experiência omnichannel integrada</strong> via Design System unificado, conectando canais físicos e digitais na jornada do cliente
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         §8 BACK TO HOME
+    ======================================= -->
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-6">
+        <hr class="border-[var(--color-border)] mb-10" />
+        <div class="text-center">
+          <a href="../index.html#cases"
+            class="inline-flex items-center gap-2 text-base font-medium hover:text-accent transition-colors underline underline-offset-4"
+            data-i18n="case.pernambucanas.back_home">
+            voltar para home
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ======================================
+       FOOTER (same as index.html)
+  ======================================= -->
+  <footer id="contact" class="py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="mb-16 reveal">
+        <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-8" data-i18n="footer.cta.label">
+          Vamos conversar?</p>
+        <h2 class="font-serif text-5xl md:text-7xl font-bold leading-[0.95] mb-10" data-i18n="footer.cta.heading">
+          Let's work<br /><em>together.</em>
+        </h2>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-bg-dark font-semibold text-base hover:opacity-90 transition-all active:scale-95">
+          raul.sousa.work@gmail.com →
+        </a>
+      </div>
+
+      <hr class="border-[var(--color-border)] mb-10" />
+
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <p class="text-xs text-text-muted-dark" data-i18n="footer.copyright">© 2026 Raul Lima. Todos os direitos
+          reservados.</p>
+        <nav class="flex flex-wrap gap-6 text-xs text-text-muted-dark">
+          <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+          <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.experience">Experiência</a>
+          <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.skills">Competências</a>
+          <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+          <a href="../styleguide.html" class="text-accent hover:underline transition-colors">Styleguide</a>
+          <a href="https://calendly.com" target="_blank" rel="noopener" class="hover:text-accent transition-colors"
+            data-i18n="footer.schedule">Minha Agenda</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+
+  <script type="module" src="../src/main.ts"></script>
+</body>
+
+</html>

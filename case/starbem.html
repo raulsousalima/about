@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Starbem — From Pandemic Response to Scalable Digital Health | Raul Lima</title>
+  <meta name="description"
+    content="Case study: From a pandemic MVP to Starbem — 230K users, 96 B2B clients, 93% satisfaction and R$3M raised. Healthtech platform design." />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>R</text></svg>" />
+  <!-- Tabler Icons Standard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+
+<body>
+
+  <!-- ======================================
+       NAVIGATION (same as index.html)
+  ======================================= -->
+  <header id="home" class="fixed top-0 inset-x-0 z-50 glass-nav">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
+      <a href="../index.html"
+        class="flex items-center justify-center w-9 h-9 rounded-full bg-accent font-bold text-sm text-black leading-none select-none transition-transform hover:scale-105">R</a>
+
+      <!-- Nav links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-text-muted-dark">
+        <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+        <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+          data-i18n="nav.experience">Experiência</a>
+        <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.skills">Competências</a>
+        <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+      </nav>
+
+      <!-- Social + CTA + Lang Toggle -->
+      <div class="flex items-center gap-4">
+        <!-- Language Toggle -->
+        <div class="flex items-center gap-1 text-xs font-medium">
+          <button data-lang-btn="en"
+            class="px-2 py-1 rounded-full transition-all text-accent font-bold cursor-pointer hover:opacity-80">EN</button>
+          <span class="text-text-muted-dark opacity-50">|</span>
+          <button data-lang-btn="pt"
+            class="px-2 py-1 rounded-full transition-all text-text-muted-dark cursor-pointer hover:opacity-80">PT</button>
+        </div>
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="text-text-muted-dark hover:text-text-primary-dark transition-colors mx-1" aria-label="Toggle Theme">
+          <i class="ti ti-moon text-2xl" id="theme-icon"></i>
+        </button>
+        <!-- LinkedIn -->
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-linkedin text-2xl"></i>
+        </a>
+        <!-- Behance -->
+        <a href="https://behance.net" target="_blank" rel="noopener" aria-label="Behance"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-behance text-2xl"></i>
+        </a>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--alpha-15)] text-sm font-medium text-text-muted-dark hover:border-accent hover:text-accent transition-all">
+          <i class="ti ti-mail text-lg"></i> <span data-i18n="nav.contact">Contato</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <main class="pt-[72px]">
+
+    <!-- ======================================
+         CASE HERO
+    ======================================= -->
+    <section class="pt-[60px] pb-16">
+      <div class="max-w-7xl mx-auto px-6">
+        <!-- Back button -->
+        <a href="../index.html#cases"
+          class="inline-flex items-center gap-2 text-sm text-text-muted-dark hover:text-accent transition-colors mb-6 group">
+          <i class="ti ti-arrow-left text-lg transition-transform group-hover:-translate-x-1"></i>
+          <span data-i18n="case.back">Voltar</span>
+        </a>
+
+        <!-- Case title -->
+        <h1 class="font-serif text-4xl md:text-5xl font-bold mb-[60px] heading-accent reveal"
+          data-i18n="case.starbem.title">
+          De Resposta à Pandemia a Plataforma Escalável de Saúde Digital
+        </h1>
+      </div>
+
+      <!-- Hero banner — FULL WIDTH -->
+      <div class="case-hero-banner reveal" style="background-image: url('../img/cases/starbem/bannerhero.png'); border-radius: 0;">
+        <!-- Overlay for contrast -->
+        <div class="absolute inset-0 bg-black/40 z-0"></div>
+
+        <div class="absolute inset-0 flex flex-col items-center justify-center z-10 text-center px-6">
+          <!-- Brand Name -->
+          <span class="text-6xl md:text-[8rem] font-bold text-white/10 font-serif tracking-widest select-none uppercase">
+            STARBEM
+          </span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         OVERVIEW
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-[280px_1fr] gap-12 items-start reveal">
+          <!-- Company logo -->
+          <div class="case-img-placeholder p-8">
+            <!-- Logo Starbem (Dinâmico Dark/Light) -->
+            <img src="../img/cases/starbem/logo_dark.svg" alt="Starbem" class="show-in-dark" style="max-width: 220px; height: auto;" />
+            <img src="../img/cases/starbem/logo_light.svg" alt="Starbem" class="show-in-light" style="max-width: 220px; height: auto;" />
+          </div>
+          <!-- Description -->
+          <p class="text-lg md:text-xl leading-relaxed text-text-muted-dark" data-i18n="case.starbem.overview.company">
+            Starbem é uma healthtech brasileira focada em oferecer serviços de saúde digital acessíveis. A plataforma
+            conecta pacientes a profissionais de saúde — incluindo médicos, psicólogos, psiquiatras e nutricionistas
+            — com forte ênfase em soluções de saúde mental para empresas (B2B).
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         CONTEXT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-4xl reveal">
+          <h2 class="font-serif text-4xl md:text-5xl font-bold mb-8 heading-accent" data-i18n="case.starbem.context.title">
+            Contexto
+          </h2>
+
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.starbem.context.p1">
+            Durante a pandemia de COVID-19, o acesso à saúde tornou-se limitado e sobrecarregado. As pessoas enfrentavam
+            incerteza sobre sintomas, quando buscar atendimento de emergência e como ter acesso médico com segurança.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.starbem.context.p2">
+            Nesse cenário, identificamos uma oportunidade de <strong class="text-text-primary-dark">alavancar a telemedicina</strong>
+            para oferecer assistência médica rápida, confiável e escalável — reduzindo o impacto da sobrecarga nos
+            sistemas de saúde e guiando pacientes com clareza.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark" data-i18n="case.starbem.context.p3">
+            Com o crescimento da demanda e a validação do modelo, o MVP evoluiu para o
+            <strong class="text-text-primary-dark">Starbem</strong>, uma plataforma robusta de saúde digital que se
+            tornou referência em saúde corporativa no Brasil.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         CHALLENGE
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
+
+          <!-- Image placeholder -->
+          <div class="reveal">
+            <div class="case-img-placeholder aspect-square" style="max-width: 400px;">
+              <img src="../img/cases/starbem/imagem.png" alt="Imagem do desafio Starbem" />
+            </div>
+          </div>
+
+          <!-- Challenge text -->
+          <div class="reveal">
+            <span class="case-label mb-6" data-i18n="case.starbem.challenge.label">Desafio</span>
+
+            <p class="text-lg md:text-xl leading-relaxed mt-6 mb-6" data-i18n="case.starbem.challenge.intro">
+              O principal desafio foi <strong>projetar e lançar uma solução que diagnosticasse, triasse e orientasse pacientes com rapidez</strong>.
+            </p>
+
+            <p class="text-base leading-relaxed text-text-muted-dark mb-6" data-i18n="case.starbem.challenge.research">
+              A pesquisa revelou <strong class="text-text-primary-dark">barreiras críticas de acesso e comunicação</strong> que precisavam ser resolvidas em tempo real:
+            </p>
+
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.starbem.challenge.list.1">Falta de orientação clara para pacientes com sintomas de COVID-19</span>
+              </li>
+              <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.starbem.challenge.list.2">Sistemas de saúde sobrecarregados e inacessíveis</span>
+              </li>
+              <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.starbem.challenge.list.3">Baixa acessibilidade a suporte médico imediato</span>
+              </li>
+            </ul>
+
+            <p class="text-base leading-relaxed text-text-muted-dark" data-i18n="case.starbem.challenge.conclusion">
+              O desafio era <strong class="text-text-primary-dark">garantir confiança, usabilidade e escalabilidade</strong> em um
+              ambiente de alta incerteza, validando rapidamente sem abrir mão da qualidade da experiência.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         PROCESS
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.starbem.process.label">Processo</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.starbem.process.intro">
+            O projeto seguiu um <strong class="text-text-primary-dark">ciclo acelerado de descoberta, validação e entrega</strong>,
+            adaptado à velocidade exigida pelo contexto pandêmico.
+          </p>
+        </div>
+
+        <!-- Timeline -->
+        <div class="process-timeline rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)] overflow-hidden reveal">
+          <!-- Step 1 -->
+          <div class="process-step">
+            <div class="step-number">01</div>
+            <h3 class="step-title" data-i18n="case.starbem.process.step1.title">Pesquisa</h3>
+            <p class="step-desc" data-i18n="case.starbem.process.step1.desc">
+              Pesquisa inicial com usuários afetados para entender comportamentos, medos e necessidades em contexto de crise.
+            </p>
+          </div>
+          <!-- Step 2 -->
+          <div class="process-step">
+            <div class="step-number">02</div>
+            <h3 class="step-title" data-i18n="case.starbem.process.step2.title">Jornadas</h3>
+            <p class="step-desc" data-i18n="case.starbem.process.step2.desc">
+              Definição das principais jornadas de usuário focadas em triagem de sintomas e tomada de decisão.
+            </p>
+          </div>
+          <!-- Step 3 -->
+          <div class="process-step">
+            <div class="step-number">03</div>
+            <h3 class="step-title" data-i18n="case.starbem.process.step3.title">Alinhamento</h3>
+            <p class="step-desc" data-i18n="case.starbem.process.step3.desc">
+              Facilitação de sessões de alinhamento com stakeholders e parceiros, definindo escopo e critérios de sucesso.
+            </p>
+          </div>
+          <!-- Step 4 -->
+          <div class="process-step">
+            <div class="step-number">04</div>
+            <h3 class="step-title" data-i18n="case.starbem.process.step4.title">Prototipagem</h3>
+            <p class="step-desc" data-i18n="case.starbem.process.step4.desc">
+              Ciclos rápidos de prototipagem para validar hipóteses. Testes de usabilidade para refinar fluxos e reduzir fricção.
+            </p>
+          </div>
+          <!-- Step 5 -->
+          <div class="process-step">
+            <div class="step-number">05</div>
+            <h3 class="step-title" data-i18n="case.starbem.process.step5.title">Entrega</h3>
+            <p class="step-desc" data-i18n="case.starbem.process.step5.desc">
+              Colaboração estreita com times multifuncionais para iteração rápida, lançamento do MVP e evolução contínua do produto.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         PROJECT GALLERY
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <span class="case-label mb-4 md:mb-0" data-i18n="case.starbem.gallery.label">Projeto</span>
+        </div>
+
+        <div id="gallery-app-view" class="case-gallery show-grid pb-8 reveal">
+          <!-- Gallery item 1 -->
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.starbem.gallery.title1">Triagem de Sintomas</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/starbem/1.png" alt="Tela de triagem de sintomas do Starbem" />
+              </div>
+            </div>
+          </div>
+          <!-- Gallery item 2 -->
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.starbem.gallery.title2">Consulta Online</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/starbem/2.png" alt="Tela de consulta online Starbem" />
+              </div>
+              <img src="../img/cases/starbem/menuinferior.png" class="case-gallery-overlay" alt="Menu inferior" />
+            </div>
+          </div>
+          <!-- Gallery item 3 -->
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.starbem.gallery.title3">Dashboard de Saúde</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/starbem/3.png" alt="Dashboard de saúde pessoal Starbem" />
+              </div>
+            </div>
+          </div>
+          <!-- Gallery item 4 -->
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.starbem.gallery.title4">Benefícios B2B</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/starbem/4.png" alt="Tela de benefícios corporativos Starbem" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estratégia / Solução Section -->
+        <div class="case-strategy-section reveal">
+          <div class="case-strategy-content">
+            <p data-i18n="case.starbem.strategy.p1">Atuei de forma estratégica ao longo de todo o ciclo de vida do produto — da descoberta à entrega — liderando um time multidisciplinar e traduzindo dores complexas dos usuários em oportunidades concretas de produto.</p>
+
+            <p data-i18n="case.starbem.strategy.p2">Identifiquei que <strong>mais de 60% dos pacientes não sabiam quando buscar atendimento de emergência</strong>, o que gerava tanto sobrecarga nos pronto-socorros quanto subnotificação de casos graves. O problema central não era apenas clínico: era de comunicação, confiança e acesso.</p>
+
+            <p data-i18n="case.starbem.strategy.p3">Para resolver isso, propus a criação de um MVP de telemedicina centrado em três pilares de experiência:</p>
+
+            <ul class="space-y-4 my-8">
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <strong data-i18n="case.starbem.strategy.item1">clareza no diagnóstico inicial de sintomas,</strong>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <strong data-i18n="case.starbem.strategy.item2">conexão imediata com médicos voluntários,</strong>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <strong data-i18n="case.starbem.strategy.item3">orientação confiável entre recuperação em casa e encaminhamento emergencial.</strong>
+              </li>
+            </ul>
+
+            <p data-i18n="case.starbem.strategy.p4">Além disso, identifiquei lacunas na jornada de onboarding e na comunicação de valor da plataforma — especialmente no mercado B2B. Reestruturei o fluxo para garantir que empresas compreendessem rapidamente o impacto do produto na saúde dos seus colaboradores.</p>
+
+            <p data-i18n="case.starbem.strategy.p5">Alinhei stakeholders em torno de uma visão clara de produto, conduzi ciclos rápidos de validação para reduzir riscos e construí a fundação que permitiu ao produto evoluir de um MVP emergencial para um negócio escalável de saúde digital.</p>
+
+            <p data-i18n="case.starbem.strategy.p6">Como resultado, essa abordagem transformou uma resposta de crise em uma solução de longo prazo — conectando experiência do usuário com crescimento de receita, expansão B2B e atração de investimento.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         IMPACT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.starbem.impact.label">Impacto</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-4xl" data-i18n="case.starbem.impact.intro">
+            O projeto evoluiu de um MVP pandêmico para uma plataforma digital de saúde com escala nacional,
+            demonstrando o poder de combinar design centrado no usuário com estratégia de negócio orientada a dados.
+          </p>
+        </div>
+
+        <!-- Metrics grid -->
+        <div class="grid md:grid-cols-3 gap-6 reveal">
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value" data-i18n="case.starbem.impact.metric1.value">230K</p>
+            <p class="metric-desc" data-i18n="case.starbem.impact.metric1.desc">
+              <strong>usuários ativos no Brasil</strong>, consolidando a plataforma como referência em saúde digital acessível
+            </p>
+          </div>
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value" data-i18n="case.starbem.impact.metric2.value">93%</p>
+            <p class="metric-desc" data-i18n="case.starbem.impact.metric2.desc">
+              <strong>taxa de satisfação dos usuários</strong>, com crescimento de receita de R$78K no Q1 2022 para mais de R$1M no Q1 2023
+            </p>
+          </div>
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value" data-i18n="case.starbem.impact.metric3.value">R$3M</p>
+            <p class="metric-desc" data-i18n="case.starbem.impact.metric3.desc">
+              <strong>captados de investidores-anjo</strong> (2021–2022) e participação no Toronto Accelerator Program (2023), com 96 clientes B2B
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         BACK TO HOME
+    ======================================= -->
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-6">
+        <hr class="border-[var(--color-border)] mb-10" />
+        <div class="text-center">
+          <a href="../index.html#cases"
+            class="inline-flex items-center gap-2 text-base font-medium hover:text-accent transition-colors underline underline-offset-4"
+            data-i18n="case.starbem.back_home">
+            voltar para home
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ======================================
+       FOOTER (same as index.html)
+  ======================================= -->
+  <footer id="contact" class="py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="mb-16 reveal">
+        <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-8" data-i18n="footer.cta.label">
+          Vamos conversar?</p>
+        <h2 class="font-serif text-5xl md:text-7xl font-bold leading-[0.95] mb-10" data-i18n="footer.cta.heading">
+          Let's work<br /><em>together.</em>
+        </h2>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-bg-dark font-semibold text-base hover:opacity-90 transition-all active:scale-95">
+          raul.sousa.work@gmail.com →
+        </a>
+      </div>
+
+      <hr class="border-[var(--color-border)] mb-10" />
+
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <p class="text-xs text-text-muted-dark" data-i18n="footer.copyright">© 2026 Raul Lima. Todos os direitos
+          reservados.</p>
+        <nav class="flex flex-wrap gap-6 text-xs text-text-muted-dark">
+          <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+          <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.experience">Experiência</a>
+          <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.skills">Competências</a>
+          <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+          <a href="../styleguide.html" class="text-accent hover:underline transition-colors">Styleguide</a>
+          <a href="https://calendly.com" target="_blank" rel="noopener" class="hover:text-accent transition-colors"
+            data-i18n="footer.schedule">Minha Agenda</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+
+  <script type="module" src="../src/main.ts"></script>
+</body>
+
+</html>
