@@ -32,6 +32,7 @@
           data-i18n="nav.experience">Experiência</a>
         <a href="#skills" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.skills">Competências</a>
         <a href="#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+        <a href="#contact" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.contact">Contato</a>
       </nav>
 
       <!-- Social + CTA + Lang Toggle -->
@@ -54,7 +55,7 @@
           <i class="ti ti-brand-linkedin text-2xl"></i>
         </a>
         <!-- Behance -->
-        <a href="https://behance.net" target="_blank" rel="noopener" aria-label="Behance"
+        <a href="https://www.behance.net/raulsousa" target="_blank" rel="noopener" aria-label="Behance"
           class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
           <i class="ti ti-brand-behance text-2xl"></i>
         </a>
@@ -111,10 +112,10 @@
               data-i18n="hero.cta.projects">
               Ver projetos →
             </a>
-            <a href="https://calendly.com" target="_blank"
+            <a href="#contact"
               class="px-6 py-3 rounded-full border border-[var(--alpha-15)] text-sm font-medium hover:border-white/40 transition-all"
               data-i18n="hero.cta.schedule">
-              Agendar conversa
+              Contato
             </a>
           </div>
         </div>
@@ -185,15 +186,14 @@
             <hr class="border-black/06 mb-5" />
             <ul class="space-y-3 text-sm text-text-muted-light">
               <li class="flex items-center gap-3">
-                <i class="ti ti-building-skyscraper text-lg"></i> <span data-i18n="about.card.company">Daycoval
-                  Investimentos — Atual</span>
+                <i class="ti ti-building-skyscraper text-lg"></i> <span data-i18n="about.card.company">Bank Daycoval — Atual</span>
               </li>
               <li class="flex items-center gap-3">
                 <i class="ti ti-school text-lg"></i> <span data-i18n="about.card.education">Pós PUC-RS — UX Design &amp;
                   Beyond (Nota 10.0)</span>
               </li>
               <li class="flex items-center gap-3">
-                <i class="ti ti-map-pin text-lg"></i> <span data-i18n="about.card.location">Brasil</span>
+                <i class="ti ti-map-pin text-lg"></i> <span data-i18n="about.card.location">Brasil — São Paulo</span>
               </li>
               <li class="flex items-center gap-3">
                 <i class="ti ti-mail text-lg"></i>
@@ -222,58 +222,83 @@
         <div class="reveal md:col-span-1">
           <h3 class="font-serif text-2xl font-bold mb-8" style="color:#111" data-i18n="experience.title">Experiência
           </h3>
-          <div class="space-y-6">
-            <!-- item -->
-            <div class="flex gap-4">
+          <div class="space-y-2">
+
+            <!-- Daycoval -->
+            <div class="exp-item relative flex gap-4 cursor-pointer group rounded-xl border border-black/10 p-4 hover:border-accent transition-colors">
               <div class="pt-1.5 flex-shrink-0">
-                <div class="w-2 h-2 rounded-full bg-black/20"></div>
+                <div class="exp-dot w-2 h-2 rounded-full bg-black/20 transition-all group-hover:bg-black/40"></div>
               </div>
-              <div>
+              <div class="flex-1">
                 <p class="font-semibold text-sm" style="color:#111">Daycoval</p>
-                <p class="text-xs text-text-muted-light mb-0.5" data-i18n="experience.daycoval.period">2025 – Atual ·
-                  Banking</p>
+                <p class="text-xs text-text-muted-light mb-0.5" data-i18n="experience.daycoval.period">2025 – Atual · Banking</p>
+              </div>
+              <div class="exp-card hidden absolute left-0 top-full mt-2 z-30 w-72 bg-white border border-black/08 rounded-xl shadow-lg p-5">
+                <p class="font-semibold text-sm mb-2" style="color:#111" data-i18n="experience.daycoval.card.title">Specialist Product Designer</p>
+                <p class="text-xs text-text-muted-light leading-relaxed" data-i18n="experience.daycoval.card.desc">Contributing to the company's design culture by strengthening UX practices and promoting product and design maturity across teams.</p>
               </div>
             </div>
-            <div class="flex gap-4">
+
+            <!-- Decathlon -->
+            <div class="exp-item relative flex gap-4 cursor-pointer group rounded-xl border border-black/10 p-4 hover:border-accent transition-colors">
               <div class="pt-1.5 flex-shrink-0">
-                <div class="w-2 h-2 rounded-full bg-black/20"></div>
+                <div class="exp-dot w-2 h-2 rounded-full bg-black/20 transition-all group-hover:bg-black/40"></div>
               </div>
-              <div>
+              <div class="flex-1">
                 <p class="font-semibold text-sm" style="color:#111">Decathlon</p>
-                <p class="text-xs text-text-muted-light" data-i18n="experience.decathlon.period">2025 – 2025 · 6 meses ·
-                  Retail Platform</p>
+                <p class="text-xs text-text-muted-light" data-i18n="experience.decathlon.period">2025 – 2025 · 6 meses · Retail Platform</p>
+              </div>
+              <div class="exp-card hidden absolute left-0 top-full mt-2 z-30 w-72 bg-white border border-black/08 rounded-xl shadow-lg p-5">
+                <p class="font-semibold text-sm mb-2" style="color:#111" data-i18n="experience.decathlon.card.title">Consulting Product Designer</p>
+                <p class="text-xs text-text-muted-light leading-relaxed" data-i18n="experience.decathlon.card.desc">Applied my design process expertise to redesign the benefits program, generating new business opportunities and improving the overall experience.</p>
               </div>
             </div>
-            <div class="flex gap-4">
+
+            <!-- GOK Digital -->
+            <div class="exp-item relative flex gap-4 cursor-pointer group rounded-xl border border-black/10 p-4 hover:border-accent transition-colors">
               <div class="pt-1.5 flex-shrink-0">
-                <div class="w-2 h-2 rounded-full bg-black/20"></div>
+                <div class="exp-dot w-2 h-2 rounded-full bg-black/20 transition-all group-hover:bg-black/40"></div>
               </div>
-              <div>
+              <div class="flex-1">
                 <p class="font-semibold text-sm" style="color:#111">GOK. Digital</p>
-                <p class="text-xs text-text-muted-light" data-i18n="experience.gok.period">2012 – 2025 · 13 anos · Tech
-                  &amp; Innovation</p>
+                <p class="text-xs text-text-muted-light" data-i18n="experience.gok.period">2012 – 2025 · 13 anos · Tech &amp; Innovation</p>
+              </div>
+              <div class="exp-card hidden absolute left-0 top-full mt-2 z-30 w-72 bg-white border border-black/08 rounded-xl shadow-lg p-5">
+                <p class="font-semibold text-sm mb-2" style="color:#111" data-i18n="experience.gok.card.title">Coordinator of Product Designer</p>
+                <p class="text-xs text-text-muted-light leading-relaxed" data-i18n="experience.gok.card.desc">Structured the entire design operation, including team development, allocation, leadership, and strategic direction across multiple projects and clients.</p>
               </div>
             </div>
-            <div class="flex gap-4">
+
+            <!-- Buscapé -->
+            <div class="exp-item relative flex gap-4 cursor-pointer group rounded-xl border border-black/10 p-4 hover:border-accent transition-colors">
               <div class="pt-1.5 flex-shrink-0">
-                <div class="w-2 h-2 rounded-full bg-black/20"></div>
+                <div class="exp-dot w-2 h-2 rounded-full bg-black/20 transition-all group-hover:bg-black/40"></div>
               </div>
-              <div>
+              <div class="flex-1">
                 <p class="font-semibold text-sm" style="color:#111">Buscapé Company</p>
-                <p class="text-xs text-text-muted-light" data-i18n="experience.buscape.period">2011 – 2012 · 1 ano ·
-                  Retail Platform</p>
+                <p class="text-xs text-text-muted-light" data-i18n="experience.buscape.period">2011 – 2012 · 1 ano · Retail Platform</p>
+              </div>
+              <div class="exp-card hidden absolute left-0 top-full mt-2 z-30 w-72 bg-white border border-black/08 rounded-xl shadow-lg p-5">
+                <p class="font-semibold text-sm mb-2" style="color:#111" data-i18n="experience.buscape.card.title">Product Designer Senior</p>
+                <p class="text-xs text-text-muted-light leading-relaxed" data-i18n="experience.buscape.card.desc">Contributed as a design accelerator by creating scalable visual patterns and optimizing layouts for high-volume digital implementations.</p>
               </div>
             </div>
-            <div class="flex gap-4">
+
+            <!-- Inverthia -->
+            <div class="exp-item relative flex gap-4 cursor-pointer group rounded-xl border border-black/10 p-4 hover:border-accent transition-colors">
               <div class="pt-1.5 flex-shrink-0">
-                <div class="w-2 h-2 rounded-full bg-black/20"></div>
+                <div class="exp-dot w-2 h-2 rounded-full bg-black/20 transition-all group-hover:bg-black/40"></div>
               </div>
-              <div>
+              <div class="flex-1">
                 <p class="font-semibold text-sm" style="color:#111">Inverthia</p>
-                <p class="text-xs text-text-muted-light" data-i18n="experience.inverthia.period">2011 – 2011 · 9 meses ·
-                  Digital Agency</p>
+                <p class="text-xs text-text-muted-light" data-i18n="experience.inverthia.period">2011 – 2011 · 9 meses · Digital Agency</p>
+              </div>
+              <div class="exp-card hidden absolute left-0 top-full mt-2 z-30 w-72 bg-white border border-black/08 rounded-xl shadow-lg p-5">
+                <p class="font-semibold text-sm mb-2" style="color:#111" data-i18n="experience.inverthia.card.title">Product Designer</p>
+                <p class="text-xs text-text-muted-light leading-relaxed" data-i18n="experience.inverthia.card.desc">Applied multidisciplinary design skills across visual assets, complex websites, web coding, and interactive animation experiences.</p>
               </div>
             </div>
+
           </div>
         </div>
 
@@ -312,7 +337,7 @@
         <div class="reveal md:col-span-1">
           <h3 class="font-serif text-2xl font-bold mb-8" style="color:#111" data-i18n="certifications.title">
             Certificações</h3>
-          <div class="space-y-4">
+          <div class="space-y-2">
             <div class="p-4 rounded-xl bg-white border border-black/06">
               <p class="text-sm font-medium" style="color:#111">Communication &amp; Public Speaking</p>
               <p class="text-xs text-text-muted-light">Evolve — 2023</p>
@@ -380,7 +405,6 @@
         Cases</p>
       <div class="flex items-end justify-between mb-16">
         <h2 class="font-serif text-4xl md:text-5xl font-bold" style="color:#111" data-i18n="cases.heading">Projetos</h2>
-        <p class="text-text-muted-light text-sm hidden md:block" data-i18n="cases.subtitle">Casos selecionados</p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6">
@@ -529,15 +553,16 @@
           <p class="text-text-muted-light text-base leading-relaxed" data-i18n="academic.project">
             Projeto: Dashboard para gestão estratégica de design focado em eficiência operacional orientada a dados.
           </p>
-        </div>
-        <!-- Visual placeholder card -->
-        <div
-          class="reveal rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 aspect-video flex items-center justify-center border border-black/06">
-          <div class="text-center">
-            <p class="text-4xl mb-2">📈</p>
-            <p class="text-sm text-text-muted-light font-medium" data-i18n="academic.visual">Dashboard — Visual
-              Analytics</p>
+          <div class="mt-8">
+            <a href="https://drive.google.com/file/d/1CqsAKP-dCqmHjHCipFH1MIO-daAiCDYH/view" target="_blank" rel="noopener"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-black text-white text-sm font-medium hover:opacity-80 transition-all active:scale-95">
+              <i class="ti ti-file-text text-lg"></i> <span data-i18n="academic.cta">Ver Trabalho Acadêmico →</span>
+            </a>
           </div>
+        </div>
+        <!-- Visual card -->
+        <div class="reveal rounded-2xl overflow-hidden border border-black/06 shadow-sm">
+          <img src="img/faculdade.png" alt="Dashboard — Visual Analytics" class="w-full h-auto block" />
         </div>
       </div>
     </div>
@@ -545,20 +570,87 @@
 
 
   <!-- ======================================
+       CONTACT FORM
+  ======================================= -->
+  <section id="contact" class="py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+
+      <!-- Header row -->
+      <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-4" data-i18n="contact.label">07 — Contato</p>
+      <div class="grid md:grid-cols-2 gap-8 items-end mb-16">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold heading-accent" data-i18n="contact.heading">
+          Vamos trabalhar<br /><em>juntos.</em>
+        </h2>
+        <p class="text-text-muted-dark text-base leading-relaxed" data-i18n="contact.description">
+          Obrigado por visitar meu portfólio. Se quiser conversar sobre projetos, design ou oportunidades, estou aqui e adoraria conectar.
+        </p>
+      </div>
+
+      <!-- Photo + Form grid -->
+      <div class="reveal grid md:grid-cols-[4fr_5fr] gap-0 rounded-2xl overflow-hidden border border-[var(--color-border)]">
+
+        <!-- Left: photo -->
+        <div class="relative min-h-[400px] md:min-h-0">
+          <img
+            src="https://media.licdn.com/dms/image/v2/D4D03AQHGUupXqMDPeQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1681073257259?e=1778716800&v=beta&t=iee7GzLJ-kUJdf9-4KotQPVppIpN_8tJdnWsrhm1sc8"
+            alt="Raul Lima"
+            class="absolute inset-0 w-full h-full object-cover object-center" />
+          <!-- Subtle gradient at bottom for text legibility if needed -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
+        </div>
+
+        <!-- Right: Tally form on light bg -->
+        <div class="bg-white px-8 md:px-10 py-8">
+          <iframe data-tally-src="https://tally.so/embed/EkBVN4?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+            loading="lazy" width="100%" height="284" frameborder="0" marginheight="0" marginwidth="0"
+            title="Contato"></iframe>
+        </div>
+
+      </div>
+
+      <script>
+        var d=document,w="https://tally.so/widgets/embed.js",
+        v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){e.src=e.dataset.tallySrc})};
+        if("undefined"!=typeof Tally)v();
+        else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s)}
+      </script>
+
+    </div>
+  </section>
+
+
+  <!-- ======================================
        FOOTER / CTA
   ======================================= -->
-  <footer id="contact" class="py-24 md:py-32">
+  <footer class="py-24 md:py-32">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="mb-16 reveal">
-        <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-8" data-i18n="footer.cta.label">
-          Vamos conversar?</p>
-        <h2 class="font-serif text-5xl md:text-7xl font-bold leading-[0.95] mb-10" data-i18n="footer.cta.heading">
-          Let's work<br /><em>together.</em>
-        </h2>
-        <a href="mailto:raul.sousa.work@gmail.com"
-          class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-bg-dark font-semibold text-base hover:opacity-90 transition-all active:scale-95">
-          raul.sousa.work@gmail.com →
-        </a>
+      <div class="mb-16 reveal grid md:grid-cols-2 gap-12 items-center">
+
+        <!-- Left: CTA content -->
+        <div>
+          <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-8" data-i18n="footer.cta.label">
+            Raul Lima Portfolio</p>
+          <h2 class="font-serif text-5xl md:text-7xl font-bold leading-[0.95] mb-10" data-i18n="footer.cta.heading">
+            Thank's for<br /><em>Watching.</em>
+          </h2>
+          <a href="mailto:raul.sousa.work@gmail.com"
+            class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-bg-dark font-semibold text-base hover:opacity-90 transition-all active:scale-95">
+            raul.sousa.work@gmail.com →
+          </a>
+        </div>
+
+        <!-- Right: VOID RUNNER game -->
+        <div id="void-runner-wrap" class="rounded-2xl overflow-hidden border border-[var(--alpha-15)] bg-black shadow-xl" style="height: 480px;">
+          <iframe id="game-iframe" src="space-shooter-offline.html"
+            width="100%" height="100%"
+            frameborder="0"
+            scrolling="no"
+            allow="autoplay"
+            title="VOID RUNNER — Mini Game"
+            style="display:block; width:100%; height:100%; background:#000;">
+          </iframe>
+        </div>
+
       </div>
 
       <hr class="border-[var(--color-border)] mb-10" />
@@ -573,9 +665,8 @@
           <a href="#skills" class="hover:text-text-primary-dark transition-colors"
             data-i18n="nav.skills">Competências</a>
           <a href="#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+          <a href="#contact" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.contact">Contato</a>
           <a href="/styleguide.html" class="text-accent hover:underline transition-colors">Styleguide</a>
-          <a href="https://calendly.com" target="_blank" rel="noopener" class="hover:text-accent transition-colors"
-            data-i18n="footer.schedule">Minha Agenda</a>
         </nav>
       </div>
     </div>
@@ -583,6 +674,75 @@
 
 
   <script type="module" src="/src/main.ts"></script>
+
+  <!-- VOID RUNNER Focus Mode Backdrop -->
+  <style>
+    #void-runner-backdrop {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.95);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    #void-runner-backdrop.active { opacity: 1; pointer-events: all; }
+    
+    body.focus-active .reveal {
+      transform: none !important;
+      filter: none !important;
+    }
+
+    #void-runner-wrap {
+      transition: all 0.35s ease;
+    }
+    #void-runner-wrap.active-focus {
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      width: min(900px, 95vw) !important;
+      height: min(640px, 90vh) !important;
+      z-index: 10000 !important;
+      margin: 0 !important;
+    }
+    #void-runner-focus-hint {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      color: rgba(255,255,255,0.35); font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase; pointer-events: none;
+      z-index: 10001;
+      opacity: 0; transition: opacity 0.35s ease;
+    }
+    #void-runner-backdrop.active ~ #void-runner-focus-hint {
+      opacity: 1;
+    }
+  </style>
+
+  <div id="void-runner-backdrop"></div>
+  <p id="void-runner-focus-hint">Clique fora do jogo para fechar</p>
+
+  <script>
+    (function(){
+      const backdrop = document.getElementById('void-runner-backdrop');
+      const wrap = document.getElementById('void-runner-wrap');
+      const iframe = document.getElementById('game-iframe');
+
+      window.addEventListener('message', function(e){
+        if(!e.data || !e.data.voidRunnerState) return;
+        if(e.data.voidRunnerState === 'playing'){
+          document.body.classList.add('focus-active');
+          backdrop.classList.add('active');
+          wrap.classList.add('active-focus');
+        }
+      });
+
+      backdrop.addEventListener('click', function(){
+        document.body.classList.remove('focus-active');
+        backdrop.classList.remove('active');
+        wrap.classList.remove('active-focus');
+        if(iframe && iframe.contentWindow){
+           iframe.contentWindow.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyP',bubbles:true}));
+        }
+      });
+    })();
+  </script>
 </body>
 
 </html>
