@@ -23,6 +23,7 @@ export default defineConfig({
         nofrictionai: resolve(__dirname, 'case/nofrictionai.html'),
         starbem: resolve(__dirname, 'case/starbem.html'),
         pernambucanas: resolve(__dirname, 'case/pernambucanas.html'),
+        spaceshooter: resolve(__dirname, 'space-shooter-offline.html'),
       },
     },
   },
