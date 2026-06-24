@@ -568,11 +568,14 @@ body {
   align-items: center;
   gap: 1.5rem;
   width: max-content;
-  animation: gallery-scroll 45s linear infinite;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+  will-change: transform;
 }
 
-.gallery-track.is-paused {
-  animation-play-state: paused;
+.gallery-track.is-dragging {
+  cursor: grabbing;
 }
 
 .gallery-item {
@@ -581,19 +584,14 @@ body {
   height: 320px;
   width: auto;
   border-radius: var(--radius-md);
-  cursor: pointer;
   object-fit: cover;
   box-shadow: 0 24px 48px -12px rgba(0,0,0,0.55), 0 8px 20px -8px rgba(0,0,0,0.4);
   transition: transform 0.35s ease;
+  -webkit-user-drag: none;
 }
 
 .gallery-item:hover {
   transform: translateY(-8px);
-}
-
-@keyframes gallery-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
 }
 
 @media (max-width: 768px) {
