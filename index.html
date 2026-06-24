@@ -71,7 +71,13 @@
   <!-- ======================================
        HERO
   ======================================= -->
-  <section class="relative min-h-screen dot-grid flex flex-col justify-center overflow-hidden">
+  <section id="hero-sequence" class="relative min-h-screen dot-grid flex flex-col justify-center overflow-hidden">
+    <!-- Scroll-driven image sequence (acts as background video) -->
+    <canvas id="hero-sequence-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+
+    <!-- Dark overlay to keep text readable over the sequence -->
+    <div class="absolute inset-0 bg-black/55 pointer-events-none"></div>
+
     <!-- Gradient overlay for depth -->
     <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-bg-dark pointer-events-none">
     </div>

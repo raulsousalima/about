@@ -4,6 +4,7 @@ import { initTheme } from './theme'
 import { initTypewriter } from './typewriter'
 import { initGalleryToggle } from './caseToggle'
 import { animateCounters } from './counter'
+import { initScrollSequence } from './scrollSequence'
 
 // Scroll-reveal: observe all .reveal elements
 const observer = new IntersectionObserver(
@@ -62,5 +63,6 @@ initI18n()
 initTheme()
 initTypewriter()
 initGalleryToggle()
+initScrollSequence()
 
 
