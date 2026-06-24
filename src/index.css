@@ -108,6 +108,35 @@
   --radius-pill: 9999px;
 }
 
+/* Hero always renders in dark mode — the scroll-sequence animation and its
+   overlay are designed for a dark background, regardless of the global toggle. */
+#hero-sequence {
+  --color-bg-dark:     #111111;
+  --color-bg-light:    #EFEFEF;
+  --color-surface:     #1A1A1A;
+  --color-surface-hover: #222222;
+  --color-border:      rgba(255,255,255,0.08);
+
+  --color-text-primary-dark:  #F4F4F4;
+  --color-text-muted-dark:    rgba(255,255,255,0.45);
+  --color-text-primary-light: #111111;
+  --color-text-muted-light:   #666666;
+
+  --color-accent:      #C8F04E;
+  --color-accent-hover:#D4F475;
+  --color-accent-muted:rgba(200,240,78,0.15);
+  --color-accent-2:    #E8E8E8;
+
+  --alpha-5:  rgba(255,255,255,0.05);
+  --alpha-10: rgba(255,255,255,0.10);
+  --alpha-15: rgba(255,255,255,0.15);
+  --alpha-20: rgba(255,255,255,0.20);
+  --alpha-40: rgba(255,255,255,0.40);
+  --glass-bg: rgba(17,17,17,0.75);
+
+  color: var(--color-text-primary-dark);
+}
+
 /* ===================== Base ======================== */
 *, *::before, *::after { box-sizing: border-box; }
 
