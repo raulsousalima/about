@@ -1,4 +1,4 @@
-const AUTO_SPEED = 55 // px per second
+const AUTO_SPEED = 28 // px per second
 const DRAG_THRESHOLD = 6 // px of movement before a pointer-down counts as a drag, not a click
 
 type TrackState = {
