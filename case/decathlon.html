@@ -449,6 +449,34 @@
 
 
     <!-- ======================================
+         GALLERY MOSAIC
+    ======================================= -->
+    <section class="py-16 md:py-24 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-6 mb-12 reveal">
+        <span class="case-label mb-4" data-i18n="case.decathlon.gallerymosaic.label">Galeria</span>
+        <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.decathlon.gallerymosaic.intro">Um mosaico com telas e momentos do projeto.</p>
+      </div>
+
+      <div class="gallery-mosaic reveal">
+        <div class="gallery-track">
+          <img class="gallery-item" src="../img/cases/decathlon/1.png" alt="Decathlon gallery 1" />
+          <img class="gallery-item" src="../img/cases/decathlon/2.png" alt="Decathlon gallery 2" />
+          <img class="gallery-item" src="../img/cases/decathlon/3.png" alt="Decathlon gallery 3" />
+          <img class="gallery-item" src="../img/cases/decathlon/4.png" alt="Decathlon gallery 4" />
+          <img class="gallery-item" src="../img/cases/decathlon/web1.png" alt="Decathlon gallery 5" />
+          <img class="gallery-item" src="../img/cases/decathlon/web2.png" alt="Decathlon gallery 6" />
+          <img class="gallery-item" src="../img/cases/decathlon/1.png" alt="Decathlon gallery 1" />
+          <img class="gallery-item" src="../img/cases/decathlon/2.png" alt="Decathlon gallery 2" />
+          <img class="gallery-item" src="../img/cases/decathlon/3.png" alt="Decathlon gallery 3" />
+          <img class="gallery-item" src="../img/cases/decathlon/4.png" alt="Decathlon gallery 4" />
+          <img class="gallery-item" src="../img/cases/decathlon/web1.png" alt="Decathlon gallery 5" />
+          <img class="gallery-item" src="../img/cases/decathlon/web2.png" alt="Decathlon gallery 6" />
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
          IMPACT
     ======================================= -->
     <section class="py-16 md:py-24">
@@ -545,6 +573,11 @@
     </div>
   </footer>
 
+
+  <div class="gallery-lightbox" id="gallery-lightbox">
+    <button class="gallery-lightbox-close" id="gallery-lightbox-close" aria-label="Fechar"><i class="ti ti-x"></i></button>
+    <img class="gallery-lightbox-img" id="gallery-lightbox-img" src="" alt="" />
+  </div>
 
   <script type="module" src="../src/main.ts"></script>
 

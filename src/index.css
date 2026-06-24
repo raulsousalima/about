@@ -552,3 +552,108 @@ body {
     border-width: 6px;
   }
 }
+
+/* ==================== Gallery Mosaic Section =================== */
+
+.gallery-mosaic {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+.gallery-track {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: max-content;
+  animation: gallery-scroll 45s linear infinite;
+}
+
+.gallery-track.is-paused {
+  animation-play-state: paused;
+}
+
+.gallery-item {
+  display: block;
+  flex-shrink: 0;
+  height: 320px;
+  width: auto;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  object-fit: cover;
+  box-shadow: 0 24px 48px -12px rgba(0,0,0,0.55), 0 8px 20px -8px rgba(0,0,0,0.4);
+  transition: transform 0.35s ease;
+}
+
+.gallery-item:hover {
+  transform: translateY(-8px);
+}
+
+@keyframes gallery-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (max-width: 768px) {
+  .gallery-item {
+    height: 200px;
+  }
+}
+
+/* Lightbox modal shared by gallery mosaics */
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0,0,0,0.85);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.gallery-lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.gallery-lightbox-img {
+  max-width: 90vw;
+  max-height: 85vh;
+  border-radius: var(--radius-md);
+  box-shadow: 0 25px 60px -12px rgba(0,0,0,0.65);
+  transform: scale(0.94);
+  transition: transform 0.3s ease;
+}
+
+.gallery-lightbox.is-open .gallery-lightbox-img {
+  transform: scale(1);
+}
+
+.gallery-lightbox-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.gallery-lightbox-close:hover {
+  background: rgba(255,255,255,0.2);
+}
