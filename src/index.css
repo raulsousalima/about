@@ -26,6 +26,8 @@
   --color-accent-muted:rgba(200,240,78,0.15);
   --color-accent-2:    #E8E8E8;
 
+  --particle-rgb: 255,255,255;
+
   /* Semantic Colors */
   --color-success:     #34D399; /* Emerald 400 */
   --color-success-bg:  rgba(52,211,153,0.15);
@@ -74,6 +76,8 @@
   --color-accent: #A7D226;
   --color-accent-hover: #A0C530;
   --color-accent-muted: rgba(167,210,38,0.30);
+
+  --particle-rgb: 17,17,17;
 
   /* Semantic Colors - Light Mode Equivalents */
   --color-success:     #059669; /* Emerald 600 */
@@ -554,6 +558,19 @@ body {
 }
 
 /* ==================== Gallery Mosaic Section =================== */
+
+.gallery-section {
+  position: relative;
+}
+
+.gallery-particles-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
 
 .gallery-mosaic {
   position: relative;

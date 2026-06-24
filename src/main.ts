@@ -6,6 +6,7 @@ import { initGalleryToggle } from './caseToggle'
 import { animateCounters } from './counter'
 import { initScrollSequence } from './scrollSequence'
 import { initGalleryMosaic } from './gallery'
+import { initGalleryParticles } from './particles'
 
 // Scroll-reveal: observe all .reveal elements
 const observer = new IntersectionObserver(
@@ -66,5 +67,6 @@ initTypewriter()
 initGalleryToggle()
 initScrollSequence()
 initGalleryMosaic()
+initGalleryParticles()
 
 
