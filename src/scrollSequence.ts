@@ -1,5 +1,6 @@
 const FRAME_COUNT = 101;
 const FRAME_PATH = (i: number) => `/img/sequence/imagem_${String(i).padStart(3, '0')}.jpg`;
+const SCROLL_COMPLETION_RATIO = 0.7;
 
 let canvas: HTMLCanvasElement | null = null;
 let ctx: CanvasRenderingContext2D | null = null;
@@ -45,7 +46,8 @@ function resizeCanvas() {
 function frameForScroll(): number {
   if (!section) return 0;
   const rect = section.getBoundingClientRect();
-  const progress = Math.min(Math.max(-rect.top / Math.max(rect.height, 1), 0), 1);
+  const rawProgress = -rect.top / Math.max(rect.height, 1);
+  const progress = Math.min(Math.max(rawProgress / SCROLL_COMPLETION_RATIO, 0), 1);
   return Math.min(FRAME_COUNT - 1, Math.round(progress * (FRAME_COUNT - 1)));
 }
 
