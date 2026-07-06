@@ -12,7 +12,7 @@
  *    working; the new case simply becomes visible to anyone already unlocked.
  *
  * SHARE A LINK
- *    https://<your-site>/?preview=RL-f01a99bc3816baf9
+ *    https://<your-site>/?preview=rl-cases
  *
  * REVOKE ACCESS (rotate)
  *  - Remove a token from ACCESS_TOKENS (or replace it) and redeploy. Any link
@@ -23,7 +23,7 @@
  */
 
 // Active tokens. Add/replace/remove entries to rotate access, then redeploy.
-const ACCESS_TOKENS = ['RL-f01a99bc3816baf9']
+const ACCESS_TOKENS = ['rl-cases']
 
 // Case slugs that require the token (matches case/<slug>.html and
 // [data-private-case="<slug>"] cards on the home grid).
