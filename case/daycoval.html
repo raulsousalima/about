@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banco Daycoval — Transformando a experiência Pix | Raul Lima</title>
+  <meta name="description"
+    content="Case study: Redesenho da experiência Pix no app do Banco Daycoval — nova arquitetura, pesquisa com usuários e evolução incremental em um ambiente altamente regulado." />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>R</text></svg>" />
+  <!-- Tabler Icons Standard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+
+<body>
+
+  <!-- ======================================
+       NAVIGATION (same as index.html)
+  ======================================= -->
+  <header id="home" class="fixed top-0 inset-x-0 z-50 glass-nav">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
+      <a href="../index.html"
+        class="flex items-center justify-center w-9 h-9 rounded-full bg-accent font-bold text-sm text-black leading-none select-none transition-transform hover:scale-105">R</a>
+
+      <!-- Nav links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-text-muted-dark">
+        <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+        <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+          data-i18n="nav.experience">Experiência</a>
+        <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.skills">Competências</a>
+        <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+      </nav>
+
+      <!-- Social + CTA + Lang Toggle -->
+      <div class="flex items-center gap-4">
+        <!-- Language Toggle -->
+        <div class="flex items-center gap-1 text-xs font-medium">
+          <button data-lang-btn="en"
+            class="px-2 py-1 rounded-full transition-all text-accent font-bold cursor-pointer hover:opacity-80">EN</button>
+          <span class="text-text-muted-dark opacity-50">|</span>
+          <button data-lang-btn="pt"
+            class="px-2 py-1 rounded-full transition-all text-text-muted-dark cursor-pointer hover:opacity-80">PT</button>
+        </div>
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="text-text-muted-dark hover:text-text-primary-dark transition-colors mx-1" aria-label="Toggle Theme">
+          <i class="ti ti-moon text-2xl" id="theme-icon"></i>
+        </button>
+        <!-- LinkedIn -->
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-linkedin text-2xl"></i>
+        </a>
+        <!-- Behance -->
+        <a href="https://www.behance.net/raulsousa" target="_blank" rel="noopener" aria-label="Behance"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-behance text-2xl"></i>
+        </a>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--alpha-15)] text-sm font-medium text-text-muted-dark hover:border-accent hover:text-accent transition-all">
+          <i class="ti ti-mail text-lg"></i> <span data-i18n="nav.contact">Contato</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <main class="pt-[72px]">
+
+    <!-- ======================================
+         CASE HERO
+    ======================================= -->
+    <section class="pt-[60px] pb-16">
+      <div class="max-w-7xl mx-auto px-6">
+        <!-- Back button -->
+        <a href="../index.html#cases"
+          class="inline-flex items-center gap-2 text-sm text-text-muted-dark hover:text-accent transition-colors mb-6 group">
+          <i class="ti ti-arrow-left text-lg transition-transform group-hover:-translate-x-1"></i>
+          <span data-i18n="case.back">Voltar</span>
+        </a>
+
+        <!-- Case title -->
+        <h1 class="font-serif text-4xl md:text-5xl font-bold mb-6 heading-accent reveal"
+          data-i18n="case.daycoval.title">
+          Transformando a experiência Pix no Banco Daycoval
+        </h1>
+
+        <!-- Case meta -->
+        <p class="text-sm md:text-base text-text-muted-dark mb-[60px] reveal">
+          <span class="text-text-primary-dark font-medium">Banco Daycoval</span>
+          &nbsp;·&nbsp; <span data-i18n="case.daycoval.hero.role">UX Specialist</span>
+          &nbsp;·&nbsp; <span data-i18n="case.daycoval.hero.period">2025 – Atual</span>
+        </p>
+      </div>
+
+      <!-- Hero banner — FULL WIDTH -->
+      <div class="case-hero-banner reveal"
+        style="background-image: linear-gradient(135deg, rgba(20,20,30,0.85), rgba(10,10,15,0.95)), url('../img/cases/daycoval/bannerhero.png'); border-radius: 0;">
+        <!-- Overlay for contrast -->
+        <div class="absolute inset-0 bg-black/40 z-0"></div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         OVERVIEW
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-[280px_1fr] gap-12 items-start reveal">
+          <!-- Company logo placeholder -->
+          <div class="case-img-placeholder p-8" style="min-height: 160px;">
+            <span class="font-serif text-3xl font-bold text-text-primary-dark">Daycoval</span>
+          </div>
+          <!-- Description -->
+          <div>
+            <span class="case-label mb-4" data-i18n="case.daycoval.overview.label">Sobre o Banco</span>
+            <p class="text-lg md:text-xl leading-relaxed text-text-muted-dark mt-4" data-i18n="case.daycoval.overview.company">
+              O Banco Daycoval é uma das principais instituições financeiras brasileiras, com forte atuação em crédito,
+              consignado, tesouraria e soluções financeiras para pessoas físicas e empresas. Com aproximadamente 2,3
+              milhões de clientes, o banco está entre os maiores bancos do país e vive um momento de evolução digital,
+              investindo na modernização de seus produtos e na maturidade dos processos de experiência do usuário.
+            </p>
+
+            <!-- Quick facts -->
+            <div class="grid sm:grid-cols-3 gap-6 mt-10">
+              <div>
+                <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-2" data-i18n="case.daycoval.overview.fact1.label">Setor</p>
+                <p class="text-base text-text-primary-dark font-medium" data-i18n="case.daycoval.overview.fact1.value">Serviços Financeiros</p>
+              </div>
+              <div>
+                <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-2" data-i18n="case.daycoval.overview.fact2.label">Plataformas</p>
+                <p class="text-base text-text-primary-dark font-medium" data-i18n="case.daycoval.overview.fact2.value">Mobile App, Web e Backoffice</p>
+              </div>
+              <div>
+                <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-2" data-i18n="case.daycoval.overview.fact3.label">Minha atuação</p>
+                <p class="text-base text-text-primary-dark font-medium" data-i18n="case.daycoval.overview.fact3.value">UX Specialist — Product Design, UX Research e Discovery</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         CONTEXT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-4xl reveal">
+          <h2 class="font-serif text-4xl md:text-5xl font-bold mb-8 heading-accent" data-i18n="case.daycoval.context.title">
+            Contexto
+          </h2>
+
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.daycoval.context.p1">
+            Minha atuação no Banco Daycoval é bastante abrangente, conectando diferentes áreas do negócio para transformar
+            necessidades dos usuários em oportunidades para os produtos digitais. Trabalho diariamente em parceria com
+            equipes de <strong class="text-text-primary-dark">Negócio, Produto, Tecnologia, Segurança e Compliance</strong>,
+            atuando como elo entre as necessidades dos clientes e os objetivos estratégicos da empresa.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.daycoval.context.p2">
+            Ao ingressar no banco, meu principal objetivo foi <strong class="text-text-primary-dark">fortalecer a cultura
+            de UX e elevar a maturidade dos processos de Design e Produto</strong>. Para isso, implementei práticas
+            estruturadas de pesquisa, discovery e validação, criando processos que permitissem ao time tomar decisões
+            baseadas em evidências e não apenas em percepções.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.daycoval.context.p3">
+            Durante esse período estruturei o processo de <strong class="text-text-primary-dark">Testes de Usabilidade</strong>,
+            desenvolvendo roteiros padronizados, materiais de apoio, critérios de avaliação e ferramentas para
+            monitoramento das sessões, utilizando o Maze para pesquisas moderadas e não moderadas com clientes reais.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.daycoval.context.p4">
+            Também fortaleci a frente de pesquisa por meio da criação de templates de Benchmark, boas práticas para
+            análise de mercado e documentação dos principais aprendizados. Como próxima evolução, iniciei a estruturação
+            de um processo consistente de Desk Research, tornando a pesquisa um pilar contínuo dentro da equipe.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.daycoval.context.p5">
+            Paralelamente, participei da evolução de diferentes funcionalidades do aplicativo, como Conta Corrente,
+            Cartão de Crédito e, principalmente, do <strong class="text-text-primary-dark">Pix</strong>, uma funcionalidade
+            estratégica para o banco.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.daycoval.context.p6">
+            O desafio desse projeto era modernizar toda a experiência do Pix respeitando as limitações técnicas,
+            regulatórias e operacionais do ambiente existente. Como a implementação seria realizada em diferentes esteiras
+            de desenvolvimento, era necessário criar uma solução que permitisse uma evolução gradual sem comprometer a
+            experiência dos clientes.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark" data-i18n="case.daycoval.context.p7">
+            Como estratégia, iniciamos o redesenho pela criação de uma <strong class="text-text-primary-dark">Home do
+            Pix</strong>, estabelecendo uma nova arquitetura para organizar toda a funcionalidade. Essa decisão também deu
+            origem a uma estratégia maior para o aplicativo: permitir que cada grande funcionalidade possuísse sua própria
+            página inicial, organizando melhor as jornadas dos usuários e facilitando a evolução futura do produto.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         CHALLENGE
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-4xl reveal">
+          <span class="case-label mb-6" data-i18n="case.daycoval.challenge.label">Desafio</span>
+
+          <p class="text-lg md:text-xl leading-relaxed mt-6 mb-6" data-i18n="case.daycoval.challenge.intro">
+            O principal desafio era <strong>evoluir uma das funcionalidades mais importantes do aplicativo</strong>
+            conciliando inovação, restrições técnicas e regras regulatórias já estabelecidas pelo banco.
+          </p>
+
+          <p class="text-base leading-relaxed text-text-muted-dark mb-6" data-i18n="case.daycoval.challenge.research">
+            Além disso, a implementação aconteceria de forma gradual, exigindo que novos fluxos coexistissem com
+            funcionalidades já disponíveis em produção, sem gerar inconsistências para os usuários. Os principais desafios
+            identificados foram:
+          </p>
+
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3 text-text-muted-dark">
+              <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+              <span data-i18n="case.daycoval.challenge.list.1">Evoluir uma funcionalidade crítica sem comprometer a experiência atual.</span>
+            </li>
+            <li class="flex items-start gap-3 text-text-muted-dark">
+              <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+              <span data-i18n="case.daycoval.challenge.list.2">Conciliar regras de negócio existentes com novas oportunidades identificadas durante a pesquisa.</span>
+            </li>
+            <li class="flex items-start gap-3 text-text-muted-dark">
+              <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+              <span data-i18n="case.daycoval.challenge.list.3">Alinhar expectativas entre Produto, Negócio, Tecnologia, Segurança e Compliance.</span>
+            </li>
+            <li class="flex items-start gap-3 text-text-muted-dark">
+              <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+              <span data-i18n="case.daycoval.challenge.list.4">Compreender profundamente os fluxos existentes antes de propor mudanças.</span>
+            </li>
+            <li class="flex items-start gap-3 text-text-muted-dark">
+              <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+              <span data-i18n="case.daycoval.challenge.list.5">Construir uma arquitetura escalável para futuras funcionalidades do aplicativo.</span>
+            </li>
+            <li class="flex items-start gap-3 text-text-muted-dark">
+              <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+              <span data-i18n="case.daycoval.challenge.list.6">Garantir que a implementação pudesse acontecer de forma incremental.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         GALLERY MOSAIC
+    ======================================= -->
+    <section class="py-16 md:py-24 overflow-hidden gallery-section">
+      <canvas class="gallery-particles-canvas" aria-hidden="true"></canvas>
+      <div class="max-w-7xl mx-auto px-6 mb-12 reveal relative z-10">
+        <span class="case-label mb-4" data-i18n="case.daycoval.gallerymosaic.label">Galeria</span>
+        <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.daycoval.gallerymosaic.intro">Um mosaico com telas e momentos do projeto.</p>
+      </div>
+
+      <!-- Mosaic placeholder — drop optimized WebP frames into img/cases/daycoval/gallery-mosaic/
+           then populate <div class="gallery-track"> with duplicated <img class="gallery-item"> tags
+           following the pattern used in the other cases. -->
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div class="case-img-placeholder" style="min-height: 200px; display:flex; align-items:center; justify-content:center;">
+          <p class="text-sm text-text-muted-dark" data-i18n="case.daycoval.gallerymosaic.placeholder">Imagens do mosaico em breve.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         PROCESS
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.daycoval.process.label">Processo</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.daycoval.process.intro">
+            O projeto seguiu um <strong class="text-text-primary-dark">fluxo estruturado de pesquisa, validação e
+            entrega</strong>, conectando descoberta, evidências e acompanhamento do desenvolvimento.
+          </p>
+        </div>
+
+        <!-- Timeline -->
+        <div class="process-timeline rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)] overflow-hidden reveal">
+          <!-- Step 1 -->
+          <div class="process-step">
+            <div class="step-number">01</div>
+            <h3 class="step-title" data-i18n="case.daycoval.process.step1.title">Pesquisa e entendimento</h3>
+            <p class="step-desc" data-i18n="case.daycoval.process.step1.desc">
+              Imersão para compreender o cenário atual do Pix dentro do banco, com pesquisas internas, entrevistas com
+              stakeholders e levantamento das principais dores dos clientes e das áreas de negócio.
+            </p>
+            <ul class="step-deliverables">
+              <li data-i18n="case.daycoval.process.step1.d1">Levantamento de requisitos</li>
+              <li data-i18n="case.daycoval.process.step1.d2">Entrevistas com stakeholders</li>
+              <li data-i18n="case.daycoval.process.step1.d3">Pesquisa de contexto</li>
+              <li data-i18n="case.daycoval.process.step1.d4">Mapeamento de dores</li>
+            </ul>
+          </div>
+          <!-- Step 2 -->
+          <div class="process-step">
+            <div class="step-number">02</div>
+            <h3 class="step-title" data-i18n="case.daycoval.process.step2.title">Benchmark e oportunidades</h3>
+            <p class="step-desc" data-i18n="case.daycoval.process.step2.desc">
+              Análise comparativa dos principais bancos e fintechs do mercado para identificar padrões, oportunidades e
+              boas práticas, direcionando decisões de produto e discussões estratégicas.
+            </p>
+            <ul class="step-deliverables">
+              <li data-i18n="case.daycoval.process.step2.d1">Benchmark competitivo</li>
+              <li data-i18n="case.daycoval.process.step2.d2">Mapeamento de oportunidades</li>
+              <li data-i18n="case.daycoval.process.step2.d3">Insights de mercado</li>
+              <li data-i18n="case.daycoval.process.step2.d4">Priorização das melhorias</li>
+            </ul>
+          </div>
+          <!-- Step 3 -->
+          <div class="process-step">
+            <div class="step-number">03</div>
+            <h3 class="step-title" data-i18n="case.daycoval.process.step3.title">Ideação e prototipação</h3>
+            <p class="step-desc" data-i18n="case.daycoval.process.step3.desc">
+              Soluções construídas com os times de Produto e Design em sessões colaborativas de ideação e Design Critique,
+              com alinhamentos técnicos para validar a viabilidade antes dos testes.
+            </p>
+            <ul class="step-deliverables">
+              <li data-i18n="case.daycoval.process.step3.d1">Wireframes</li>
+              <li data-i18n="case.daycoval.process.step3.d2">Protótipos de alta fidelidade</li>
+              <li data-i18n="case.daycoval.process.step3.d3">Design Critiques</li>
+              <li data-i18n="case.daycoval.process.step3.d4">Validação técnica</li>
+            </ul>
+          </div>
+          <!-- Step 4 -->
+          <div class="process-step">
+            <div class="step-number">04</div>
+            <h3 class="step-title" data-i18n="case.daycoval.process.step4.title">Validação e alinhamento</h3>
+            <p class="step-desc" data-i18n="case.daycoval.process.step4.desc">
+              Apresentações para Negócio e stakeholders compartilhando aprendizados de pesquisas, benchmarks e testes de
+              usabilidade. Os feedbacks refinaram a solução antes do desenvolvimento.
+            </p>
+            <ul class="step-deliverables">
+              <li data-i18n="case.daycoval.process.step4.d1">Testes de usabilidade</li>
+              <li data-i18n="case.daycoval.process.step4.d2">Apresentação dos insights</li>
+              <li data-i18n="case.daycoval.process.step4.d3">Refinamentos</li>
+              <li data-i18n="case.daycoval.process.step4.d4">Aprovação da solução</li>
+            </ul>
+          </div>
+          <!-- Step 5 -->
+          <div class="process-step">
+            <div class="step-number">05</div>
+            <h3 class="step-title" data-i18n="case.daycoval.process.step5.title">Handoff e acompanhamento</h3>
+            <p class="step-desc" data-i18n="case.daycoval.process.step5.desc">
+              Handoff para o time de desenvolvimento, documentando especificações de interface, comportamento dos
+              componentes e regras de negócio, com acompanhamento da implementação para garantir consistência.
+            </p>
+            <ul class="step-deliverables">
+              <li data-i18n="case.daycoval.process.step5.d1">Especificações funcionais</li>
+              <li data-i18n="case.daycoval.process.step5.d2">Documentação</li>
+              <li data-i18n="case.daycoval.process.step5.d3">Design QA</li>
+              <li data-i18n="case.daycoval.process.step5.d4">Suporte ao desenvolvimento</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         DECISIONS
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.daycoval.decisions.label">Decisões</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.daycoval.decisions.intro">
+            Um dos momentos mais desafiadores deste projeto foi equilibrar os insights obtidos nas pesquisas com usuários
+            e as expectativas das áreas de negócio.
+          </p>
+        </div>
+
+        <div class="case-strategy-content max-w-4xl reveal">
+          <p data-i18n="case.daycoval.decisions.p1">Durante o redesenho da experiência de gerenciamento dos limites do
+            Pix, os testes de usabilidade mostraram que os clientes tinham dificuldade para compreender a quantidade de
+            opções disponíveis e, em muitos casos, não entendiam claramente como os limites funcionavam. No entanto, a
+            expectativa inicial da superintendência era manter a estrutura existente, por estar alinhada às regras e
+            processos já estabelecidos pelo banco.</p>
+
+          <p data-i18n="case.daycoval.decisions.p2">Ao invés de simplesmente seguir esse direcionamento, busquei reunir
+            mais evidências para fundamentar uma decisão mais consistente. Trabalhei em conjunto com o responsável pelo
+            produto Pix, a equipe de Segurança e outras áreas envolvidas para compreender as restrições técnicas,
+            regulatórias e operacionais da funcionalidade. Paralelamente, utilizei os resultados do benchmark para
+            demonstrar que os principais bancos do mercado estavam simplificando a configuração dos limites, reduzindo a
+            quantidade de opções e tornando a experiência mais intuitiva.</p>
+
+          <p data-i18n="case.daycoval.decisions.p3">Essa discussão envolveu diversas áreas, como Produto, Negócio,
+            Tecnologia, Segurança e Compliance. Foram necessárias várias rodadas de alinhamento, já que uma alteração
+            aparentemente simples na interface impactava diretamente regras internas do Pix, serviços e fluxos de
+            implementação.</p>
+
+          <p data-i18n="case.daycoval.decisions.p4">Ao longo dessas conversas, ficou claro que a melhor solução não seria
+            atender apenas à visão do negócio ou apenas aos resultados da pesquisa, mas <strong>encontrar um equilíbrio
+            entre as necessidades dos usuários e as restrições do banco</strong>. Em conjunto com o time de Produto,
+            avaliamos diferentes alternativas até chegarmos a uma proposta que reduzisse a complexidade da jornada sem
+            comprometer os requisitos regulatórios e operacionais.</p>
+
+          <p data-i18n="case.daycoval.decisions.p5">Como resultado, entregamos uma experiência mais simples, com menos
+            interações para o cliente, alinhada aos padrões dos principais players do mercado e preparada para evoluir de
+            forma escalável.</p>
+
+          <p data-i18n="case.daycoval.decisions.p6">Mais do que redesenhar uma funcionalidade, este projeto reforçou a
+            importância de utilizar pesquisas, benchmarks e dados como instrumentos para influenciar decisões e construir
+            consenso entre diferentes áreas. Em um ambiente altamente regulado como o setor financeiro, o sucesso do
+            projeto dependia não apenas da qualidade da solução proposta, mas também da capacidade de comunicar seu valor
+            e engajar todos os stakeholders em torno da mesma visão.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         PROJECT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-8 reveal">
+          <span class="case-label mb-4" data-i18n="case.daycoval.project.label">Projeto</span>
+        </div>
+
+        <div class="max-w-4xl reveal">
+          <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-2" data-i18n="case.daycoval.project.platform.label">Plataforma</p>
+          <p class="text-lg md:text-xl font-medium text-text-primary-dark mb-6" data-i18n="case.daycoval.project.platform.value">📱 Mobile App (iOS e Android)</p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark" data-i18n="case.daycoval.project.desc">
+            O projeto contemplou o redesenho completo da experiência do Pix dentro do aplicativo do Banco Daycoval,
+            incluindo a nova Home do Pix e a evolução das principais jornadas da funcionalidade.
+          </p>
+        </div>
+
+        <!-- Screens placeholder — drop the project screens here, organized by flow. -->
+        <div class="case-img-placeholder mt-10 reveal" style="min-height: 200px; display:flex; align-items:center; justify-content:center;">
+          <p class="text-sm text-text-muted-dark" data-i18n="case.daycoval.project.placeholder">Telas do projeto em breve.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         IMPACT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.daycoval.impact.label">Impacto</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-4xl" data-i18n="case.daycoval.impact.intro">
+            Embora a implementação esteja sendo realizada de forma gradual, o projeto já gerou impactos importantes para o
+            produto e para a maturidade do UX dentro do banco.
+          </p>
+        </div>
+
+        <!-- Highlights -->
+        <div class="grid md:grid-cols-3 gap-6 mb-10 reveal">
+          <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)] p-8">
+            <h3 class="text-lg font-bold mb-3 text-text-primary-dark" data-i18n="case.daycoval.impact.h1.title">🚀 Modernização da experiência Pix</h3>
+            <p class="text-sm leading-relaxed text-text-muted-dark" data-i18n="case.daycoval.impact.h1.desc">
+              A nova arquitetura aproximou a experiência do Daycoval dos principais bancos digitais do mercado, criando
+              uma navegação mais organizada, intuitiva e preparada para futuras evoluções.
+            </p>
+          </div>
+          <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)] p-8">
+            <h3 class="text-lg font-bold mb-3 text-text-primary-dark" data-i18n="case.daycoval.impact.h2.title">💡 Novas oportunidades para o roadmap</h3>
+            <p class="text-sm leading-relaxed text-text-muted-dark" data-i18n="case.daycoval.impact.h2.desc">
+              O processo de pesquisa e benchmark permitiu identificar oportunidades que passaram a compor o roadmap do
+              produto, fortalecendo uma cultura de decisões baseadas em evidências.
+            </p>
+          </div>
+          <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)] p-8">
+            <h3 class="text-lg font-bold mb-3 text-text-primary-dark" data-i18n="case.daycoval.impact.h3.title">👥 Solução validada com usuários</h3>
+            <p class="text-sm leading-relaxed text-text-muted-dark" data-i18n="case.daycoval.impact.h3.desc">
+              A proposta foi validada com clientes reais em testes de usabilidade utilizando o Maze, gerando evidências
+              para refinar a solução antes da implementação.
+            </p>
+          </div>
+        </div>
+
+        <!-- Metrics grid -->
+        <div class="grid md:grid-cols-3 gap-6 reveal">
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value" data-i18n="case.daycoval.impact.metric1.value">3,9/5</p>
+            <p class="metric-desc" data-i18n="case.daycoval.impact.metric1.desc">
+              <strong>de satisfação</strong> na avaliação dos usuários nos testes de usabilidade
+            </p>
+          </div>
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value" data-i18n="case.daycoval.impact.metric2.value">9</p>
+            <p class="metric-desc" data-i18n="case.daycoval.impact.metric2.desc">
+              <strong>insights validados</strong> para a evolução da jornada do Pix
+            </p>
+          </div>
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value metric-value-sm" data-i18n="case.daycoval.impact.metric3.value">Evidências</p>
+            <p class="metric-desc" data-i18n="case.daycoval.impact.metric3.desc">
+              <strong>utilizadas para refinar a solução</strong> antes da implementação
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         BACK TO HOME
+    ======================================= -->
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-6">
+        <hr class="border-[var(--color-border)] mb-10" />
+        <div class="text-center">
+          <a href="../index.html#cases"
+            class="inline-flex items-center gap-2 text-base font-medium hover:text-accent transition-colors underline underline-offset-4"
+            data-i18n="case.daycoval.back_home">
+            voltar para home
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ======================================
+       FOOTER (same as index.html)
+  ======================================= -->
+  <footer id="contact" class="py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="mb-16 reveal text-center">
+        <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-8" data-i18n="footer.cta.label">
+          Vamos conversar?</p>
+        <h2 class="font-serif text-5xl md:text-7xl font-bold leading-[0.95] mb-10" data-i18n="footer.cta.heading">
+          Thank's for<br /><em>Watching.</em>
+        </h2>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-bg-dark font-semibold text-base hover:opacity-90 transition-all active:scale-95">
+          raul.sousa.work@gmail.com →
+        </a>
+      </div>
+
+      <hr class="border-[var(--color-border)] mb-10" />
+
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <p class="text-xs text-text-muted-dark" data-i18n="footer.copyright">© 2026 Raul Lima. Todos os direitos
+          reservados.</p>
+        <nav class="flex flex-wrap gap-6 text-xs text-text-muted-dark">
+          <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+          <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.experience">Experiência</a>
+          <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.skills">Competências</a>
+          <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+          <a href="../styleguide.html" class="text-accent hover:underline transition-colors">Styleguide</a>
+          <a href="https://calendly.com" target="_blank" rel="noopener" class="hover:text-accent transition-colors"
+            data-i18n="footer.schedule">Minha Agenda</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+
+  <div class="gallery-lightbox" id="gallery-lightbox">
+    <button class="gallery-lightbox-close" id="gallery-lightbox-close" aria-label="Fechar"><i class="ti ti-x"></i></button>
+    <img class="gallery-lightbox-img" id="gallery-lightbox-img" src="" alt="" />
+  </div>
+
+  <script type="module" src="../src/main.ts"></script>
+
+
+</body>
+
+</html>
