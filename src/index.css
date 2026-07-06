@@ -156,6 +156,13 @@ body {
 
 /* ==================== Components =================== */
 
+/* Private case gate (see src/privateAccess.ts).
+   Private cards ship hidden; JS reveals them only in unlocked private mode.
+   Private internal pages ship with <html class="pa-locked"> hiding the body
+   until JS confirms access, so content never flashes to a locked visitor. */
+.pa-hidden { display: none !important; }
+html.pa-locked body { visibility: hidden; }
+
 /* Theme visibility toggles */
 .show-in-light { display: none; }
 .show-in-dark { display: block; }
