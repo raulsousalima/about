@@ -97,7 +97,7 @@
 
       <!-- Hero banner — FULL WIDTH -->
       <div class="case-hero-banner reveal"
-        style="background-image: linear-gradient(135deg, rgba(20,20,30,0.85), rgba(10,10,15,0.95)), url('../img/cases/daycoval/bannerhero.png'); border-radius: 0;">
+        style="background-image: url('../img/cases/daycoval/banner_hero.webp'); border-radius: 0;">
         <!-- Overlay for contrast -->
         <div class="absolute inset-0 bg-black/40 z-0"></div>
       </div>
@@ -111,8 +111,9 @@
       <div class="max-w-7xl mx-auto px-6">
         <div class="grid md:grid-cols-[280px_1fr] gap-12 items-start reveal">
           <!-- Company logo placeholder -->
-          <div class="case-img-placeholder p-8" style="min-height: 160px;">
-            <span class="font-serif text-3xl font-bold text-text-primary-dark">Daycoval</span>
+          <div class="case-img-placeholder p-8">
+            <img src="../img/cases/daycoval/logo_dark.svg" alt="Banco Daycoval" class="show-in-dark" style="max-width: 280px; height: auto;" />
+            <img src="../img/cases/daycoval/logo_light.svg" alt="Banco Daycoval" class="show-in-light" style="max-width: 280px; height: auto;" />
           </div>
           <!-- Description -->
           <div>
@@ -204,7 +205,17 @@
     ======================================= -->
     <section class="py-16 md:py-24">
       <div class="max-w-7xl mx-auto px-6">
-        <div class="max-w-4xl reveal">
+        <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
+
+          <!-- Image -->
+          <div class="reveal">
+            <div class="case-img-placeholder aspect-square" style="max-width: 400px;">
+              <img src="../img/cases/daycoval/imagem.png" alt="Experiência Pix Daycoval" />
+            </div>
+          </div>
+
+          <!-- Challenge text -->
+          <div class="reveal">
           <span class="case-label mb-6" data-i18n="case.daycoval.challenge.label">Desafio</span>
 
           <p class="text-lg md:text-xl leading-relaxed mt-6 mb-6" data-i18n="case.daycoval.challenge.intro">
@@ -244,6 +255,7 @@
               <span data-i18n="case.daycoval.challenge.list.6">Garantir que a implementação pudesse acontecer de forma incremental.</span>
             </li>
           </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -259,12 +271,38 @@
         <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.daycoval.gallerymosaic.intro">Um mosaico com telas e momentos do projeto.</p>
       </div>
 
-      <!-- Mosaic placeholder — drop optimized WebP frames into img/cases/daycoval/gallery-mosaic/
-           then populate <div class="gallery-track"> with duplicated <img class="gallery-item"> tags
-           following the pattern used in the other cases. -->
-      <div class="max-w-7xl mx-auto px-6 relative z-10">
-        <div class="case-img-placeholder" style="min-height: 200px; display:flex; align-items:center; justify-content:center;">
-          <p class="text-sm text-text-muted-dark" data-i18n="case.daycoval.gallerymosaic.placeholder">Imagens do mosaico em breve.</p>
+      <div class="gallery-mosaic reveal relative z-10">
+        <div class="gallery-track">
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_0.webp" width="1120" height="700" alt="Daycoval gallery 0" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_1.webp" width="1120" height="700" alt="Daycoval gallery 1" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_2.webp" width="1120" height="700" alt="Daycoval gallery 2" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_3.webp" width="1120" height="700" alt="Daycoval gallery 3" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_4.webp" width="1120" height="700" alt="Daycoval gallery 4" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_5.webp" width="1120" height="700" alt="Daycoval gallery 5" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_6.webp" width="1120" height="700" alt="Daycoval gallery 6" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_7.webp" width="1120" height="700" alt="Daycoval gallery 7" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_8.webp" width="1120" height="700" alt="Daycoval gallery 8" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_9.webp" width="1120" height="700" alt="Daycoval gallery 9" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_10.webp" width="1120" height="700" alt="Daycoval gallery 10" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_11.webp" width="1120" height="700" alt="Daycoval gallery 11" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_12.webp" width="1120" height="700" alt="Daycoval gallery 12" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_13.webp" width="1120" height="700" alt="Daycoval gallery 13" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_14.webp" width="1120" height="700" alt="Daycoval gallery 14" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_0.webp" width="1120" height="700" alt="Daycoval gallery 0" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_1.webp" width="1120" height="700" alt="Daycoval gallery 1" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_2.webp" width="1120" height="700" alt="Daycoval gallery 2" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_3.webp" width="1120" height="700" alt="Daycoval gallery 3" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_4.webp" width="1120" height="700" alt="Daycoval gallery 4" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_5.webp" width="1120" height="700" alt="Daycoval gallery 5" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_6.webp" width="1120" height="700" alt="Daycoval gallery 6" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_7.webp" width="1120" height="700" alt="Daycoval gallery 7" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_8.webp" width="1120" height="700" alt="Daycoval gallery 8" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_9.webp" width="1120" height="700" alt="Daycoval gallery 9" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_10.webp" width="1120" height="700" alt="Daycoval gallery 10" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_11.webp" width="1120" height="700" alt="Daycoval gallery 11" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_12.webp" width="1120" height="700" alt="Daycoval gallery 12" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_13.webp" width="1120" height="700" alt="Daycoval gallery 13" />
+          <img class="gallery-item" src="../img/cases/daycoval/gallery-mosaic/presentation_14.webp" width="1120" height="700" alt="Daycoval gallery 14" />
         </div>
       </div>
     </section>
@@ -422,22 +460,96 @@
     ======================================= -->
     <section class="py-16 md:py-24">
       <div class="max-w-7xl mx-auto px-6">
-        <div class="mb-8 reveal">
-          <span class="case-label mb-4" data-i18n="case.daycoval.project.label">Projeto</span>
+        <div class="mb-12 reveal flex flex-col items-start md:flex-row md:items-end justify-between gap-6">
+          <span class="case-label mb-4 md:mb-0" data-i18n="case.daycoval.project.label">Projeto</span>
+          <div class="flex items-center bg-[var(--alpha-5)] rounded-full p-1 border border-[var(--alpha-10)]" id="gallery-view-toggle">
+            <button id="view-mode-app-btn" class="px-5 py-2 rounded-full text-sm font-medium bg-surface text-[var(--color-text-primary-dark)] shadow-sm transition-all">App</button>
+            <button id="view-mode-web-btn" class="px-5 py-2 rounded-full text-sm font-medium text-[var(--color-text-muted-dark)] hover:text-[var(--color-text-primary-dark)] transition-all">Web</button>
+          </div>
         </div>
 
-        <div class="max-w-4xl reveal">
-          <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-2" data-i18n="case.daycoval.project.platform.label">Plataforma</p>
-          <p class="text-lg md:text-xl font-medium text-text-primary-dark mb-6" data-i18n="case.daycoval.project.platform.value">📱 Mobile App (iOS e Android)</p>
-          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark" data-i18n="case.daycoval.project.desc">
-            O projeto contemplou o redesenho completo da experiência do Pix dentro do aplicativo do Banco Daycoval,
-            incluindo a nova Home do Pix e a evolução das principais jornadas da funcionalidade.
-          </p>
+        <!-- App View -->
+        <div id="gallery-app-view" class="case-gallery show-grid pb-8 reveal">
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.daycoval.project.app.title1">Home Pix</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/daycoval/01.png" alt="Home do Pix no app Daycoval" />
+              </div>
+              <img src="../img/cases/daycoval/menuinferior.png" class="case-gallery-overlay" alt="Menu inferior" />
+            </div>
+          </div>
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.daycoval.project.app.title2">Limites Pix</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/daycoval/02.png" alt="Gerenciamento de limites do Pix" />
+              </div>
+              <img src="../img/cases/daycoval/menuinferior.png" class="case-gallery-overlay" alt="Menu inferior" />
+            </div>
+          </div>
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.daycoval.project.app.title3">Configurar Limites</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/daycoval/03.png" alt="Configuração de limites por contato" />
+              </div>
+              <img src="../img/cases/daycoval/menuinferior.png" class="case-gallery-overlay" alt="Menu inferior" />
+            </div>
+          </div>
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.daycoval.project.app.title4">Confirmação</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/daycoval/04.png" alt="Confirmação de ajuste de limite" />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- Screens placeholder — drop the project screens here, organized by flow. -->
-        <div class="case-img-placeholder mt-10 reveal" style="min-height: 200px; display:flex; align-items:center; justify-content:center;">
-          <p class="text-sm text-text-muted-dark" data-i18n="case.daycoval.project.placeholder">Telas do projeto em breve.</p>
+        <!-- Web View (2x2 grid, hidden by default) -->
+        <div id="gallery-web-view" class="gallery-web-view web-grid-2x2 hidden pb-8">
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.daycoval.project.web.title1">Home Pix</h4>
+            <div class="case-gallery-item web-landscape-format">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/daycoval/web0.png" alt="Home do Pix no internet banking" />
+              </div>
+            </div>
+          </div>
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.daycoval.project.web.title2">Onboarding</h4>
+            <div class="case-gallery-item web-landscape-format">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/daycoval/web1.png" alt="Onboarding do Pix no internet banking" />
+              </div>
+            </div>
+          </div>
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.daycoval.project.web.title3">Limites Pix</h4>
+            <div class="case-gallery-item web-landscape-format">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/daycoval/web2.png" alt="Limites do Pix no internet banking" />
+              </div>
+            </div>
+          </div>
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.daycoval.project.web.title4">Ajustar Limites</h4>
+            <div class="case-gallery-item web-landscape-format">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/daycoval/web3.png" alt="Ajuste de limites no internet banking" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project description -->
+        <div class="case-strategy-section reveal">
+          <div class="case-strategy-content max-w-4xl">
+            <p data-i18n="case.daycoval.project.desc">O projeto contemplou o redesenho completo da experiência do Pix
+              dentro do aplicativo do Banco Daycoval, incluindo a nova Home do Pix e a evolução das principais jornadas da
+              funcionalidade, com a mesma estrutura levada também para o internet banking.</p>
+          </div>
         </div>
       </div>
     </section>

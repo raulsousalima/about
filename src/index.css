@@ -538,6 +538,24 @@ html.pa-locked body { visibility: hidden; }
   border-radius: 24px;
 }
 
+/* Web view as a 2x2 grid of landscape desktop shots (e.g. Daycoval) */
+.gallery-web-view.web-grid-2x2:not(.hidden) {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 768px) {
+  .gallery-web-view.web-grid-2x2:not(.hidden) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.case-gallery-item.web-landscape-format {
+  width: 100%;
+  aspect-ratio: 900 / 500;
+  border-width: 8px;
+  border-radius: 20px;
+}
+
 .case-gallery-overlay {
   position: absolute;
   bottom: 0;
