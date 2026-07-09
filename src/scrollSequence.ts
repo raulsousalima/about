@@ -1,4 +1,4 @@
-const FRAME_COUNT = 101;
+const FRAME_COUNT = 160;
 const FRAME_PATH = (i: number) => `/img/sequence/imagem_${String(i).padStart(3, '0')}.jpg`;
 const SCROLL_COMPLETION_RATIO = 0.2;
 
