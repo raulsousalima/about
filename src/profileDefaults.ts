@@ -1,26 +1,43 @@
 export interface Localized { pt: string; en: string }
+
 export interface Experience {
   company: string; role: Localized; location: string
   start: string; end: string; current: boolean
   summary: Localized; achievements: Localized[]
 }
+
 export interface Education { school: string; degree: Localized; start: string; end: string }
 export interface Certification { name: string; issuer: string; year: string }
 export interface LangSkill { name: Localized; level: Localized }
+
 export interface Header {
   name: string; headline: Localized; location: string
-  email: string; phone: string; website: string; linkedin: string; github: string; photo: string
+  email: string; phone: string
+  website: string; linkedin: string; github: string; figma: string
+  photo: string
 }
+
 export interface ResumeData {
   header: Header; summary: Localized; experience: Experience[]
   education: Education[]; skills: { category: Localized; items: string[] }[]
   languages: LangSkill[]; certifications: Certification[]
 }
 
+export interface LetterData {
+  kind: 'letter'
+  salutation: Localized
+  company: string
+  role: Localized
+  paragraphs: Localized[]
+  closing: Localized
+}
+
+/* ─── Shared base data ─────────────────────────────────────────────────── */
+
 const HEADER: Header = {
   name: 'Raul Lima',
   headline: {
-    pt: 'Product Designer Specialist | Liderança em Product Design | Designer Engineer | AI-driven Product Design',
+    pt: 'Product Designer Specialist | Product Design Leadership | Designer Engineer | AI-driven Product Design',
     en: 'Product Designer Specialist | Product Design Leadership | Designer Engineer | AI-driven Product Design',
   },
   location: 'São Paulo, Brazil',
@@ -29,29 +46,27 @@ const HEADER: Header = {
   website: 'raullima.vercel.app',
   linkedin: 'linkedin.com/in/raullsousa',
   github: '',
+  figma: '',
   photo: '',
 }
 
-const SUMMARY_PT = `Product Designer com 15+ anos de experiência projetando e liderando produtos digitais em Fintech, Varejo, HealthTech, EdTech e IA.
+const SUMMARY: Localized = {
+  pt: `Product Designer com 15+ anos de experiência projetando e liderando produtos digitais em Fintech, Varejo, HealthTech, EdTech e IA.
 
 Especializado em transformar desafios de negócio complexos em experiências digitais escaláveis e centradas no usuário, conectando estratégia de produto, pesquisa UX, design de interação, tecnologia e objetivos de negócio.
 
-Ao longo da carreira, contribuí e liderei produtos digitais com 1M+ usuários, atuando em empresas como Banco Daycoval, Pernambucanas, Decathlon, Grupo RD Saúde, Faber-Castell e outras grandes organizações.`
+Ao longo da carreira, contribuí e liderei produtos digitais com 1M+ usuários, atuando em empresas como Banco Daycoval, Pernambucanas, Decathlon, Grupo RD Saúde, Faber-Castell e outras grandes organizações.`,
 
-const SUMMARY_EN = `Product Designer with 15+ years of experience designing and leading digital products across Fintech, Retail, HealthTech, EdTech and AI.
+  en: `Product Designer with 15+ years of experience designing and leading digital products across Fintech, Retail, HealthTech, EdTech and AI.
 
 Experienced in transforming complex business challenges into scalable, user-centered digital experiences, connecting product strategy, UX research, interaction design, technology and business goals.
 
-Throughout my career, I have contributed to and led digital products reaching 1M+ users, working with companies such as Banco Daycoval, Pernambucanas, Decathlon, Grupo RD Saúde, Faber-Castell and other large organizations.`
+Throughout my career, I have contributed to and led digital products reaching 1M+ users, working with companies such as Banco Daycoval, Pernambucanas, Decathlon, Grupo RD Saúde, Faber-Castell and other large organizations.`,
+}
 
-const KEY_ACHIEVEMENTS_PT: Localized[] = [
-  { pt: 'Aumentou taxas de conversão em até 25% por meio de otimização de UX e redesign de funil.', en: 'Increased conversion rates by up to 25% through UX optimization and funnel redesign.' },
-  { pt: 'Reduziu abandono de usuários em 30%+ simplificando jornadas complexas.', en: 'Reduced user drop-off by 30%+ by simplifying complex journeys.' },
-  { pt: 'Melhorou a eficiência operacional em aproximadamente 20% por meio de soluções de autoatendimento e automação.', en: 'Improved operational efficiency by approximately 20% through self-service and automation solutions.' },
-  { pt: 'Liderou experiências omnichannel em 6+ unidades de negócio, melhorando consistência e escalabilidade.', en: 'Led omnichannel experiences across 6+ business units, improving consistency and scalability.' },
-]
+/* ─── Experiences (fixed order — Daycoval always first) ───────────────── */
 
-const EXPERIENCE_DAYCOVAL: Experience = {
+const EXP_DAYCOVAL: Experience = {
   company: 'Banco Daycoval',
   role: { pt: 'Product Designer Specialist', en: 'Product Designer Specialist' },
   location: 'São Paulo, Brazil · Presencial',
@@ -69,7 +84,7 @@ const EXPERIENCE_DAYCOVAL: Experience = {
   ],
 }
 
-const EXPERIENCE_GOKK_COORD: Experience = {
+const EXP_GOKK_COORD: Experience = {
   company: 'GOK.K | Digital Innovation',
   role: { pt: 'Coordenador de Product Design', en: 'Coordinator of Product Design' },
   location: 'São Paulo, Brazil · Híbrido',
@@ -87,7 +102,20 @@ const EXPERIENCE_GOKK_COORD: Experience = {
   ],
 }
 
-const EXPERIENCE_GOKK_LEADER: Experience = {
+const EXP_GOKK_COORD_DECATHLON: Experience = {
+  ...EXP_GOKK_COORD,
+  summary: {
+    pt: 'Gerenciamento de time de 14 Designers e entrega de projetos estratégicos para múltiplos clientes. Projeto em destaque: Decathlon — Club / Ready to Play — redesenho estratégico da experiência de uma das principais soluções digitais da empresa.',
+    en: 'Managed a team of 14 Designers and delivered strategic projects for multiple clients. Featured project: Decathlon — Club / Ready to Play — strategic redesign of one of the company\'s key digital solutions.',
+  },
+  achievements: [
+    { pt: 'Liderança, mentoria e desenvolvimento de time de 14 Designers.', en: 'Lead, mentor and develop a team of 14 Designers.' },
+    { pt: 'Mapeamento da jornada do cliente e benchmarking de mercado (Decathlon).', en: 'Mapped the existing customer journey and conducted market benchmarking (Decathlon).' },
+    { pt: 'Desenvolvimento de soluções UX do discovery até handoff para Tecnologia.', en: 'Developed UX solutions from discovery through technology handoff.' },
+  ],
+}
+
+const EXP_GOKK_LEADER: Experience = {
   company: 'GOK.K | Digital Innovation',
   role: { pt: 'Product Design Leader', en: 'Product Design Leader' },
   location: 'São Paulo, Brazil',
@@ -104,71 +132,71 @@ const EXPERIENCE_GOKK_LEADER: Experience = {
   ],
 }
 
-const EXPERIENCE_GOKK_SENIOR: Experience = {
+const EXP_GOKK_SENIOR: Experience = {
   company: 'GOK.K | Digital Innovation',
   role: { pt: 'Senior Product Designer', en: 'Senior Product Designer' },
   location: 'São Paulo, Brazil',
   start: '01/2015', end: '12/2016', current: false,
   summary: {
-    pt: 'Responsável por projetos end-to-end de Product Design em múltiplas indústrias e produtos digitais. Projetos: Pefisa / Pernambucanas (conta digital e serviços financeiros), Caixa Seguradoras (solução mobile para plano de saúde e odontológico), Stoneridge (rastreamento IoT de frotas nos EUA), Cenoura & Bronze (engajamento mobile), Positron (segurança veicular com geolocalização).',
-    en: 'Responsible for end-to-end Product Design projects across multiple industries and digital products. Projects: Pefisa / Pernambucanas (digital account and financial services), Caixa Seguradoras (mobile health and dental insurance), Stoneridge (IoT fleet tracking, USA), Cenoura & Bronze (mobile engagement), Positron (vehicle security with geofencing).',
+    pt: 'Responsável por projetos end-to-end de Product Design em múltiplas indústrias. Projetos: Pefisa / Pernambucanas (conta digital), Caixa Seguradoras (plano de saúde mobile), Stoneridge (rastreamento IoT de frotas, EUA), Cenoura & Bronze (engajamento mobile), Positron (segurança veicular com geofencing).',
+    en: 'Responsible for end-to-end Product Design projects across multiple industries. Projects: Pefisa / Pernambucanas (digital account), Caixa Seguradoras (mobile health insurance), Stoneridge (IoT fleet tracking, USA), Cenoura & Bronze (mobile engagement), Positron (vehicle security with geofencing).',
   },
   achievements: [
-    { pt: 'Discovery → Definição → Pesquisa → Análise de Dados → Ideação → Prototipagem → Testes de Usabilidade → Implementação.', en: 'Discovery → Definition → Research → Data Analysis → Ideation → Prototyping → Usability Testing → Implementation.' },
-    { pt: 'Pesquisa com usuários, desk research, definição de hipóteses, surveys e entrevistas, personas, jornadas, mapas de empatia.', en: 'User research, desk research, hypothesis definition, surveys and interviews, personas, customer journeys, empathy maps.' },
-    { pt: 'Prototipagem de baixa e alta fidelidade, testes de usabilidade, testes A/B, suporte ao desenvolvimento e handoff.', en: 'Low and high-fidelity prototyping, usability testing, A/B testing, development support and design handoff.' },
+    { pt: 'Discovery → Definição → Pesquisa → Ideação → Prototipagem → Testes de Usabilidade → Implementação.', en: 'Discovery → Definition → Research → Ideation → Prototyping → Usability Testing → Implementation.' },
+    { pt: 'Pesquisa com usuários, personas, jornadas, mapas de empatia, surveys e entrevistas.', en: 'User research, personas, customer journeys, empathy maps, surveys and interviews.' },
+    { pt: 'Prototipagem de baixa e alta fidelidade, testes A/B, suporte ao desenvolvimento e design handoff.', en: 'Low and high-fidelity prototyping, A/B testing, development support and design handoff.' },
   ],
 }
 
-const EXPERIENCE_GOKK_PD: Experience = {
+const EXP_GOKK_PD: Experience = {
   company: 'GOK.K | Digital Innovation',
   role: { pt: 'Product Designer', en: 'Product Designer' },
   location: 'São Paulo, Brazil',
   start: '01/2014', end: '12/2014', current: false,
   summary: {
-    pt: 'Projetos: Spark (solução mobile e web para capas personalizadas de smartphone), Risqué (simulador mobile de esmalte e catálogo para promotoras).',
+    pt: 'Projetos: Spark (solução mobile e web para capas personalizadas de smartphone), Risqué (simulador mobile de esmalte e catálogo de produtos para promotoras).',
     en: 'Projects: Spark (mobile and web solution for personalized smartphone covers), Risqué (mobile nail polish simulator and product catalog for promoters).',
   },
   achievements: [],
 }
 
-const EXPERIENCE_PD_2013: Experience = {
+const EXP_PD_2013: Experience = {
   company: 'GOK.K | Digital Innovation',
   role: { pt: 'Product Designer', en: 'Product Designer' },
   location: 'São Paulo, Brazil',
   start: '01/2013', end: '12/2013', current: false,
   summary: {
-    pt: 'Produtos digitais envolvendo IoT, aplicativos iOS e Android, web apps responsivos e tecnologias de geolocalização. Projeto em destaque: Porto Seguro — Assistente Tempo — solução para melhorar a logística de colaboradores durante o atendimento ao cliente usando geolocalização, melhorando a eficiência operacional.',
-    en: 'Digital products involving IoT, iOS and Android applications, responsive web applications and geolocation technologies. Featured project: Porto Seguro — Tempo Assistant — solution to improve employee logistics during customer service using geolocation, improving operational efficiency.',
+    pt: 'Produtos digitais envolvendo IoT, iOS/Android, web responsivo e geolocalização. Projeto em destaque: Porto Seguro — Assistente Tempo — solução de logística para atendimento ao cliente usando geolocalização, melhorando a eficiência operacional.',
+    en: 'Digital products involving IoT, iOS/Android, responsive web and geolocation. Featured project: Porto Seguro — Tempo Assistant — logistics solution for customer service using geolocation, improving operational efficiency.',
   },
   achievements: [],
 }
 
-const EXPERIENCE_DIGITAL_DESIGNER: Experience = {
+const EXP_DIGITAL_DESIGNER: Experience = {
   company: 'Digital Designer',
   role: { pt: 'Digital Designer', en: 'Digital Designer' },
   location: 'São Paulo, Brazil',
   start: '02/2012', end: '01/2013', current: false,
   summary: {
-    pt: 'Design de produtos digitais e websites, direção de arte, desenvolvimento de conceitos e apresentações, design para redes sociais e comunicação digital.',
-    en: 'Digital product and website design, art direction, concept development and presentations, social media design and digital communication.',
+    pt: 'Design de produtos digitais e websites, direção de arte, desenvolvimento de conceitos, design para redes sociais e comunicação digital.',
+    en: 'Digital product and website design, art direction, concept development, social media design and digital communication.',
   },
   achievements: [],
 }
 
-const EXPERIENCE_ADPLIST: Experience = {
+const EXP_ADPLIST: Experience = {
   company: 'ADPList',
   role: { pt: 'Mentor de Design', en: 'Design Mentor' },
   location: 'Remoto',
   start: '02/2022', end: '', current: true,
   summary: {
-    pt: 'Mentoria para Product Designers e profissionais em transição para Design, com foco em: Carreira · Product Design · Processos de Design · Gestão · Liderança · Design Thinking.',
-    en: 'Mentor Product Designers and professionals transitioning into Design, with a focus on: Career · Product Design · Design Processes · Management · Leadership · Design Thinking.',
+    pt: 'Mentoria para Product Designers e profissionais em transição para Design: Carreira · Product Design · Processos · Gestão · Liderança · Design Thinking.',
+    en: 'Mentor Product Designers and professionals transitioning into Design: Career · Product Design · Processes · Management · Leadership · Design Thinking.',
   },
   achievements: [],
 }
 
-const EXPERIENCE_AWARI: Experience = {
+const EXP_AWARI: Experience = {
   company: 'AWARI',
   role: { pt: 'Especialista em UI Design', en: 'UI Designer Specialist' },
   location: 'Remoto',
@@ -180,6 +208,8 @@ const EXPERIENCE_AWARI: Experience = {
   achievements: [],
 }
 
+/* ─── Shared sections ─────────────────────────────────────────────────── */
+
 const EDUCATION: Education[] = [
   {
     school: 'PUCRS — Pontifícia Universidade Católica do Rio Grande do Sul',
@@ -188,36 +218,18 @@ const EDUCATION: Education[] = [
   },
   {
     school: 'UNINOVE — Universidade Nove de Julho',
-    degree: { pt: 'Bacharelado — Comunicação Social & Publicidade e Propaganda', en: 'Bachelor\'s Degree — Social Communication & Advertising' },
+    degree: { pt: 'Bacharelado — Comunicação Social & Publicidade e Propaganda', en: "Bachelor's Degree — Social Communication & Advertising" },
     start: '2010', end: '2014',
   },
 ]
 
 const SKILLS = [
-  {
-    category: { pt: 'Produto & Design', en: 'Product & Design' },
-    items: ['Product Design', 'UX Design', 'UI Design', 'UX Strategy', 'Product Discovery', 'User Research', 'Interaction Design', 'Design Thinking', 'Design Systems', 'Service Design', 'Experience Design', 'User-Centered Design', 'Prototyping', 'Usability Testing'],
-  },
-  {
-    category: { pt: 'Liderança', en: 'Leadership' },
-    items: ['Design Leadership', 'Team Management', 'Career Development', 'Mentoring', 'Facilitation', 'Stakeholder Management', 'Cross-functional Collaboration', 'Conflict Resolution', 'Strategic Planning'],
-  },
-  {
-    category: { pt: 'Dados & Produto', en: 'Data & Product' },
-    items: ['Data-driven Design', 'Product Analytics', 'Research Analysis', 'Conversion Optimization', 'Customer Journey', 'Funnel Optimization', 'Business Strategy'],
-  },
-  {
-    category: { pt: 'Tecnologia & IA', en: 'Technology & AI' },
-    items: ['Figma', 'Figma MCP', 'Claude', 'Claude Code', 'Cursor', 'Antigravity', 'AI Agents', 'Generative AI', 'Rapid Prototyping', 'Adobe Creative Suite'],
-  },
-  {
-    category: { pt: 'Metodologias', en: 'Methodologies' },
-    items: ['Design Thinking', 'Lean UX', 'Agile UX', 'Agile', 'Product Discovery', 'Design Sprint', 'Research-driven Design'],
-  },
-  {
-    category: { pt: 'Indústrias', en: 'Industries' },
-    items: ['Fintech', 'Banking', 'Retail', 'HealthTech', 'EdTech', 'AI', 'E-commerce', 'IoT'],
-  },
+  { category: { pt: 'Produto & Design', en: 'Product & Design' }, items: ['Product Design', 'UX Design', 'UI Design', 'UX Strategy', 'Product Discovery', 'User Research', 'Interaction Design', 'Design Thinking', 'Design Systems', 'Service Design', 'Experience Design', 'User-Centered Design', 'Prototyping', 'Usability Testing'] },
+  { category: { pt: 'Liderança', en: 'Leadership' }, items: ['Design Leadership', 'Team Management', 'Career Development', 'Mentoring', 'Facilitation', 'Stakeholder Management', 'Cross-functional Collaboration', 'Conflict Resolution', 'Strategic Planning'] },
+  { category: { pt: 'Dados & Produto', en: 'Data & Product' }, items: ['Data-driven Design', 'Product Analytics', 'Research Analysis', 'Conversion Optimization', 'Customer Journey', 'Funnel Optimization', 'Business Strategy'] },
+  { category: { pt: 'Tecnologia & IA', en: 'Technology & AI' }, items: ['Figma', 'Figma MCP', 'Claude', 'Claude Code', 'Cursor', 'Antigravity', 'AI Agents', 'Generative AI', 'Rapid Prototyping', 'Adobe Creative Suite'] },
+  { category: { pt: 'Metodologias', en: 'Methodologies' }, items: ['Design Thinking', 'Lean UX', 'Agile UX', 'Agile', 'Product Discovery', 'Design Sprint', 'Research-driven Design'] },
+  { category: { pt: 'Indústrias', en: 'Industries' }, items: ['Fintech', 'Banking', 'Retail', 'HealthTech', 'EdTech', 'AI', 'E-commerce', 'IoT'] },
 ]
 
 const LANGUAGES: LangSkill[] = [
@@ -243,32 +255,20 @@ const CERTIFICATIONS: Certification[] = [
   { name: 'Design Thinking Experience', issuer: 'Echos Desirable Futures Lab', year: '2018' },
 ]
 
+/* ─── Resume profiles ─────────────────────────────────────────────────── */
+
 export function especialistaData(): ResumeData {
   return {
     header: { ...HEADER, headline: { pt: 'Product Designer Specialist · Fintech · Banking · AI-driven Product Design', en: 'Product Designer Specialist · Fintech · Banking · AI-driven Product Design' } },
-    summary: {
-      pt: SUMMARY_PT,
-      en: SUMMARY_EN,
-    },
+    summary: SUMMARY,
     experience: [
-      EXPERIENCE_DAYCOVAL,
-      {
-        ...EXPERIENCE_GOKK_COORD,
-        summary: {
-          pt: 'Gerenciamento de time de 14 Designers e entrega de projetos estratégicos para múltiplos clientes. Projeto em destaque: Decathlon — Club / Ready to Play — redesenho estratégico da experiência de uma das principais soluções digitais da empresa.',
-          en: 'Managed a team of 14 Designers and delivered strategic projects for multiple clients. Featured project: Decathlon — Club / Ready to Play — strategic redesign of one of the company\'s key digital solutions.',
-        },
-        achievements: [
-          { pt: 'Mapeamento da jornada do cliente existente e benchmarking de mercado.', en: 'Mapped the existing customer journey and conducted market benchmarking.' },
-          { pt: 'Identificação de oportunidades e insights estratégicos.', en: 'Identified opportunities and strategic insights.' },
-          { pt: 'Desenvolvimento de soluções UX do discovery até especificações e handoff para Tecnologia.', en: 'Developed UX solutions from discovery through specifications and technology handoff.' },
-        ],
-      },
-      EXPERIENCE_GOKK_SENIOR,
-      EXPERIENCE_GOKK_PD,
-      EXPERIENCE_PD_2013,
-      EXPERIENCE_DIGITAL_DESIGNER,
-      EXPERIENCE_ADPLIST,
+      EXP_DAYCOVAL,
+      EXP_GOKK_COORD_DECATHLON,
+      EXP_GOKK_SENIOR,
+      EXP_GOKK_PD,
+      EXP_PD_2013,
+      EXP_DIGITAL_DESIGNER,
+      EXP_ADPLIST,
     ],
     education: EDUCATION,
     skills: SKILLS,
@@ -281,21 +281,51 @@ export function coordenadorData(): ResumeData {
   return {
     header: { ...HEADER, headline: { pt: 'Coordenador de Product Design | Liderança de Times · Design Leadership · AI-driven Product Design', en: 'Coordinator of Product Design | Team Leadership · Design Leadership · AI-driven Product Design' } },
     summary: {
-      pt: `${SUMMARY_PT}\n\nPrincipais impactos em liderança:\n• Gerenciamento e desenvolvimento de times de 5 a 15+ Designers.\n• Liderança de experiências omnichannel em 6+ unidades de negócio.\n• Mentoria de Designers em diferentes estágios de carreira.`,
-      en: `${SUMMARY_EN}\n\nKey leadership impact:\n• Managed and developed Design teams of 5–15+ professionals.\n• Led omnichannel experiences across 6+ business units.\n• Mentored Designers at different career stages.`,
+      pt: SUMMARY.pt + '\n\nImpactos-chave em liderança:\n• Gerenciamento e desenvolvimento de times de 5–15+ Designers.\n• Liderança de experiências omnichannel em 6+ unidades de negócio.\n• Mentoria de Designers em diferentes estágios de carreira.',
+      en: SUMMARY.en + '\n\nKey leadership impact:\n• Managed and developed Design teams of 5–15+ professionals.\n• Led omnichannel experiences across 6+ business units.\n• Mentored Designers at different career stages.',
     },
     experience: [
-      EXPERIENCE_GOKK_COORD,
-      EXPERIENCE_DAYCOVAL,
-      EXPERIENCE_GOKK_LEADER,
-      EXPERIENCE_GOKK_SENIOR,
-      EXPERIENCE_GOKK_PD,
-      EXPERIENCE_ADPLIST,
-      EXPERIENCE_AWARI,
+      EXP_DAYCOVAL,
+      EXP_GOKK_COORD,
+      EXP_GOKK_LEADER,
+      EXP_GOKK_SENIOR,
+      EXP_GOKK_PD,
+      EXP_ADPLIST,
+      EXP_AWARI,
     ],
     education: EDUCATION,
     skills: SKILLS,
     languages: LANGUAGES,
     certifications: CERTIFICATIONS,
+  }
+}
+
+/* ─── Cover letter defaults ───────────────────────────────────────────── */
+
+export function defaultLetterData(): LetterData {
+  return {
+    kind: 'letter',
+    salutation: { pt: 'Prezado(a) Recrutador(a),', en: 'Dear Hiring Manager,' },
+    company: '',
+    role: { pt: '', en: '' },
+    paragraphs: [
+      {
+        pt: 'Sou Raul Lima, Product Designer com mais de 15 anos de experiência projetando e liderando produtos digitais em Fintech, Varejo, HealthTech, EdTech e Inteligência Artificial. Atualmente atuo como Product Designer Specialist no Banco Daycoval e como Coordenador de Product Design na GOK.K, onde lidero um time de 14 Designers.',
+        en: 'My name is Raul Lima, a Product Designer with over 15 years of experience designing and leading digital products across Fintech, Retail, HealthTech, EdTech and Artificial Intelligence. I currently work as a Product Designer Specialist at Banco Daycoval and as Coordinator of Product Design at GOK.K, where I lead a team of 14 Designers.',
+      },
+      {
+        pt: 'Ao longo da minha trajetória, desenvolvi uma atuação sólida tanto em design de produto quanto em liderança de times, sempre conectando estratégia de negócio, pesquisa com usuários e entrega de valor real. Contribuí para produtos com mais de 1 milhão de usuários, aumentando taxas de conversão em até 25%, reduzindo abandono em 30%+ e melhorando a eficiência operacional em aproximadamente 20%.',
+        en: 'Throughout my career, I have developed a strong track record in both product design and team leadership, always connecting business strategy, user research and real value delivery. I have contributed to products reaching over 1 million users, increasing conversion rates by up to 25%, reducing drop-off by 30%+ and improving operational efficiency by approximately 20%.',
+      },
+      {
+        pt: 'Tenho especial interesse em oportunidades que combinem desafios complexos de UX com impacto estratégico — seja como especialista técnico ou como líder de time. Minha abordagem é orientada por dados e pelo usuário, com forte capacidade de articulação entre produto, tecnologia e negócio.',
+        en: 'I am particularly interested in opportunities that combine complex UX challenges with strategic impact — whether as a technical specialist or as a team leader. My approach is data and user-driven, with a strong ability to bridge product, technology and business.',
+      },
+      {
+        pt: 'Fico à disposição para uma conversa. Meu portfólio está disponível em raullima.vercel.app.',
+        en: 'I would be happy to connect for a conversation. My portfolio is available at raullima.vercel.app.',
+      },
+    ],
+    closing: { pt: 'Atenciosamente,\nRaul Lima', en: 'Sincerely,\nRaul Lima' },
   }
 }
