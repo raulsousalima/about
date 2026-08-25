@@ -184,7 +184,13 @@ function newResume() {
   const name = prompt('Nome do novo perfil (ex: Product Design Lead)')?.trim()
   if (!name) return
   const key = 'custom-' + Date.now().toString(36)
-  state.resumes.set(key, { profile_key: key, profile_name: name, data: emptyResume() })
+  // Clone current profile — new profiles share the same experience, education,
+  // certifications and languages; only headline, summary and skills typically change.
+  const base = JSON.parse(JSON.stringify(state.resumes.get(state.resumeKey)!.data)) as ResumeData
+  base.header.headline = { pt: '', en: '' }
+  base.summary = { pt: '', en: '' }
+  base.skills = []
+  state.resumes.set(key, { profile_key: key, profile_name: name, data: base })
   state.resumeKey = key
   markDirty(); renderAll()
 }
