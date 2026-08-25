@@ -723,3 +723,71 @@ html.pa-locked body { visibility: hidden; }
 .gallery-lightbox-close:hover {
   background: rgba(255,255,255,0.2);
 }
+
+/* ---------- Profile / CV ---------- */
+#preview.cv-linkedin, #preview.cv-ats {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 18mm 16mm;
+  color: #111;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.45;
+}
+.cv-page h2 {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11pt;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #111;
+  margin: 18px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #d0d0d0;
+}
+.cv-section { margin-bottom: 4px; }
+.cv-item { margin-bottom: 10px; }
+.cv-item__head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.cv-item__meta { color: #555; font-size: 9.5pt; white-space: nowrap; }
+.cv-item__sub { color: #333; font-size: 10pt; margin-top: 2px; }
+.cv-item__body { margin-top: 4px; }
+.cv-list { margin: 6px 0 0 18px; padding: 0; }
+.cv-list li { margin-bottom: 3px; }
+.cv-inline { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.cv-skill { margin-bottom: 4px; }
+
+.cv-linkedin__header {
+  display: flex; align-items: center; gap: 20px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid #0a66c2;
+  margin-bottom: 12px;
+}
+.cv-linkedin__photo {
+  width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #0a66c2;
+}
+.cv-linkedin__name {
+  font-family: 'Fraunces', 'Inter', serif;
+  font-size: 24pt; font-weight: 700; margin: 0; color: #0a1f3d;
+}
+.cv-linkedin__headline { font-size: 12pt; color: #0a66c2; margin: 4px 0 2px; }
+.cv-linkedin__contacts { font-size: 9.5pt; color: #555; }
+
+.cv-ats__page { font-family: 'Inter', Arial, sans-serif; }
+.cv-ats__name { font-size: 18pt; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 0.04em; }
+.cv-ats__headline { font-size: 11pt; margin: 4px 0; }
+.cv-ats__contacts { font-size: 10pt; color: #333; margin-bottom: 10px; }
+.cv-ats__page h2 { border-bottom: 1px solid #999; }
+.cv-ats__page p { margin: 4px 0; }
+.cv-ats__page ul { margin: 4px 0 8px 18px; padding: 0; }
+
+@media print {
+  @page { size: A4; margin: 0; }
+  body.printing-cv > *:not(#editor-screen) { display: none !important; }
+  body.printing-cv #editor-screen .no-print,
+  body.printing-cv #editor-screen #editor-pane { display: none !important; }
+  body.printing-cv #editor-screen,
+  body.printing-cv #editor-screen > div,
+  body.printing-cv #editor-screen > div > div { display: block !important; background: #fff !important; }
+  body.printing-cv #preview {
+    box-shadow: none !important; margin: 0 !important; width: 210mm !important;
+  }
+}

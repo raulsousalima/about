@@ -25,6 +25,7 @@ export default defineConfig({
         starbem: resolve(__dirname, 'case/starbem.html'),
         pernambucanas: resolve(__dirname, 'case/pernambucanas.html'),
         spaceshooter: resolve(__dirname, 'space-shooter-offline.html'),
+        profile: resolve(__dirname, 'profile.html'),
       },
     },
   },
