@@ -745,8 +745,12 @@ function renderLetterPreview() {
 
 function exportPDF(which: 'resume' | 'letter') {
   const sourceId = which === 'resume' ? 'preview' : 'letter-preview'
+  const source = document.getElementById(sourceId)!
   const target = document.getElementById('print-target')!
-  target.innerHTML = document.getElementById(sourceId)!.innerHTML
+  // Clone the full element (with cv-linkedin/cv-ats class) so that CSS padding/color apply in print
+  const clone = source.cloneNode(true) as HTMLElement
+  clone.removeAttribute('id')
+  target.appendChild(clone)
   window.print()
   target.innerHTML = ''
 }
