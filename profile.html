@@ -9,20 +9,18 @@
   <title>Profile — Raul Lima</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/index.css" />
 </head>
 
 <body class="bg-bg-primary-dark text-text-primary-dark min-h-screen font-sans">
-  <!-- Login screen -->
+
+  <!-- ── Login screen ──────────────────────────────────────────────────── -->
   <section id="auth-screen" class="hidden min-h-screen flex items-center justify-center px-6">
     <div class="w-full max-w-sm">
       <a href="/" class="text-xs uppercase tracking-widest text-text-muted-dark hover:text-accent">← Voltar</a>
       <h1 class="font-serif text-4xl font-bold mt-6 mb-2">Profile</h1>
       <p class="text-sm text-text-muted-dark mb-8">Área privada. Faça login para continuar.</p>
-
       <form id="auth-form" class="space-y-4">
         <div>
           <label class="text-xs uppercase tracking-widest text-text-muted-dark">Email</label>
@@ -31,70 +29,100 @@
         </div>
         <div>
           <label class="text-xs uppercase tracking-widest text-text-muted-dark">Senha</label>
-          <input id="auth-password" type="password" required autocomplete="current-password"
+          <input id="auth-password" type="password" autocomplete="current-password"
             class="mt-2 w-full bg-transparent border border-[var(--color-border)] rounded-lg px-4 py-3 focus:outline-none focus:border-accent" />
         </div>
         <div class="flex gap-2">
           <button type="submit" data-action="signin"
             class="flex-1 bg-accent text-black font-semibold py-3 rounded-lg hover:opacity-90 transition">Entrar</button>
           <button type="button" data-action="magic"
-            class="flex-1 border border-[var(--color-border)] py-3 rounded-lg hover:border-accent transition">Magic
-            link</button>
+            class="flex-1 border border-[var(--color-border)] py-3 rounded-lg hover:border-accent transition">Magic link</button>
         </div>
         <p id="auth-msg" class="text-xs text-text-muted-dark min-h-[1em]"></p>
       </form>
     </div>
   </section>
 
-  <!-- Editor -->
-  <section id="editor-screen" class="hidden">
-    <header class="border-b border-[var(--color-border)] px-6 py-4 flex flex-wrap items-center gap-4 sticky top-0 bg-bg-primary-dark z-40 no-print">
-      <a href="/" class="text-xs uppercase tracking-widest text-text-muted-dark hover:text-accent">← Site</a>
-      <h1 class="font-serif text-xl font-semibold">Curriculum</h1>
+  <!-- ── Editor ─────────────────────────────────────────────────────────── -->
+  <section id="editor-screen" class="hidden min-h-screen flex flex-col">
 
-      <div class="ml-auto flex flex-wrap items-center gap-2">
-        <!-- Profile selector -->
-        <select id="profile-select"
-          class="bg-transparent border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm"></select>
-        <button id="profile-new" class="text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">+ Novo perfil</button>
+    <!-- Top bar -->
+    <header class="border-b border-[var(--color-border)] px-5 py-3 flex flex-wrap items-center gap-3 sticky top-0 bg-bg-primary-dark z-40 no-print">
+      <a href="/" class="text-xs uppercase tracking-widest text-text-muted-dark hover:text-accent shrink-0">← Site</a>
+
+      <!-- Tabs -->
+      <nav class="flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs shrink-0">
+        <button data-tab="profile" class="tab-btn px-4 py-2">Curriculum</button>
+        <button data-tab="carta"   class="tab-btn px-4 py-2">Carta</button>
+        <button data-tab="links"   class="tab-btn px-4 py-2">Links</button>
+      </nav>
+
+      <!-- Profile-tab controls -->
+      <div id="ctrl-profile" class="flex flex-wrap items-center gap-2 ml-auto">
+        <select id="profile-select" class="bg-transparent border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm"></select>
+        <button id="profile-new"    class="text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">+ Novo</button>
         <button id="profile-rename" class="text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">Renomear</button>
         <button id="profile-delete" class="text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-red-500 hover:text-red-500">Excluir</button>
-
-        <span class="mx-2 h-6 w-px bg-[var(--color-border)]"></span>
-
-        <!-- Language -->
+        <span class="h-6 w-px bg-[var(--color-border)]"></span>
         <div class="inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
-          <button data-lang="pt" class="px-3 py-2">PT</button>
-          <button data-lang="en" class="px-3 py-2">EN</button>
+          <button data-lang="pt" class="lang-btn px-3 py-2">PT</button>
+          <button data-lang="en" class="lang-btn px-3 py-2">EN</button>
         </div>
-
-        <!-- Style -->
         <div class="inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
-          <button data-style="linkedin" class="px-3 py-2">LinkedIn</button>
-          <button data-style="ats" class="px-3 py-2">ATS</button>
+          <button data-style="linkedin" class="style-btn px-3 py-2">LinkedIn</button>
+          <button data-style="ats"      class="style-btn px-3 py-2">ATS</button>
         </div>
-
-        <span class="mx-2 h-6 w-px bg-[var(--color-border)]"></span>
-
-        <button id="save-btn" class="text-xs px-4 py-2 bg-accent text-black font-semibold rounded-lg hover:opacity-90">Salvar</button>
+        <span class="h-6 w-px bg-[var(--color-border)]"></span>
+        <button id="save-btn"   class="text-xs px-4 py-2 bg-accent text-black font-semibold rounded-lg hover:opacity-90">Salvar</button>
         <button id="export-btn" class="text-xs px-4 py-2 border border-accent text-accent rounded-lg hover:bg-accent hover:text-black transition">Exportar PDF</button>
-        <button id="signout-btn" class="text-xs px-3 py-2 text-text-muted-dark hover:text-red-500">Sair</button>
       </div>
-      <p id="save-status" class="basis-full text-xs text-text-muted-dark"></p>
+
+      <!-- Carta-tab controls -->
+      <div id="ctrl-carta" class="hidden flex-wrap items-center gap-2 ml-auto">
+        <select id="letter-select" class="bg-transparent border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm"></select>
+        <button id="letter-new"    class="text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">+ Nova</button>
+        <button id="letter-rename" class="text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">Renomear</button>
+        <button id="letter-delete" class="text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-red-500 hover:text-red-500">Excluir</button>
+        <span class="h-6 w-px bg-[var(--color-border)]"></span>
+        <div class="inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
+          <button data-lang="pt" class="lang-btn px-3 py-2">PT</button>
+          <button data-lang="en" class="lang-btn px-3 py-2">EN</button>
+        </div>
+        <span class="h-6 w-px bg-[var(--color-border)]"></span>
+        <button id="letter-save-btn"   class="text-xs px-4 py-2 bg-accent text-black font-semibold rounded-lg hover:opacity-90">Salvar</button>
+        <button id="letter-export-btn" class="text-xs px-4 py-2 border border-accent text-accent rounded-lg hover:bg-accent hover:text-black transition">Exportar PDF</button>
+      </div>
+
+      <!-- Links-tab controls (empty — actions are inline) -->
+      <div id="ctrl-links" class="hidden ml-auto"></div>
+
+      <button id="signout-btn" class="text-xs px-3 py-2 text-text-muted-dark hover:text-red-500 shrink-0">Sair</button>
+      <p id="save-status" class="basis-full text-xs text-text-muted-dark -mt-1"></p>
     </header>
 
-    <div class="grid lg:grid-cols-2 gap-0 min-h-[calc(100vh-73px)]">
-      <!-- Left: editor form -->
-      <div id="editor-pane" class="p-6 lg:p-10 border-r border-[var(--color-border)] overflow-y-auto no-print space-y-8"></div>
-
-      <!-- Right: preview -->
-      <div class="bg-neutral-100 text-black overflow-y-auto">
+    <!-- ── Profile tab ───────────────────────────────────────────────── -->
+    <div id="tab-profile" class="tab-panel flex-1 grid lg:grid-cols-2 gap-0">
+      <div id="editor-pane"  class="p-6 lg:p-10 border-r border-[var(--color-border)] overflow-y-auto no-print space-y-8"></div>
+      <div class="bg-neutral-100 overflow-y-auto">
         <div id="preview" class="mx-auto my-6 shadow-2xl bg-white"></div>
       </div>
     </div>
+
+    <!-- ── Carta tab ─────────────────────────────────────────────────── -->
+    <div id="tab-carta" class="tab-panel hidden flex-1 grid lg:grid-cols-2 gap-0">
+      <div id="letter-editor-pane" class="p-6 lg:p-10 border-r border-[var(--color-border)] overflow-y-auto no-print space-y-8"></div>
+      <div class="bg-neutral-100 overflow-y-auto">
+        <div id="letter-preview" class="mx-auto my-6 shadow-2xl bg-white"></div>
+      </div>
+    </div>
+
+    <!-- ── Links tab ─────────────────────────────────────────────────── -->
+    <div id="tab-links" class="tab-panel hidden flex-1 flex items-start justify-center p-10">
+      <div id="links-panel" class="w-full max-w-lg space-y-4"></div>
+    </div>
+
   </section>
 
   <script type="module" src="/src/profile.ts"></script>
 </body>
-
 </html>

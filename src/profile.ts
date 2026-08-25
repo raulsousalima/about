@@ -1,61 +1,47 @@
 import { supabase, ALLOWED_EMAIL } from './supabase'
 import type { Session } from '@supabase/supabase-js'
-import { especialistaData, coordenadorData } from './profileDefaults'
-import type { ResumeData } from './profileDefaults'
+import { especialistaData, coordenadorData, defaultLetterData } from './profileDefaults'
+import type { ResumeData, LetterData } from './profileDefaults'
 
 type Lang = 'pt' | 'en'
 type Style = 'linkedin' | 'ats'
+type Tab = 'profile' | 'carta' | 'links'
 type Localized = { pt: string; en: string }
 type Experience = ResumeData['experience'][number]
-type Education = ResumeData['education'][number]
-type Certification = ResumeData['certifications'][number]
-type LangSkill = ResumeData['languages'][number]
-type Header = ResumeData['header']
 
-interface ResumeRow {
-  id?: string
-  profile_key: string
-  profile_name: string
-  data: ResumeData
-}
-
-const DEFAULT_PROFILES: { key: string; name: string; seed: () => ResumeData }[] = [
-  { key: 'especialista', name: 'Especialista', seed: especialistaData },
-  { key: 'coordenador', name: 'Coordenador', seed: coordenadorData },
-]
-
-function empty(): ResumeData {
-  return {
-    header: { name: '', headline: { pt: '', en: '' }, location: '', email: '', phone: '', website: '', linkedin: '', github: '', photo: '' },
-    summary: { pt: '', en: '' },
-    experience: [],
-    education: [],
-    skills: [],
-    languages: [],
-    certifications: [],
-  }
-}
+/* ─── State ──────────────────────────────────────────────────────────── */
 
 const state = {
-  lang: (localStorage.getItem('cv:lang') as Lang) || 'pt',
-  style: (localStorage.getItem('cv:style') as Style) || 'linkedin',
-  currentKey: localStorage.getItem('cv:key') || 'especialista',
-  resumes: new Map<string, ResumeRow>(),
-  session: null as Session | null,
-  dirty: false,
+  lang:       (localStorage.getItem('cv:lang')   as Lang)  || 'pt',
+  style:      (localStorage.getItem('cv:style')  as Style) || 'linkedin',
+  tab:        (localStorage.getItem('cv:tab')    as Tab)   || 'profile',
+  resumeKey:  localStorage.getItem('cv:key')   || 'especialista',
+  letterKey:  localStorage.getItem('cv:lkey')  || 'carta-padrao',
+  resumes:    new Map<string, { id?: string; profile_key: string; profile_name: string; data: ResumeData }>(),
+  letters:    new Map<string, { id?: string; profile_key: string; profile_name: string; data: LetterData }>(),
+  session:    null as Session | null,
+  dirty:      false,
 }
 
-/* ---------- auth ---------- */
+const DEFAULT_RESUMES = [
+  { key: 'especialista', name: 'Especialista', seed: especialistaData },
+  { key: 'coordenador',  name: 'Coordenador',  seed: coordenadorData  },
+]
+const DEFAULT_LETTERS = [
+  { key: 'carta-padrao', name: 'Padrão', seed: defaultLetterData },
+]
+
+/* ─── Auth ───────────────────────────────────────────────────────────── */
 
 async function bootstrap() {
   const { data } = await supabase.auth.getSession()
   handleSession(data.session)
-  supabase.auth.onAuthStateChange((_e, session) => handleSession(session))
+  supabase.auth.onAuthStateChange((_e, s) => handleSession(s))
 }
 
 function handleSession(session: Session | null) {
   state.session = session
-  const auth = document.getElementById('auth-screen')!
+  const auth   = document.getElementById('auth-screen')!
   const editor = document.getElementById('editor-screen')!
   if (session && session.user.email === ALLOWED_EMAIL) {
     auth.classList.add('hidden')
@@ -64,14 +50,11 @@ function handleSession(session: Session | null) {
   } else {
     auth.classList.remove('hidden')
     editor.classList.add('hidden')
-    if (session) {
-      supabase.auth.signOut()
-      msg('Este email não tem acesso.')
-    }
+    if (session) { supabase.auth.signOut(); setMsg('Este email não tem acesso.') }
   }
 }
 
-function msg(t: string) {
+function setMsg(t: string) {
   const el = document.getElementById('auth-msg')
   if (el) el.textContent = t
 }
@@ -80,105 +63,153 @@ function initAuthForm() {
   const form = document.getElementById('auth-form') as HTMLFormElement
   form.addEventListener('submit', async (e) => {
     e.preventDefault()
-    const submitter = (e.submitter as HTMLButtonElement | null)?.dataset.action || 'signin'
-    const email = (document.getElementById('auth-email') as HTMLInputElement).value.trim()
+    const email    = (document.getElementById('auth-email')    as HTMLInputElement).value.trim()
     const password = (document.getElementById('auth-password') as HTMLInputElement).value
-    if (submitter === 'signin') {
+    const action   = (e.submitter as HTMLButtonElement | null)?.dataset.action || 'signin'
+    if (action === 'signin') {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) msg(error.message)
+      if (error) setMsg(error.message)
     } else {
-      const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: location.href } })
-      if (error) msg(error.message); else msg('Verifique seu email para o link mágico.')
+      await sendMagicLink(email)
     }
   })
-
-  document.querySelector('[data-action="magic"]')!.addEventListener('click', async () => {
+  document.querySelector<HTMLButtonElement>('[data-action="magic"]')!.addEventListener('click', async () => {
     const email = (document.getElementById('auth-email') as HTMLInputElement).value.trim()
-    if (!email) return msg('Informe o email.')
-    const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: location.href } })
-    if (error) msg(error.message); else msg('Verifique seu email para o link mágico.')
+    if (!email) return setMsg('Informe o email.')
+    await sendMagicLink(email)
   })
 }
 
-/* ---------- data ---------- */
+async function sendMagicLink(email: string) {
+  const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: location.href } })
+  if (error) setMsg(error.message); else setMsg('Verifique seu email para o link mágico.')
+}
+
+/* ─── Data loading ───────────────────────────────────────────────────── */
 
 async function loadAll() {
   const { data, error } = await supabase.from('resumes').select('*').order('profile_name')
   if (error) return setSaveStatus('Erro ao carregar: ' + error.message)
+
   state.resumes.clear()
-  ;(data || []).forEach((row: any) => {
-    state.resumes.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: { ...empty(), ...row.data } })
-  })
-  // seed defaults locally if missing (with real content)
-  for (const p of DEFAULT_PROFILES) {
-    if (!state.resumes.has(p.key)) {
-      state.resumes.set(p.key, { profile_key: p.key, profile_name: p.name, data: p.seed() })
+  state.letters.clear()
+
+  for (const row of (data || [])) {
+    if (row.data?.kind === 'letter') {
+      state.letters.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: row.data as LetterData })
+    } else {
+      state.resumes.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: { ...emptyResume(), ...row.data } })
     }
   }
-  if (!state.resumes.has(state.currentKey)) {
-    state.currentKey = state.resumes.keys().next().value || 'especialista'
+
+  for (const p of DEFAULT_RESUMES) {
+    if (!state.resumes.has(p.key)) state.resumes.set(p.key, { profile_key: p.key, profile_name: p.name, data: p.seed() })
   }
+  for (const p of DEFAULT_LETTERS) {
+    if (!state.letters.has(p.key)) state.letters.set(p.key, { profile_key: p.key, profile_name: p.name, data: p.seed() })
+  }
+
+  if (!state.resumes.has(state.resumeKey)) state.resumeKey = state.resumes.keys().next().value!
+  if (!state.letters.has(state.letterKey)) state.letterKey = state.letters.keys().next().value!
+
   renderAll()
 }
 
-function current(): ResumeRow {
-  return state.resumes.get(state.currentKey)!
+function emptyResume(): ResumeData {
+  return {
+    header: { name: '', headline: { pt: '', en: '' }, location: '', email: '', phone: '', website: '', linkedin: '', github: '', figma: '', photo: '' },
+    summary: { pt: '', en: '' }, experience: [], education: [], skills: [], languages: [], certifications: [],
+  }
 }
 
-async function save() {
-  const row = current()
+/* ─── Persistence ────────────────────────────────────────────────────── */
+
+async function saveResume() {
   if (!state.session) return
-  const payload = {
-    user_id: state.session.user.id,
-    profile_key: row.profile_key,
-    profile_name: row.profile_name,
-    data: row.data,
-  }
+  const row = state.resumes.get(state.resumeKey)!
+  const payload = { user_id: state.session.user.id, profile_key: row.profile_key, profile_name: row.profile_name, data: row.data }
   setSaveStatus('Salvando…')
-  const { data, error } = await supabase
-    .from('resumes')
-    .upsert(payload, { onConflict: 'user_id,profile_key' })
-    .select()
-    .single()
+  const { data, error } = await supabase.from('resumes').upsert(payload, { onConflict: 'user_id,profile_key' }).select().single()
   if (error) return setSaveStatus('Erro: ' + error.message)
   row.id = (data as any).id
   state.dirty = false
   setSaveStatus('Salvo às ' + new Date().toLocaleTimeString())
 }
 
-async function deleteProfile() {
-  const row = current()
+async function saveLetter() {
+  if (!state.session) return
+  const row = state.letters.get(state.letterKey)!
+  const payload = { user_id: state.session.user.id, profile_key: row.profile_key, profile_name: row.profile_name, data: row.data }
+  setSaveStatus('Salvando…')
+  const { data, error } = await supabase.from('resumes').upsert(payload, { onConflict: 'user_id,profile_key' }).select().single()
+  if (error) return setSaveStatus('Erro: ' + error.message)
+  row.id = (data as any).id
+  state.dirty = false
+  setSaveStatus('Salvo às ' + new Date().toLocaleTimeString())
+}
+
+async function deleteResume() {
+  const row = state.resumes.get(state.resumeKey)!
   if (!confirm(`Excluir perfil "${row.profile_name}"?`)) return
   if (row.id) {
     const { error } = await supabase.from('resumes').delete().eq('id', row.id)
     if (error) return setSaveStatus('Erro: ' + error.message)
   }
   state.resumes.delete(row.profile_key)
-  state.currentKey = state.resumes.keys().next().value || 'especialista'
-  if (!state.resumes.has(state.currentKey)) {
+  state.resumeKey = state.resumes.keys().next().value || 'especialista'
+  if (!state.resumes.has(state.resumeKey)) {
     state.resumes.set('especialista', { profile_key: 'especialista', profile_name: 'Especialista', data: especialistaData() })
-    state.currentKey = 'especialista'
+    state.resumeKey = 'especialista'
   }
   renderAll()
 }
 
-function newProfile() {
-  const name = prompt('Nome do novo perfil (ex: Product Design Lead)')?.trim()
-  if (!name) return
-  const key = 'custom-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + Date.now().toString(36)
-  state.resumes.set(key, { profile_key: key, profile_name: name, data: empty() })
-  state.currentKey = key
-  state.dirty = true
+async function deleteLetter() {
+  const row = state.letters.get(state.letterKey)!
+  if (!confirm(`Excluir carta "${row.profile_name}"?`)) return
+  if (row.id) {
+    const { error } = await supabase.from('resumes').delete().eq('id', row.id)
+    if (error) return setSaveStatus('Erro: ' + error.message)
+  }
+  state.letters.delete(row.profile_key)
+  state.letterKey = state.letters.keys().next().value || 'carta-padrao'
+  if (!state.letters.has(state.letterKey)) {
+    state.letters.set('carta-padrao', { profile_key: 'carta-padrao', profile_name: 'Padrão', data: defaultLetterData() })
+    state.letterKey = 'carta-padrao'
+  }
   renderAll()
 }
 
-function renameProfile() {
-  const row = current()
+function newResume() {
+  const name = prompt('Nome do novo perfil (ex: Product Design Lead)')?.trim()
+  if (!name) return
+  const key = 'custom-' + Date.now().toString(36)
+  state.resumes.set(key, { profile_key: key, profile_name: name, data: emptyResume() })
+  state.resumeKey = key
+  markDirty(); renderAll()
+}
+
+function newLetter() {
+  const name = prompt('Nome da nova carta (ex: Fintech Senior)')?.trim()
+  if (!name) return
+  const key = 'carta-' + Date.now().toString(36)
+  state.letters.set(key, { profile_key: key, profile_name: name, data: defaultLetterData() })
+  state.letterKey = key
+  markDirty(); renderAll()
+}
+
+function renameResume() {
+  const row = state.resumes.get(state.resumeKey)!
   const name = prompt('Novo nome do perfil', row.profile_name)?.trim()
   if (!name) return
-  row.profile_name = name
-  state.dirty = true
-  renderAll()
+  row.profile_name = name; markDirty(); renderAll()
+}
+
+function renameLetter() {
+  const row = state.letters.get(state.letterKey)!
+  const name = prompt('Novo nome da carta', row.profile_name)?.trim()
+  if (!name) return
+  row.profile_name = name; markDirty(); renderAll()
 }
 
 function setSaveStatus(t: string) {
@@ -186,42 +217,67 @@ function setSaveStatus(t: string) {
   if (el) el.textContent = t
 }
 
-/* ---------- rendering ---------- */
+function markDirty() { state.dirty = true; setSaveStatus('Alterações não salvas') }
+
+/* ─── Render all ─────────────────────────────────────────────────────── */
 
 function renderAll() {
-  localStorage.setItem('cv:key', state.currentKey)
-  localStorage.setItem('cv:lang', state.lang)
+  localStorage.setItem('cv:key',   state.resumeKey)
+  localStorage.setItem('cv:lkey',  state.letterKey)
+  localStorage.setItem('cv:lang',  state.lang)
   localStorage.setItem('cv:style', state.style)
-  renderProfileSelect()
-  renderToggles()
-  renderEditor()
-  renderPreview()
-}
+  localStorage.setItem('cv:tab',   state.tab)
 
-function renderProfileSelect() {
-  const sel = document.getElementById('profile-select') as HTMLSelectElement
-  sel.innerHTML = ''
-  for (const row of state.resumes.values()) {
-    const o = document.createElement('option')
-    o.value = row.profile_key
-    o.textContent = row.profile_name
-    if (row.profile_key === state.currentKey) o.selected = true
-    sel.appendChild(o)
+  renderTabs()
+  renderLangStyleToggles()
+
+  if (state.tab === 'profile') {
+    renderResumeSelect()
+    renderResumeEditor()
+    renderResumePreview()
+  } else if (state.tab === 'carta') {
+    renderLetterSelect()
+    renderLetterEditor()
+    renderLetterPreview()
+  } else {
+    renderLinks()
   }
 }
 
-function renderToggles() {
-  document.querySelectorAll<HTMLButtonElement>('[data-lang]').forEach(b => {
+/* ─── Tab switching ──────────────────────────────────────────────────── */
+
+function renderTabs() {
+  document.querySelectorAll<HTMLElement>('.tab-panel').forEach(p => p.classList.add('hidden'))
+  document.getElementById('tab-' + state.tab)?.classList.remove('hidden')
+
+  document.querySelectorAll<HTMLElement>('[id^="ctrl-"]').forEach(c => {
+    c.classList.add('hidden')
+    c.classList.remove('flex')
+  })
+  const ctrl = document.getElementById('ctrl-' + state.tab)
+  if (ctrl) { ctrl.classList.remove('hidden'); ctrl.classList.add('flex') }
+
+  document.querySelectorAll<HTMLButtonElement>('.tab-btn').forEach(b => {
+    const active = b.dataset.tab === state.tab
+    b.classList.toggle('bg-accent', active)
+    b.classList.toggle('text-black', active)
+  })
+}
+
+/* ─── Language / style toggles ───────────────────────────────────────── */
+
+function renderLangStyleToggles() {
+  document.querySelectorAll<HTMLButtonElement>('.lang-btn').forEach(b => {
     b.classList.toggle('bg-accent', b.dataset.lang === state.lang)
     b.classList.toggle('text-black', b.dataset.lang === state.lang)
   })
-  document.querySelectorAll<HTMLButtonElement>('[data-style]').forEach(b => {
+  document.querySelectorAll<HTMLButtonElement>('.style-btn').forEach(b => {
     b.classList.toggle('bg-accent', b.dataset.style === state.style)
     b.classList.toggle('text-black', b.dataset.style === state.style)
   })
 }
 
-/* ---------- editor form ---------- */
+/* ─── DOM helpers ────────────────────────────────────────────────────── */
 
 function el<T extends HTMLElement>(tag: string, attrs: Record<string, any> = {}, ...children: (Node | string)[]): T {
   const e = document.createElement(tag) as T
@@ -234,19 +290,19 @@ function el<T extends HTMLElement>(tag: string, attrs: Record<string, any> = {},
   return e
 }
 
-function input(label: string, value: string, onchange: (v: string) => void, type = 'text'): HTMLDivElement {
+function inp(label: string, value: string, onchange: (v: string) => void, type = 'text'): HTMLDivElement {
   const wrap = el<HTMLDivElement>('div', { class: 'space-y-1' })
   wrap.appendChild(el('label', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, label))
   const i = el<HTMLInputElement>('input', {
     type, value,
     class: 'w-full bg-transparent border border-[var(--color-border)] rounded px-3 py-2 text-sm focus:outline-none focus:border-accent'
   })
-  i.addEventListener('input', () => { onchange(i.value); markDirty(); renderPreview() })
+  i.addEventListener('input', () => { onchange(i.value); markDirty() })
   wrap.appendChild(i)
   return wrap
 }
 
-function textarea(label: string, value: string, onchange: (v: string) => void, rows = 3): HTMLDivElement {
+function textarea(label: string, value: string, onchange: (v: string) => void, rows = 3, preview?: () => void): HTMLDivElement {
   const wrap = el<HTMLDivElement>('div', { class: 'space-y-1' })
   wrap.appendChild(el('label', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, label))
   const t = el<HTMLTextAreaElement>('textarea', {
@@ -254,16 +310,16 @@ function textarea(label: string, value: string, onchange: (v: string) => void, r
     class: 'w-full bg-transparent border border-[var(--color-border)] rounded px-3 py-2 text-sm focus:outline-none focus:border-accent'
   })
   t.value = value
-  t.addEventListener('input', () => { onchange(t.value); markDirty(); renderPreview() })
+  t.addEventListener('input', () => { onchange(t.value); markDirty(); preview?.() })
   wrap.appendChild(t)
   return wrap
 }
 
-function localizedInput(label: string, val: Localized, kind: 'input' | 'area' = 'input'): HTMLDivElement {
+function localized(label: string, val: Localized, kind: 'input' | 'area' = 'input', preview?: () => void): HTMLDivElement {
   const wrap = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
-  const build = (lang: Lang) => kind === 'input'
-    ? input(`${label} (${lang.toUpperCase()})`, val[lang] || '', v => val[lang] = v)
-    : textarea(`${label} (${lang.toUpperCase()})`, val[lang] || '', v => val[lang] = v, 3)
+  const build = (lang: 'pt' | 'en') => kind === 'input'
+    ? inp(`${label} (${lang.toUpperCase()})`, val[lang] || '', v => { val[lang] = v; preview?.() })
+    : textarea(`${label} (${lang.toUpperCase()})`, val[lang] || '', v => { val[lang] = v; preview?.() }, 3, preview)
   wrap.appendChild(build('pt'))
   wrap.appendChild(build('en'))
   return wrap
@@ -274,7 +330,7 @@ function sectionTitle(title: string, onAdd?: () => void): HTMLElement {
   h.appendChild(el('h2', { class: 'font-serif text-xl' }, title))
   if (onAdd) {
     const b = el<HTMLButtonElement>('button', { class: 'text-xs px-3 py-1 border border-[var(--color-border)] rounded hover:border-accent' }, '+ Adicionar')
-    b.addEventListener('click', () => { onAdd(); renderEditor(); renderPreview(); markDirty() })
+    b.addEventListener('click', () => { onAdd(); renderResumeEditor(); renderResumePreview(); markDirty() })
     h.appendChild(b)
   }
   return h
@@ -282,41 +338,71 @@ function sectionTitle(title: string, onAdd?: () => void): HTMLElement {
 
 function removeBtn(onclick: () => void): HTMLButtonElement {
   const b = el<HTMLButtonElement>('button', { class: 'text-xs text-red-500 hover:underline' }, 'Remover')
-  b.addEventListener('click', () => { onclick(); renderEditor(); renderPreview(); markDirty() })
+  b.addEventListener('click', () => { onclick(); renderResumeEditor(); renderResumePreview(); markDirty() })
   return b
 }
 
-function markDirty() { state.dirty = true; setSaveStatus('Alterações não salvas') }
+/* ─── Resume select ──────────────────────────────────────────────────── */
 
-function renderEditor() {
+function renderResumeSelect() {
+  const sel = document.getElementById('profile-select') as HTMLSelectElement
+  sel.innerHTML = ''
+  for (const row of state.resumes.values()) {
+    const o = document.createElement('option')
+    o.value = row.profile_key
+    o.textContent = row.profile_name
+    if (row.profile_key === state.resumeKey) o.selected = true
+    sel.appendChild(o)
+  }
+}
+
+function renderLetterSelect() {
+  const sel = document.getElementById('letter-select') as HTMLSelectElement
+  sel.innerHTML = ''
+  for (const row of state.letters.values()) {
+    const o = document.createElement('option')
+    o.value = row.profile_key
+    o.textContent = row.profile_name
+    if (row.profile_key === state.letterKey) o.selected = true
+    sel.appendChild(o)
+  }
+}
+
+/* ─── Resume editor ──────────────────────────────────────────────────── */
+
+function renderResumeEditor() {
   const pane = document.getElementById('editor-pane')!
   pane.innerHTML = ''
-  const d = current().data
+  const d = state.resumes.get(state.resumeKey)!.data
+  const refresh = () => renderResumePreview()
 
   // Header
   const hs = el<HTMLDivElement>('section', { class: 'space-y-3' })
   hs.appendChild(sectionTitle('Cabeçalho'))
-  hs.appendChild(input('Nome completo', d.header.name, v => d.header.name = v))
-  hs.appendChild(localizedInput('Headline', d.header.headline))
-  const row1 = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
-  row1.appendChild(input('Localização', d.header.location, v => d.header.location = v))
-  row1.appendChild(input('Email', d.header.email, v => d.header.email = v, 'email'))
-  hs.appendChild(row1)
-  const row2 = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
-  row2.appendChild(input('Telefone', d.header.phone, v => d.header.phone = v))
-  row2.appendChild(input('Website', d.header.website, v => d.header.website = v))
-  hs.appendChild(row2)
-  const row3 = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
-  row3.appendChild(input('LinkedIn', d.header.linkedin, v => d.header.linkedin = v))
-  row3.appendChild(input('GitHub', d.header.github, v => d.header.github = v))
-  hs.appendChild(row3)
-  hs.appendChild(input('Foto (URL)', d.header.photo, v => d.header.photo = v))
+  hs.appendChild(inp('Nome completo', d.header.name, v => { d.header.name = v; refresh() }))
+  hs.appendChild(localized('Headline', d.header.headline, 'input', refresh))
+  const r1 = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
+  r1.appendChild(inp('Localização', d.header.location, v => { d.header.location = v; refresh() }))
+  r1.appendChild(inp('Email', d.header.email, v => { d.header.email = v; refresh() }, 'email'))
+  hs.appendChild(r1)
+  const r2 = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
+  r2.appendChild(inp('Telefone', d.header.phone, v => { d.header.phone = v; refresh() }))
+  r2.appendChild(inp('Website / Portfólio', d.header.website, v => { d.header.website = v; refresh() }))
+  hs.appendChild(r2)
+  const r3 = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
+  r3.appendChild(inp('LinkedIn', d.header.linkedin, v => { d.header.linkedin = v; refresh() }))
+  r3.appendChild(inp('Figma Portfólio', d.header.figma || '', v => { d.header.figma = v; refresh() }))
+  hs.appendChild(r3)
+  const r4 = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
+  r4.appendChild(inp('GitHub', d.header.github, v => { d.header.github = v; refresh() }))
+  r4.appendChild(inp('Foto (URL)', d.header.photo, v => { d.header.photo = v; refresh() }))
+  hs.appendChild(r4)
   pane.appendChild(hs)
 
   // Summary
   const ss = el<HTMLDivElement>('section', { class: 'space-y-3' })
   ss.appendChild(sectionTitle('Resumo'))
-  ss.appendChild(localizedInput('Resumo profissional', d.summary, 'area'))
+  ss.appendChild(localized('Resumo profissional', d.summary, 'area', refresh))
   pane.appendChild(ss)
 
   // Experience
@@ -325,45 +411,45 @@ function renderEditor() {
     company: '', role: { pt: '', en: '' }, location: '', start: '', end: '', current: false,
     summary: { pt: '', en: '' }, achievements: [],
   })))
-  d.experience.forEach((exp, i) => {
+  d.experience.forEach((exp: Experience, i: number) => {
     const c = el<HTMLDivElement>('div', { class: 'p-4 border border-[var(--color-border)] rounded-lg space-y-3' })
     const head = el<HTMLDivElement>('div', { class: 'flex items-center justify-between' })
     head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Experiência #${i + 1}`))
     head.appendChild(removeBtn(() => d.experience.splice(i, 1)))
     c.appendChild(head)
-    c.appendChild(input('Empresa', exp.company, v => exp.company = v))
-    c.appendChild(localizedInput('Cargo', exp.role))
+    c.appendChild(inp('Empresa', exp.company, v => { exp.company = v; refresh() }))
+    c.appendChild(localized('Cargo', exp.role, 'input', refresh))
     const r = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-3 gap-3' })
-    r.appendChild(input('Local', exp.location, v => exp.location = v))
-    r.appendChild(input('Início (MM/AAAA)', exp.start, v => exp.start = v))
-    r.appendChild(input('Fim (MM/AAAA)', exp.end, v => exp.end = v))
+    r.appendChild(inp('Local', exp.location, v => { exp.location = v; refresh() }))
+    r.appendChild(inp('Início (MM/AAAA)', exp.start, v => { exp.start = v; refresh() }))
+    r.appendChild(inp('Fim (MM/AAAA)', exp.end, v => { exp.end = v; refresh() }))
     c.appendChild(r)
     const cur = el<HTMLLabelElement>('label', { class: 'flex items-center gap-2 text-xs' })
     const chk = el<HTMLInputElement>('input', { type: 'checkbox' })
     chk.checked = exp.current
-    chk.addEventListener('change', () => { exp.current = chk.checked; markDirty(); renderPreview() })
+    chk.addEventListener('change', () => { exp.current = chk.checked; markDirty(); refresh() })
     cur.appendChild(chk); cur.appendChild(document.createTextNode('Emprego atual'))
     c.appendChild(cur)
-    c.appendChild(localizedInput('Resumo do cargo', exp.summary, 'area'))
-
+    c.appendChild(localized('Resumo do cargo', exp.summary, 'area', refresh))
     // Achievements
     const ach = el<HTMLDivElement>('div', { class: 'space-y-2' })
     const ahead = el<HTMLDivElement>('div', { class: 'flex items-center justify-between' })
-    ahead.appendChild(el('span', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, 'Conquistas / bullets'))
-    const add = el<HTMLButtonElement>('button', { class: 'text-xs px-2 py-1 border border-[var(--color-border)] rounded hover:border-accent' }, '+ Bullet')
-    add.addEventListener('click', () => { exp.achievements.push({ pt: '', en: '' }); renderEditor(); renderPreview(); markDirty() })
-    ahead.appendChild(add)
+    ahead.appendChild(el('span', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, 'Bullets / Conquistas'))
+    const addA = el<HTMLButtonElement>('button', { class: 'text-xs px-2 py-1 border border-[var(--color-border)] rounded hover:border-accent' }, '+ Bullet')
+    addA.addEventListener('click', () => { exp.achievements.push({ pt: '', en: '' }); renderResumeEditor(); refresh(); markDirty() })
+    ahead.appendChild(addA)
     ach.appendChild(ahead)
     exp.achievements.forEach((a, ai) => {
       const line = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-[1fr_1fr_auto] gap-2 items-start' })
       const tpt = el<HTMLInputElement>('input', { type: 'text', placeholder: 'PT', class: 'bg-transparent border border-[var(--color-border)] rounded px-2 py-1 text-sm' })
       tpt.value = a.pt
-      tpt.addEventListener('input', () => { a.pt = tpt.value; markDirty(); renderPreview() })
+      tpt.addEventListener('input', () => { a.pt = tpt.value; markDirty(); refresh() })
       const ten = el<HTMLInputElement>('input', { type: 'text', placeholder: 'EN', class: 'bg-transparent border border-[var(--color-border)] rounded px-2 py-1 text-sm' })
       ten.value = a.en
-      ten.addEventListener('input', () => { a.en = ten.value; markDirty(); renderPreview() })
-      line.appendChild(tpt); line.appendChild(ten)
-      line.appendChild(removeBtn(() => exp.achievements.splice(ai, 1)))
+      ten.addEventListener('input', () => { a.en = ten.value; markDirty(); refresh() })
+      const rb = el<HTMLButtonElement>('button', { class: 'text-xs text-red-500 hover:underline' }, 'Rem')
+      rb.addEventListener('click', () => { exp.achievements.splice(ai, 1); renderResumeEditor(); refresh(); markDirty() })
+      line.appendChild(tpt); line.appendChild(ten); line.appendChild(rb)
       ach.appendChild(line)
     })
     c.appendChild(ach)
@@ -380,11 +466,11 @@ function renderEditor() {
     head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Formação #${i + 1}`))
     head.appendChild(removeBtn(() => d.education.splice(i, 1)))
     c.appendChild(head)
-    c.appendChild(input('Instituição', ed.school, v => ed.school = v))
-    c.appendChild(localizedInput('Grau / Curso', ed.degree))
+    c.appendChild(inp('Instituição', ed.school, v => { ed.school = v; refresh() }))
+    c.appendChild(localized('Grau / Curso', ed.degree, 'input', refresh))
     const r = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
-    r.appendChild(input('Início', ed.start, v => ed.start = v))
-    r.appendChild(input('Fim', ed.end, v => ed.end = v))
+    r.appendChild(inp('Início', ed.start, v => { ed.start = v; refresh() }))
+    r.appendChild(inp('Fim', ed.end, v => { ed.end = v; refresh() }))
     c.appendChild(r)
     eds.appendChild(c)
   })
@@ -399,8 +485,8 @@ function renderEditor() {
     head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Categoria #${i + 1}`))
     head.appendChild(removeBtn(() => d.skills.splice(i, 1)))
     c.appendChild(head)
-    c.appendChild(localizedInput('Categoria', sk.category))
-    c.appendChild(textarea('Itens (separados por vírgula)', sk.items.join(', '), v => sk.items = v.split(',').map(s => s.trim()).filter(Boolean), 2))
+    c.appendChild(localized('Categoria', sk.category, 'input', refresh))
+    c.appendChild(textarea('Itens (separados por vírgula)', sk.items.join(', '), v => { sk.items = v.split(',').map(s => s.trim()).filter(Boolean); refresh() }, 2, refresh))
     sks.appendChild(c)
   })
   pane.appendChild(sks)
@@ -414,8 +500,8 @@ function renderEditor() {
     head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Idioma #${i + 1}`))
     head.appendChild(removeBtn(() => d.languages.splice(i, 1)))
     c.appendChild(head)
-    c.appendChild(localizedInput('Idioma', lg.name))
-    c.appendChild(localizedInput('Nível', lg.level))
+    c.appendChild(localized('Idioma', lg.name, 'input', refresh))
+    c.appendChild(localized('Nível', lg.level, 'input', refresh))
     ls.appendChild(c)
   })
   pane.appendChild(ls)
@@ -429,46 +515,139 @@ function renderEditor() {
     head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Certificação #${i + 1}`))
     head.appendChild(removeBtn(() => d.certifications.splice(i, 1)))
     c.appendChild(head)
-    c.appendChild(input('Nome', ct.name, v => ct.name = v))
+    c.appendChild(inp('Nome', ct.name, v => { ct.name = v; refresh() }))
     const r = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
-    r.appendChild(input('Emissor', ct.issuer, v => ct.issuer = v))
-    r.appendChild(input('Ano', ct.year, v => ct.year = v))
+    r.appendChild(inp('Emissor', ct.issuer, v => { ct.issuer = v; refresh() }))
+    r.appendChild(inp('Ano', ct.year, v => { ct.year = v; refresh() }))
     c.appendChild(r)
     cs.appendChild(c)
   })
   pane.appendChild(cs)
 }
 
-/* ---------- preview / print ---------- */
+/* ─── Letter editor ──────────────────────────────────────────────────── */
 
-function esc(s: string) { return (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!)) }
+function renderLetterEditor() {
+  const pane = document.getElementById('letter-editor-pane')!
+  pane.innerHTML = ''
+  const d = state.letters.get(state.letterKey)!.data
+  const refresh = () => renderLetterPreview()
+
+  const hs = el<HTMLDivElement>('section', { class: 'space-y-3' })
+  hs.appendChild(sectionTitle('Destinatário'))
+  hs.appendChild(localized('Saudação', d.salutation, 'input', refresh))
+  hs.appendChild(inp('Empresa', d.company, v => { d.company = v; refresh() }))
+  hs.appendChild(localized('Cargo pretendido', d.role, 'input', refresh))
+  pane.appendChild(hs)
+
+  const ps = el<HTMLDivElement>('section', { class: 'space-y-4' })
+  const pahead = el<HTMLDivElement>('div', { class: 'flex items-center justify-between border-b border-[var(--color-border)] pb-2 mb-4' })
+  pahead.appendChild(el('h2', { class: 'font-serif text-xl' }, 'Parágrafos'))
+  const addP = el<HTMLButtonElement>('button', { class: 'text-xs px-3 py-1 border border-[var(--color-border)] rounded hover:border-accent' }, '+ Parágrafo')
+  addP.addEventListener('click', () => { d.paragraphs.push({ pt: '', en: '' }); renderLetterEditor(); refresh(); markDirty() })
+  pahead.appendChild(addP)
+  ps.appendChild(pahead)
+
+  d.paragraphs.forEach((p, i) => {
+    const c = el<HTMLDivElement>('div', { class: 'p-4 border border-[var(--color-border)] rounded-lg space-y-3' })
+    const head = el<HTMLDivElement>('div', { class: 'flex items-center justify-between' })
+    head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Parágrafo ${i + 1}`))
+    const rb = el<HTMLButtonElement>('button', { class: 'text-xs text-red-500 hover:underline' }, 'Remover')
+    rb.addEventListener('click', () => { d.paragraphs.splice(i, 1); renderLetterEditor(); refresh(); markDirty() })
+    head.appendChild(rb)
+    c.appendChild(head)
+    c.appendChild(localized('Texto', p, 'area', refresh))
+    ps.appendChild(c)
+  })
+  pane.appendChild(ps)
+
+  const cs = el<HTMLDivElement>('section', { class: 'space-y-3' })
+  cs.appendChild(sectionTitle('Encerramento'))
+  cs.appendChild(localized('Encerramento', d.closing, 'area', refresh))
+  pane.appendChild(cs)
+}
+
+/* ─── Links tab ──────────────────────────────────────────────────────── */
+
+function renderLinks() {
+  const panel = document.getElementById('links-panel')!
+  panel.innerHTML = ''
+
+  const header = state.resumes.get(state.resumeKey)?.data.header
+
+  const links: { label: string; key: keyof typeof header; placeholder: string }[] = [
+    { label: 'LinkedIn',          key: 'linkedin', placeholder: 'linkedin.com/in/...' },
+    { label: 'Portfolio (Website)', key: 'website',  placeholder: 'raullima.vercel.app' },
+    { label: 'Figma Portfólio',   key: 'figma',    placeholder: 'figma.com/proto/...' },
+    { label: 'GitHub',            key: 'github',   placeholder: 'github.com/...' },
+  ]
+
+  panel.appendChild(el('h2', { class: 'font-serif text-2xl font-semibold mb-2' }, 'Links'))
+  panel.appendChild(el('p', { class: 'text-xs text-text-muted-dark mb-6' }, 'Clique em Copiar para copiar o link. Os valores são lidos do Curriculum ativo.'))
+
+  for (const link of links) {
+    const value = (header?.[link.key] || '') as string
+    const row = el<HTMLDivElement>('div', { class: 'flex items-center gap-3 p-4 border border-[var(--color-border)] rounded-lg' })
+
+    const info = el<HTMLDivElement>('div', { class: 'flex-1 min-w-0' })
+    info.appendChild(el('p', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, link.label))
+    info.appendChild(el('p', { class: `text-sm truncate ${value ? '' : 'text-text-muted-dark italic'}` }, value || link.placeholder))
+    row.appendChild(info)
+
+    if (value) {
+      const open = el<HTMLAnchorElement>('a', {
+        href: value.startsWith('http') ? value : 'https://' + value,
+        target: '_blank', rel: 'noopener',
+        class: 'text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent shrink-0',
+      }, 'Abrir')
+      row.appendChild(open)
+
+      const copy = el<HTMLButtonElement>('button', {
+        class: 'text-xs px-3 py-2 bg-accent text-black font-semibold rounded-lg hover:opacity-90 shrink-0',
+      }, 'Copiar')
+      copy.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(value.startsWith('http') ? value : 'https://' + value)
+        copy.textContent = 'Copiado!'
+        setTimeout(() => copy.textContent = 'Copiar', 1800)
+      })
+      row.appendChild(copy)
+    } else {
+      row.appendChild(el('span', { class: 'text-xs text-text-muted-dark shrink-0' }, 'Não preenchido'))
+    }
+
+    panel.appendChild(row)
+  }
+}
+
+/* ─── Preview helpers ────────────────────────────────────────────────── */
+
+function esc(s: string) {
+  return (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!))
+}
 function L(v: Localized): string { return esc(v?.[state.lang] || v?.pt || v?.en || '') }
-
 function fmtDate(exp: { start: string; end: string; current: boolean }): string {
   const endLabel = state.lang === 'pt' ? 'Atual' : 'Present'
   return `${esc(exp.start)} — ${exp.current ? endLabel : esc(exp.end)}`.replace(/^ — /, '')
 }
-
 function labels() {
   return state.lang === 'pt'
     ? { summary: 'Resumo', experience: 'Experiência', education: 'Formação', skills: 'Competências', languages: 'Idiomas', certifications: 'Certificações' }
     : { summary: 'Summary', experience: 'Experience', education: 'Education', skills: 'Skills', languages: 'Languages', certifications: 'Certifications' }
 }
 
-function renderPreview() {
+/* ─── Resume preview ─────────────────────────────────────────────────── */
+
+function renderResumePreview() {
   const p = document.getElementById('preview')!
-  const d = current().data
+  const d = state.resumes.get(state.resumeKey)!.data
   p.innerHTML = state.style === 'linkedin' ? linkedinTemplate(d) : atsTemplate(d)
-  p.className = 'mx-auto my-6 shadow-2xl bg-white'
-  if (state.style === 'linkedin') p.classList.add('cv-linkedin')
-  else p.classList.add('cv-ats')
+  p.className = `mx-auto my-6 shadow-2xl bg-white ${state.style === 'linkedin' ? 'cv-linkedin' : 'cv-ats'}`
 }
 
 function linkedinTemplate(d: ResumeData): string {
   const l = labels()
-  const contacts = [d.header.email, d.header.phone, d.header.location, d.header.website, d.header.linkedin, d.header.github].filter(Boolean).map(esc).join(' · ')
-  return `
-  <article class="cv-page">
+  const contacts = [d.header.email, d.header.phone, d.header.location, d.header.website, d.header.linkedin, d.header.github, d.header.figma].filter(Boolean).map(esc).join(' · ')
+  return `<article class="cv-page">
     <header class="cv-linkedin__header">
       ${d.header.photo ? `<img src="${esc(d.header.photo)}" alt="" class="cv-linkedin__photo"/>` : ''}
       <div>
@@ -477,98 +656,123 @@ function linkedinTemplate(d: ResumeData): string {
         <p class="cv-linkedin__contacts">${contacts}</p>
       </div>
     </header>
-
     ${L(d.summary) ? `<section class="cv-section"><h2>${l.summary}</h2><p>${L(d.summary).replace(/\n/g, '<br/>')}</p></section>` : ''}
-
     ${d.experience.length ? `<section class="cv-section"><h2>${l.experience}</h2>${d.experience.map(x => `
       <div class="cv-item">
-        <div class="cv-item__head">
-          <strong>${L(x.role)}</strong>
-          <span class="cv-item__meta">${fmtDate(x)}</span>
-        </div>
+        <div class="cv-item__head"><strong>${L(x.role)}</strong><span class="cv-item__meta">${fmtDate(x)}</span></div>
         <div class="cv-item__sub">${esc(x.company)}${x.location ? ' · ' + esc(x.location) : ''}</div>
         ${L(x.summary) ? `<p class="cv-item__body">${L(x.summary)}</p>` : ''}
         ${x.achievements.length ? `<ul class="cv-list">${x.achievements.map(a => `<li>${L(a)}</li>`).join('')}</ul>` : ''}
       </div>`).join('')}</section>` : ''}
-
     ${d.education.length ? `<section class="cv-section"><h2>${l.education}</h2>${d.education.map(ed => `
       <div class="cv-item">
         <div class="cv-item__head"><strong>${L(ed.degree)}</strong><span class="cv-item__meta">${esc(ed.start)}${ed.end ? ' — ' + esc(ed.end) : ''}</span></div>
         <div class="cv-item__sub">${esc(ed.school)}</div>
       </div>`).join('')}</section>` : ''}
-
-    ${d.skills.length ? `<section class="cv-section"><h2>${l.skills}</h2>${d.skills.map(sk => `
-      <div class="cv-skill"><strong>${L(sk.category)}:</strong> ${sk.items.map(esc).join(' · ')}</div>`).join('')}</section>` : ''}
-
+    ${d.skills.length ? `<section class="cv-section"><h2>${l.skills}</h2>${d.skills.map(sk => `<div class="cv-skill"><strong>${L(sk.category)}:</strong> ${sk.items.map(esc).join(' · ')}</div>`).join('')}</section>` : ''}
     ${d.languages.length ? `<section class="cv-section"><h2>${l.languages}</h2><ul class="cv-inline">${d.languages.map(lg => `<li>${L(lg.name)} — <em>${L(lg.level)}</em></li>`).join('')}</ul></section>` : ''}
-
-    ${d.certifications.length ? `<section class="cv-section"><h2>${l.certifications}</h2>${d.certifications.map(c => `
-      <div class="cv-item"><strong>${esc(c.name)}</strong> — ${esc(c.issuer)}${c.year ? ' (' + esc(c.year) + ')' : ''}</div>`).join('')}</section>` : ''}
+    ${d.certifications.length ? `<section class="cv-section"><h2>${l.certifications}</h2>${d.certifications.map(c => `<div class="cv-item"><strong>${esc(c.name)}</strong> — ${esc(c.issuer)}${c.year ? ' (' + esc(c.year) + ')' : ''}</div>`).join('')}</section>` : ''}
   </article>`
 }
 
 function atsTemplate(d: ResumeData): string {
   const l = labels()
-  const contactLines = [
-    d.header.email, d.header.phone, d.header.location,
-    d.header.linkedin, d.header.github, d.header.website
-  ].filter(Boolean).map(esc).join(' | ')
-  return `
-  <article class="cv-page cv-ats__page">
+  const contacts = [d.header.email, d.header.phone, d.header.location, d.header.linkedin, d.header.github, d.header.figma, d.header.website].filter(Boolean).map(esc).join(' | ')
+  return `<article class="cv-page cv-ats__page">
     <h1 class="cv-ats__name">${esc(d.header.name)}</h1>
     <p class="cv-ats__headline">${L(d.header.headline)}</p>
-    <p class="cv-ats__contacts">${contactLines}</p>
-
+    <p class="cv-ats__contacts">${contacts}</p>
     ${L(d.summary) ? `<h2>${l.summary}</h2><p>${L(d.summary).replace(/\n/g, '<br/>')}</p>` : ''}
-
     ${d.experience.length ? `<h2>${l.experience}</h2>${d.experience.map(x => `
-      <p><strong>${L(x.role)}</strong> — ${esc(x.company)}${x.location ? ', ' + esc(x.location) : ''}<br/>
-      <em>${fmtDate(x)}</em></p>
+      <p><strong>${L(x.role)}</strong> — ${esc(x.company)}${x.location ? ', ' + esc(x.location) : ''}<br/><em>${fmtDate(x)}</em></p>
       ${L(x.summary) ? `<p>${L(x.summary)}</p>` : ''}
-      ${x.achievements.length ? `<ul>${x.achievements.map(a => `<li>${L(a)}</li>`).join('')}</ul>` : ''}
-    `).join('')}` : ''}
-
-    ${d.education.length ? `<h2>${l.education}</h2>${d.education.map(ed => `
-      <p><strong>${L(ed.degree)}</strong> — ${esc(ed.school)}<br/><em>${esc(ed.start)}${ed.end ? ' — ' + esc(ed.end) : ''}</em></p>`).join('')}` : ''}
-
+      ${x.achievements.length ? `<ul>${x.achievements.map(a => `<li>${L(a)}</li>`).join('')}</ul>` : ''}`).join('')}` : ''}
+    ${d.education.length ? `<h2>${l.education}</h2>${d.education.map(ed => `<p><strong>${L(ed.degree)}</strong> — ${esc(ed.school)}<br/><em>${esc(ed.start)}${ed.end ? ' — ' + esc(ed.end) : ''}</em></p>`).join('')}` : ''}
     ${d.skills.length ? `<h2>${l.skills}</h2>${d.skills.map(sk => `<p><strong>${L(sk.category)}:</strong> ${sk.items.map(esc).join(', ')}</p>`).join('')}` : ''}
-
     ${d.languages.length ? `<h2>${l.languages}</h2><p>${d.languages.map(lg => `${L(lg.name)} (${L(lg.level)})`).join(', ')}</p>` : ''}
-
     ${d.certifications.length ? `<h2>${l.certifications}</h2>${d.certifications.map(c => `<p>${esc(c.name)} — ${esc(c.issuer)}${c.year ? ', ' + esc(c.year) : ''}</p>`).join('')}` : ''}
   </article>`
 }
 
-/* ---------- print ---------- */
+/* ─── Letter preview ─────────────────────────────────────────────────── */
 
-function exportPDF() {
-  document.body.classList.add('printing-cv')
-  window.print()
-  setTimeout(() => document.body.classList.remove('printing-cv'), 500)
+function renderLetterPreview() {
+  const p = document.getElementById('letter-preview')!
+  if (!p) return
+  const d = state.letters.get(state.letterKey)!.data
+  const header = state.resumes.get(state.resumeKey)?.data.header
+  const contacts = header ? [header.email, header.phone, header.location, header.linkedin].filter(Boolean).map(esc).join(' · ') : ''
+  const isLinkedin = state.style === 'linkedin'
+
+  p.innerHTML = `<article class="cv-page ${isLinkedin ? 'cv-letter-linkedin' : 'cv-letter-ats'}">
+    <header class="${isLinkedin ? 'cv-linkedin__header' : 'cv-ats__page'}" style="margin-bottom:24px">
+      ${isLinkedin && header?.photo ? `<img src="${esc(header.photo)}" alt="" class="cv-linkedin__photo"/>` : ''}
+      <div>
+        <h1 class="${isLinkedin ? 'cv-linkedin__name' : 'cv-ats__name'}">${esc(header?.name || 'Raul Lima')}</h1>
+        <p class="${isLinkedin ? 'cv-linkedin__contacts' : 'cv-ats__contacts'}">${contacts}</p>
+      </div>
+    </header>
+    <div style="margin-bottom:16px">
+      ${d.company ? `<p><strong>${esc(d.company)}</strong>${L(d.role) ? ' — ' + L(d.role) : ''}</p>` : ''}
+      <p>${L(d.salutation)}</p>
+    </div>
+    <div style="margin-bottom:24px; line-height:1.7">
+      ${d.paragraphs.map(para => `<p style="margin-bottom:12px">${L(para).replace(/\n/g, '<br/>')}</p>`).join('')}
+    </div>
+    <p style="white-space:pre-line">${L(d.closing)}</p>
+  </article>`
+  p.className = `mx-auto my-6 shadow-2xl bg-white ${isLinkedin ? 'cv-linkedin' : 'cv-ats'}`
 }
 
-/* ---------- wiring ---------- */
+/* ─── Print / PDF ────────────────────────────────────────────────────── */
+
+function exportPDF(which: 'resume' | 'letter') {
+  document.body.dataset.printing = which
+  window.print()
+  setTimeout(() => delete document.body.dataset.printing, 500)
+}
+
+/* ─── Wiring ─────────────────────────────────────────────────────────── */
 
 document.addEventListener('DOMContentLoaded', () => {
   initAuthForm()
   bootstrap()
 
+  // Signout
   document.getElementById('signout-btn')!.addEventListener('click', () => supabase.auth.signOut())
-  document.getElementById('save-btn')!.addEventListener('click', save)
-  document.getElementById('export-btn')!.addEventListener('click', exportPDF)
-  document.getElementById('profile-new')!.addEventListener('click', newProfile)
-  document.getElementById('profile-rename')!.addEventListener('click', renameProfile)
-  document.getElementById('profile-delete')!.addEventListener('click', deleteProfile)
-  ;(document.getElementById('profile-select') as HTMLSelectElement).addEventListener('change', (e) => {
-    state.currentKey = (e.target as HTMLSelectElement).value
-    renderAll()
-  })
-  document.querySelectorAll<HTMLButtonElement>('[data-lang]').forEach(b => b.addEventListener('click', () => {
+
+  // Tabs
+  document.querySelectorAll<HTMLButtonElement>('.tab-btn').forEach(b => b.addEventListener('click', () => {
+    state.tab = b.dataset.tab as Tab; renderAll()
+  }))
+
+  // Lang / Style
+  document.querySelectorAll<HTMLButtonElement>('.lang-btn').forEach(b => b.addEventListener('click', () => {
     state.lang = b.dataset.lang as Lang; renderAll()
   }))
-  document.querySelectorAll<HTMLButtonElement>('[data-style]').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll<HTMLButtonElement>('.style-btn').forEach(b => b.addEventListener('click', () => {
     state.style = b.dataset.style as Style; renderAll()
   }))
+
+  // Resume controls
+  document.getElementById('save-btn')!.addEventListener('click', saveResume)
+  document.getElementById('export-btn')!.addEventListener('click', () => exportPDF('resume'))
+  document.getElementById('profile-new')!.addEventListener('click', newResume)
+  document.getElementById('profile-rename')!.addEventListener('click', renameResume)
+  document.getElementById('profile-delete')!.addEventListener('click', deleteResume)
+  ;(document.getElementById('profile-select') as HTMLSelectElement).addEventListener('change', (e) => {
+    state.resumeKey = (e.target as HTMLSelectElement).value; renderAll()
+  })
+
+  // Letter controls
+  document.getElementById('letter-save-btn')!.addEventListener('click', saveLetter)
+  document.getElementById('letter-export-btn')!.addEventListener('click', () => exportPDF('letter'))
+  document.getElementById('letter-new')!.addEventListener('click', newLetter)
+  document.getElementById('letter-rename')!.addEventListener('click', renameLetter)
+  document.getElementById('letter-delete')!.addEventListener('click', deleteLetter)
+  ;(document.getElementById('letter-select') as HTMLSelectElement).addEventListener('change', (e) => {
+    state.letterKey = (e.target as HTMLSelectElement).value; renderAll()
+  })
 
   window.addEventListener('beforeunload', (e) => {
     if (state.dirty) { e.preventDefault(); e.returnValue = '' }
