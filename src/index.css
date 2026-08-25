@@ -725,7 +725,8 @@ html.pa-locked body { visibility: hidden; }
 }
 
 /* ---------- Profile / CV ---------- */
-#preview.cv-linkedin, #preview.cv-ats {
+#preview.cv-linkedin, #preview.cv-ats,
+#letter-preview.cv-linkedin, #letter-preview.cv-ats {
   width: 210mm;
   min-height: 297mm;
   padding: 18mm 16mm;
