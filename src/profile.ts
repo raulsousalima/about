@@ -1,58 +1,16 @@
 import { supabase, ALLOWED_EMAIL } from './supabase'
 import type { Session } from '@supabase/supabase-js'
+import { especialistaData, coordenadorData } from './profileDefaults'
+import type { ResumeData } from './profileDefaults'
 
 type Lang = 'pt' | 'en'
 type Style = 'linkedin' | 'ats'
-
-interface Localized { pt: string; en: string }
-
-interface Experience {
-  company: string
-  role: Localized
-  location: string
-  start: string
-  end: string
-  current: boolean
-  summary: Localized
-  achievements: Localized[]
-}
-
-interface Education {
-  school: string
-  degree: Localized
-  start: string
-  end: string
-}
-
-interface Certification {
-  name: string
-  issuer: string
-  year: string
-}
-
-interface LangSkill { name: Localized; level: Localized }
-
-interface Header {
-  name: string
-  headline: Localized
-  location: string
-  email: string
-  phone: string
-  website: string
-  linkedin: string
-  github: string
-  photo: string
-}
-
-interface ResumeData {
-  header: Header
-  summary: Localized
-  experience: Experience[]
-  education: Education[]
-  skills: { category: Localized; items: string[] }[]
-  languages: LangSkill[]
-  certifications: Certification[]
-}
+type Localized = { pt: string; en: string }
+type Experience = ResumeData['experience'][number]
+type Education = ResumeData['education'][number]
+type Certification = ResumeData['certifications'][number]
+type LangSkill = ResumeData['languages'][number]
+type Header = ResumeData['header']
 
 interface ResumeRow {
   id?: string
@@ -61,9 +19,9 @@ interface ResumeRow {
   data: ResumeData
 }
 
-const DEFAULT_PROFILES: { key: string; name: string }[] = [
-  { key: 'especialista', name: 'Especialista' },
-  { key: 'coordenador', name: 'Coordenador' },
+const DEFAULT_PROFILES: { key: string; name: string; seed: () => ResumeData }[] = [
+  { key: 'especialista', name: 'Especialista', seed: especialistaData },
+  { key: 'coordenador', name: 'Coordenador', seed: coordenadorData },
 ]
 
 function empty(): ResumeData {
@@ -151,10 +109,10 @@ async function loadAll() {
   ;(data || []).forEach((row: any) => {
     state.resumes.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: { ...empty(), ...row.data } })
   })
-  // seed defaults locally if missing
+  // seed defaults locally if missing (with real content)
   for (const p of DEFAULT_PROFILES) {
     if (!state.resumes.has(p.key)) {
-      state.resumes.set(p.key, { profile_key: p.key, profile_name: p.name, data: empty() })
+      state.resumes.set(p.key, { profile_key: p.key, profile_name: p.name, data: p.seed() })
     }
   }
   if (!state.resumes.has(state.currentKey)) {
@@ -198,7 +156,7 @@ async function deleteProfile() {
   state.resumes.delete(row.profile_key)
   state.currentKey = state.resumes.keys().next().value || 'especialista'
   if (!state.resumes.has(state.currentKey)) {
-    state.resumes.set('especialista', { profile_key: 'especialista', profile_name: 'Especialista', data: empty() })
+    state.resumes.set('especialista', { profile_key: 'especialista', profile_name: 'Especialista', data: especialistaData() })
     state.currentKey = 'especialista'
   }
   renderAll()
