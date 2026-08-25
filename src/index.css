@@ -786,5 +786,5 @@ html.pa-locked body { visibility: hidden; }
   body > *:not(#print-target) { display: none !important; }
   #print-target { display: block !important; background: #fff; }
   #print-target > * { margin: 0 !important; box-shadow: none !important; }
-  #print-target .cv-page { box-shadow: none !important; margin: 0 !important; width: 210mm !important; }
+  #print-target .cv-page { box-shadow: none !important; margin: 0 !important; width: auto !important; }
 }
