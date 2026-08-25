@@ -782,9 +782,9 @@ html.pa-locked body { visibility: hidden; }
 .cv-ats__page ul { margin: 4px 0 8px 18px; padding: 0; }
 
 @media print {
-  @page { size: A4; margin: 16mm 0; }
+  @page { size: A4; margin: 0; }
   body > *:not(#print-target) { display: none !important; }
   #print-target { display: block !important; background: #fff; }
-  #print-target > * { margin: 0 !important; box-shadow: none !important; padding-top: 0 !important; padding-bottom: 0 !important; }
+  #print-target > * { margin: 0 !important; box-shadow: none !important; padding: 16mm 16mm 0 16mm !important; }
   #print-target .cv-page { box-shadow: none !important; margin: 0 !important; width: auto !important; }
 }
