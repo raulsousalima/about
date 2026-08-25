@@ -781,26 +781,7 @@ html.pa-locked body { visibility: hidden; }
 
 @media print {
   @page { size: A4; margin: 0; }
-
-  /* Hide everything except the target preview */
-  [data-printing] > *:not(#editor-screen) { display: none !important; }
-  [data-printing] #editor-screen .no-print { display: none !important; }
-  [data-printing] #editor-screen,
-  [data-printing] #editor-screen > div { display: block !important; background: #fff !important; }
-
-  /* Resume */
-  [data-printing="resume"] #tab-carta,
-  [data-printing="resume"] #tab-links,
-  [data-printing="resume"] #editor-pane { display: none !important; }
-  [data-printing="resume"] #preview {
-    box-shadow: none !important; margin: 0 !important; width: 210mm !important;
-  }
-
-  /* Letter */
-  [data-printing="letter"] #tab-profile,
-  [data-printing="letter"] #tab-links,
-  [data-printing="letter"] #letter-editor-pane { display: none !important; }
-  [data-printing="letter"] #letter-preview {
-    box-shadow: none !important; margin: 0 !important; width: 210mm !important;
-  }
+  body > *:not(#print-target) { display: none !important; }
+  #print-target { display: block !important; background: #fff; }
+  #print-target .cv-page { box-shadow: none !important; margin: 0 !important; width: 210mm !important; }
 }

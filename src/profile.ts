@@ -733,9 +733,11 @@ function renderLetterPreview() {
 /* ─── Print / PDF ────────────────────────────────────────────────────── */
 
 function exportPDF(which: 'resume' | 'letter') {
-  document.body.dataset.printing = which
+  const sourceId = which === 'resume' ? 'preview' : 'letter-preview'
+  const target = document.getElementById('print-target')!
+  target.innerHTML = document.getElementById(sourceId)!.innerHTML
   window.print()
-  setTimeout(() => delete document.body.dataset.printing, 500)
+  target.innerHTML = ''
 }
 
 /* ─── Wiring ─────────────────────────────────────────────────────────── */
