@@ -385,6 +385,7 @@ function renderResumeEditor() {
   const pane = document.getElementById('editor-pane')!
   pane.innerHTML = ''
   const d = state.resumes.get(state.resumeKey)!.data
+  sortExperienceByDate(d.experience)
   const refresh = () => renderResumePreview()
 
   // Header
@@ -623,6 +624,20 @@ function esc(s: string) {
   return (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!))
 }
 function L(v: Localized): string { return esc(v?.[state.lang] || v?.pt || v?.en || '') }
+function parseDateKey(s: string): number {
+  const m = (s || '').match(/(\d{1,2})\s*\/\s*(\d{4})/)
+  if (m) return parseInt(m[2], 10) * 12 + parseInt(m[1], 10)
+  const y = (s || '').match(/(\d{4})/)
+  return y ? parseInt(y[1], 10) * 12 : 0
+}
+function sortExperienceByDate(experience: Experience[]) {
+  experience.sort((a, b) => {
+    const aKey = a.current ? Infinity : parseDateKey(a.end)
+    const bKey = b.current ? Infinity : parseDateKey(b.end)
+    if (aKey !== bKey) return bKey - aKey
+    return parseDateKey(b.start) - parseDateKey(a.start)
+  })
+}
 function fmtDate(exp: { start: string; end: string; current: boolean }): string {
   const endLabel = state.lang === 'pt' ? 'Atual' : 'Present'
   return `${esc(exp.start)} — ${exp.current ? endLabel : esc(exp.end)}`.replace(/^ — /, '')
@@ -638,6 +653,7 @@ function labels() {
 function renderResumePreview() {
   const p = document.getElementById('preview')!
   const d = state.resumes.get(state.resumeKey)!.data
+  sortExperienceByDate(d.experience)
   p.innerHTML = state.style === 'linkedin' ? linkedinTemplate(d) : atsTemplate(d)
   p.className = `mx-auto my-6 shadow-2xl bg-white ${state.style === 'linkedin' ? 'cv-linkedin' : 'cv-ats'}`
 }
