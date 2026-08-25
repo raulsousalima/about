@@ -726,7 +726,8 @@ html.pa-locked body { visibility: hidden; }
 
 /* ---------- Profile / CV ---------- */
 #preview.cv-linkedin, #preview.cv-ats,
-#letter-preview.cv-linkedin, #letter-preview.cv-ats {
+#letter-preview.cv-linkedin, #letter-preview.cv-ats,
+#print-target .cv-linkedin, #print-target .cv-ats {
   width: 210mm;
   min-height: 297mm;
   padding: 18mm 16mm;
@@ -784,5 +785,6 @@ html.pa-locked body { visibility: hidden; }
   @page { size: A4; margin: 0; }
   body > *:not(#print-target) { display: none !important; }
   #print-target { display: block !important; background: #fff; }
+  #print-target > * { margin: 0 !important; box-shadow: none !important; }
   #print-target .cv-page { box-shadow: none !important; margin: 0 !important; width: 210mm !important; }
 }
