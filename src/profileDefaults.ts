@@ -28,7 +28,7 @@ export interface LetterData {
   salutation: Localized
   company: string
   role: Localized
-  paragraphs: Localized[]
+  body: Localized
   closing: Localized
 }
 
@@ -308,24 +308,22 @@ export function defaultLetterData(): LetterData {
     salutation: { pt: 'Prezado(a) Recrutador(a),', en: 'Dear Hiring Manager,' },
     company: '',
     role: { pt: '', en: '' },
-    paragraphs: [
-      {
-        pt: 'Sou Raul Lima, Product Designer com mais de 15 anos de experiência projetando e liderando produtos digitais em Fintech, Varejo, HealthTech, EdTech e Inteligência Artificial. Atualmente atuo como Product Designer Specialist no Banco Daycoval e como Coordenador de Product Design na GOK.K, onde lidero um time de 14 Designers.',
-        en: 'My name is Raul Lima, a Product Designer with over 15 years of experience designing and leading digital products across Fintech, Retail, HealthTech, EdTech and Artificial Intelligence. I currently work as a Product Designer Specialist at Banco Daycoval and as Coordinator of Product Design at GOK.K, where I lead a team of 14 Designers.',
-      },
-      {
-        pt: 'Ao longo da minha trajetória, desenvolvi uma atuação sólida tanto em design de produto quanto em liderança de times, sempre conectando estratégia de negócio, pesquisa com usuários e entrega de valor real. Contribuí para produtos com mais de 1 milhão de usuários, aumentando taxas de conversão em até 25%, reduzindo abandono em 30%+ e melhorando a eficiência operacional em aproximadamente 20%.',
-        en: 'Throughout my career, I have developed a strong track record in both product design and team leadership, always connecting business strategy, user research and real value delivery. I have contributed to products reaching over 1 million users, increasing conversion rates by up to 25%, reducing drop-off by 30%+ and improving operational efficiency by approximately 20%.',
-      },
-      {
-        pt: 'Tenho especial interesse em oportunidades que combinem desafios complexos de UX com impacto estratégico — seja como especialista técnico ou como líder de time. Minha abordagem é orientada por dados e pelo usuário, com forte capacidade de articulação entre produto, tecnologia e negócio.',
-        en: 'I am particularly interested in opportunities that combine complex UX challenges with strategic impact — whether as a technical specialist or as a team leader. My approach is data and user-driven, with a strong ability to bridge product, technology and business.',
-      },
-      {
-        pt: 'Fico à disposição para uma conversa. Meu portfólio está disponível em raullima.vercel.app.',
-        en: 'I would be happy to connect for a conversation. My portfolio is available at raullima.vercel.app.',
-      },
-    ],
+    body: {
+      pt: `Sou Raul Lima, Product Designer com mais de 15 anos de experiência projetando e liderando produtos digitais em Fintech, Varejo, HealthTech, EdTech e Inteligência Artificial. Atualmente atuo como Product Designer Specialist no Banco Daycoval e como Coordenador de Product Design na GOK.K, onde lidero um time de 14 Designers.
+
+Ao longo da minha trajetória, desenvolvi uma atuação sólida tanto em design de produto quanto em liderança de times, sempre conectando estratégia de negócio, pesquisa com usuários e entrega de valor real. Contribuí para produtos com mais de 1 milhão de usuários, aumentando taxas de conversão em até 25%, reduzindo abandono em 30%+ e melhorando a eficiência operacional em aproximadamente 20%.
+
+Tenho especial interesse em oportunidades que combinem desafios complexos de UX com impacto estratégico — seja como especialista técnico ou como líder de time. Minha abordagem é orientada por dados e pelo usuário, com forte capacidade de articulação entre produto, tecnologia e negócio.
+
+Fico à disposição para uma conversa. Meu portfólio está disponível em raullima.vercel.app.`,
+      en: `My name is Raul Lima, a Product Designer with over 15 years of experience designing and leading digital products across Fintech, Retail, HealthTech, EdTech and Artificial Intelligence. I currently work as a Product Designer Specialist at Banco Daycoval and as Coordinator of Product Design at GOK.K, where I lead a team of 14 Designers.
+
+Throughout my career, I have developed a strong track record in both product design and team leadership, always connecting business strategy, user research and real value delivery. I have contributed to products reaching over 1 million users, increasing conversion rates by up to 25%, reducing drop-off by 30%+ and improving operational efficiency by approximately 20%.
+
+I am particularly interested in opportunities that combine complex UX challenges with strategic impact — whether as a technical specialist or as a team leader. My approach is data and user-driven, with a strong ability to bridge product, technology and business.
+
+I would be happy to connect for a conversation. My portfolio is available at raullima.vercel.app.`,
+    },
     closing: { pt: 'Atenciosamente,\nRaul Lima', en: 'Sincerely,\nRaul Lima' },
   }
 }

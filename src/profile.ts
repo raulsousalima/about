@@ -96,7 +96,12 @@ async function loadAll() {
 
   for (const row of (data || [])) {
     if (row.data?.kind === 'letter') {
-      state.letters.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: row.data as LetterData })
+      const ld = row.data as any
+      if (Array.isArray(ld.paragraphs) && !ld.body) {
+        ld.body = { pt: ld.paragraphs.map((p: any) => p.pt || '').join('\n\n'), en: ld.paragraphs.map((p: any) => p.en || '').join('\n\n') }
+        delete ld.paragraphs
+      }
+      state.letters.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: ld as LetterData })
     } else {
       state.resumes.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: { ...emptyResume(), ...row.data } })
     }
@@ -546,25 +551,12 @@ function renderLetterEditor() {
   hs.appendChild(localized('Cargo pretendido', d.role, 'input', refresh))
   pane.appendChild(hs)
 
-  const ps = el<HTMLDivElement>('section', { class: 'space-y-4' })
-  const pahead = el<HTMLDivElement>('div', { class: 'flex items-center justify-between border-b border-[var(--color-border)] pb-2 mb-4' })
-  pahead.appendChild(el('h2', { class: 'font-serif text-xl' }, 'Parágrafos'))
-  const addP = el<HTMLButtonElement>('button', { class: 'text-xs px-3 py-1 border border-[var(--color-border)] rounded hover:border-accent' }, '+ Parágrafo')
-  addP.addEventListener('click', () => { d.paragraphs.push({ pt: '', en: '' }); renderLetterEditor(); refresh(); markDirty() })
-  pahead.appendChild(addP)
-  ps.appendChild(pahead)
-
-  d.paragraphs.forEach((p, i) => {
-    const c = el<HTMLDivElement>('div', { class: 'p-4 border border-[var(--color-border)] rounded-lg space-y-3' })
-    const head = el<HTMLDivElement>('div', { class: 'flex items-center justify-between' })
-    head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Parágrafo ${i + 1}`))
-    const rb = el<HTMLButtonElement>('button', { class: 'text-xs text-red-500 hover:underline' }, 'Remover')
-    rb.addEventListener('click', () => { d.paragraphs.splice(i, 1); renderLetterEditor(); refresh(); markDirty() })
-    head.appendChild(rb)
-    c.appendChild(head)
-    c.appendChild(localized('Texto', p, 'area', refresh))
-    ps.appendChild(c)
-  })
+  const ps = el<HTMLDivElement>('section', { class: 'space-y-3' })
+  ps.appendChild(sectionTitle('Corpo da carta'))
+  ps.appendChild(el('p', { class: 'text-[11px] text-text-muted-dark' }, 'Separe parágrafos com uma linha em branco.'))
+  const bodyWrap = localized('Texto', d.body, 'area', refresh)
+  bodyWrap.querySelectorAll<HTMLTextAreaElement>('textarea').forEach(t => { t.rows = 14 })
+  ps.appendChild(bodyWrap)
   pane.appendChild(ps)
 
   const cs = el<HTMLDivElement>('section', { class: 'space-y-3' })
@@ -707,26 +699,45 @@ function renderLetterPreview() {
   if (!p) return
   const d = state.letters.get(state.letterKey)!.data
   const header = state.resumes.get(state.resumeKey)?.data.header
-  const contacts = header ? [header.email, header.phone, header.location, header.linkedin].filter(Boolean).map(esc).join(' · ') : ''
   const isLinkedin = state.style === 'linkedin'
 
-  p.innerHTML = `<article class="cv-page ${isLinkedin ? 'cv-letter-linkedin' : 'cv-letter-ats'}">
-    <header class="${isLinkedin ? 'cv-linkedin__header' : 'cv-ats__page'}" style="margin-bottom:24px">
-      ${isLinkedin && header?.photo ? `<img src="${esc(header.photo)}" alt="" class="cv-linkedin__photo"/>` : ''}
-      <div>
-        <h1 class="${isLinkedin ? 'cv-linkedin__name' : 'cv-ats__name'}">${esc(header?.name || 'Raul Lima')}</h1>
-        <p class="${isLinkedin ? 'cv-linkedin__contacts' : 'cv-ats__contacts'}">${contacts}</p>
-      </div>
-    </header>
-    <div style="margin-bottom:16px">
-      ${d.company ? `<p><strong>${esc(d.company)}</strong>${L(d.role) ? ' — ' + L(d.role) : ''}</p>` : ''}
-      <p>${L(d.salutation)}</p>
-    </div>
-    <div style="margin-bottom:24px; line-height:1.7">
-      ${d.paragraphs.map(para => `<p style="margin-bottom:12px">${L(para).replace(/\n/g, '<br/>')}</p>`).join('')}
-    </div>
-    <p style="white-space:pre-line">${L(d.closing)}</p>
-  </article>`
+  const contacts = header
+    ? [header.email, header.phone, header.location, header.linkedin].filter(Boolean).map(esc).join(isLinkedin ? ' · ' : ' | ')
+    : ''
+
+  const bodyParagraphs = (d.body?.[state.lang] || d.body?.pt || '')
+    .split(/\n\n+/)
+    .filter(Boolean)
+    .map(para => `<p style="margin-bottom:10px;color:#111;line-height:1.65">${esc(para).replace(/\n/g, '<br/>')}</p>`)
+    .join('')
+
+  const titleLabel = state.lang === 'pt' ? 'Carta de Apresentação' : 'Cover Letter'
+
+  p.innerHTML = isLinkedin
+    ? `<article class="cv-page">
+        <header class="cv-linkedin__header" style="margin-bottom:20px">
+          ${header?.photo ? `<img src="${esc(header.photo)}" alt="" class="cv-linkedin__photo"/>` : ''}
+          <div>
+            <h1 class="cv-linkedin__name">${esc(header?.name || 'Raul Lima')}</h1>
+            <p class="cv-linkedin__contacts">${contacts}</p>
+          </div>
+        </header>
+        <h2 style="font-size:13pt;text-transform:none;letter-spacing:0;border-bottom:1px solid #d0d0d0;padding-bottom:4px;margin-bottom:14px;color:#111">${titleLabel}</h2>
+        ${d.company ? `<p style="margin-bottom:8px;color:#111"><strong>${esc(d.company)}</strong>${L(d.role) ? ' — ' + L(d.role) : ''}</p>` : ''}
+        <p style="margin-bottom:14px;color:#111">${L(d.salutation)}</p>
+        <div style="margin-bottom:20px">${bodyParagraphs}</div>
+        <p style="white-space:pre-line;color:#111">${L(d.closing)}</p>
+      </article>`
+    : `<article class="cv-page cv-ats__page">
+        <h1 class="cv-ats__name" style="color:#111">${esc(header?.name || 'Raul Lima')}</h1>
+        <p class="cv-ats__contacts" style="color:#333">${contacts}</p>
+        <h2 style="font-size:13pt;text-transform:none;letter-spacing:0;border-bottom:1px solid #999;padding-bottom:4px;margin:14px 0 10px;color:#111">${titleLabel}</h2>
+        ${d.company ? `<p style="margin-bottom:8px;color:#111"><strong>${esc(d.company)}</strong>${L(d.role) ? ' — ' + L(d.role) : ''}</p>` : ''}
+        <p style="margin-bottom:14px;color:#111">${L(d.salutation)}</p>
+        <div style="margin-bottom:20px">${bodyParagraphs}</div>
+        <p style="white-space:pre-line;color:#111">${L(d.closing)}</p>
+      </article>`
+
   p.className = `mx-auto my-6 shadow-2xl bg-white ${isLinkedin ? 'cv-linkedin' : 'cv-ats'}`
 }
 
