@@ -313,16 +313,22 @@ function inp(label: string, value: string, onchange: (v: string) => void, type =
   return wrap
 }
 
+function autoGrowTextarea(t: HTMLTextAreaElement) {
+  t.style.height = 'auto'
+  t.style.height = t.scrollHeight + 'px'
+}
+
 function textarea(label: string, value: string, onchange: (v: string) => void, rows = 3, preview?: () => void): HTMLDivElement {
   const wrap = el<HTMLDivElement>('div', { class: 'space-y-1' })
   wrap.appendChild(el('label', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, label))
   const t = el<HTMLTextAreaElement>('textarea', {
     rows: String(rows),
-    class: 'w-full bg-transparent border border-[var(--color-border)] rounded px-3 py-2 text-sm focus:outline-none focus:border-accent'
+    class: 'w-full bg-transparent border border-[var(--color-border)] rounded px-3 py-2 text-sm resize-none overflow-hidden focus:outline-none focus:border-accent'
   })
   t.value = value
-  t.addEventListener('input', () => { onchange(t.value); markDirty(); preview?.() })
+  t.addEventListener('input', () => { onchange(t.value); markDirty(); autoGrowTextarea(t); preview?.() })
   wrap.appendChild(t)
+  requestAnimationFrame(() => autoGrowTextarea(t))
   return wrap
 }
 
@@ -655,7 +661,8 @@ function renderResumePreview() {
   const d = state.resumes.get(state.resumeKey)!.data
   sortExperienceByDate(d.experience)
   p.innerHTML = state.style === 'linkedin' ? linkedinTemplate(d) : atsTemplate(d)
-  p.className = `mx-auto my-6 shadow-2xl bg-white ${state.style === 'linkedin' ? 'cv-linkedin' : 'cv-ats'}`
+  p.className = `shadow-2xl bg-white ${state.style === 'linkedin' ? 'cv-linkedin' : 'cv-ats'}`
+  fitPreviewToViewport('preview-frame', 'preview')
 }
 
 function linkedinTemplate(d: ResumeData): string {
@@ -754,7 +761,8 @@ function renderLetterPreview() {
         <p style="white-space:pre-line;color:#111">${L(d.closing)}</p>
       </article>`
 
-  p.className = `mx-auto my-6 shadow-2xl bg-white ${isLinkedin ? 'cv-linkedin' : 'cv-ats'}`
+  p.className = `shadow-2xl bg-white ${isLinkedin ? 'cv-linkedin' : 'cv-ats'}`
+  fitPreviewToViewport('letter-preview-frame', 'letter-preview')
 }
 
 /* ─── Print / PDF ────────────────────────────────────────────────────── */
@@ -766,9 +774,47 @@ function exportPDF(which: 'resume' | 'letter') {
   // Clone the full element (with cv-linkedin/cv-ats class) so that CSS padding/color apply in print
   const clone = source.cloneNode(true) as HTMLElement
   clone.removeAttribute('id')
+  clone.style.transform = 'none' // undo the mobile fit-to-viewport scale — PDF is always full size
   target.appendChild(clone)
   window.print()
   target.innerHTML = ''
+}
+
+/* ─── Mobile fit-to-viewport ─────────────────────────────────────────── */
+// Below the lg breakpoint the A4 preview (794px) is wider than the phone
+// screen, so we scale it down to fit and shrink its frame to match — the
+// export path always resets the clone's transform, so PDFs stay full size.
+const LG_BREAKPOINT = 1024
+
+function fitPreviewToViewport(frameId: string, previewId: string) {
+  const frame = document.getElementById(frameId)
+  const preview = document.getElementById(previewId) as HTMLElement | null
+  if (!frame || !preview) return
+  const column = frame.parentElement as HTMLElement | null
+  if (!column) return
+
+  if (window.innerWidth >= LG_BREAKPOINT) {
+    preview.style.transform = ''
+    frame.style.width = ''
+    frame.style.height = ''
+    return
+  }
+
+  const naturalWidth = preview.offsetWidth
+  const naturalHeight = preview.offsetHeight
+  if (!naturalWidth || !naturalHeight) return
+
+  const available = column.clientWidth - 24
+  const scale = Math.min(1, available / naturalWidth)
+  preview.style.transformOrigin = 'top left'
+  preview.style.transform = `scale(${scale})`
+  frame.style.width = `${naturalWidth * scale}px`
+  frame.style.height = `${naturalHeight * scale}px`
+}
+
+function fitActivePreview() {
+  if (state.tab === 'profile') fitPreviewToViewport('preview-frame', 'preview')
+  else if (state.tab === 'carta') fitPreviewToViewport('letter-preview-frame', 'letter-preview')
 }
 
 /* ─── Wiring ─────────────────────────────────────────────────────────── */
@@ -815,5 +861,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('beforeunload', (e) => {
     if (state.dirty) { e.preventDefault(); e.returnValue = '' }
+  })
+
+  let resizeRaf = 0
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(resizeRaf)
+    resizeRaf = requestAnimationFrame(fitActivePreview)
   })
 })
