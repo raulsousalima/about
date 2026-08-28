@@ -47,77 +47,81 @@
   <section id="editor-screen" class="hidden min-h-screen flex flex-col">
 
     <!-- Top bar -->
-    <header class="border-b border-[var(--color-border)] px-5 py-3 flex flex-wrap items-center gap-3 sticky top-0 bg-bg-primary-dark z-40 no-print">
+    <header class="border-b border-[var(--color-border)] px-4 sm:px-5 py-3 flex flex-wrap items-center gap-2 sm:gap-3 sticky top-0 bg-bg-primary-dark z-40 no-print">
       <a href="/" class="text-xs uppercase tracking-widest text-text-muted-dark hover:text-accent shrink-0">← Site</a>
 
       <!-- Tabs -->
       <nav class="flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs shrink-0">
-        <button data-tab="profile" class="tab-btn px-4 py-2">Curriculum</button>
-        <button data-tab="carta"   class="tab-btn px-4 py-2">Carta</button>
-        <button data-tab="links"   class="tab-btn px-4 py-2">Links</button>
+        <button data-tab="profile" class="tab-btn px-3 sm:px-4 py-2">Curriculum</button>
+        <button data-tab="carta"   class="tab-btn px-3 sm:px-4 py-2">Carta</button>
+        <button data-tab="links"   class="tab-btn px-3 sm:px-4 py-2">Links</button>
       </nav>
 
-      <!-- Profile-tab controls -->
-      <div id="ctrl-profile" class="flex flex-wrap items-center gap-2 ml-auto">
-        <select id="profile-select" class="bg-transparent border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm"></select>
-        <button id="profile-new"    class="text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">+ Novo</button>
-        <button id="profile-rename" class="text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">Renomear</button>
-        <button id="profile-delete" class="text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-red-500 hover:text-red-500">Excluir</button>
-        <span class="h-6 w-px bg-[var(--color-border)]"></span>
-        <div class="inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
+      <!-- Profile-tab controls: horizontally-scrolling toolbar on mobile, wraps normally on desktop -->
+      <div id="ctrl-profile" class="flex flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar basis-full lg:basis-auto lg:flex-wrap lg:overflow-visible lg:ml-auto">
+        <select id="profile-select" class="shrink-0 bg-transparent border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm"></select>
+        <button id="profile-new"    class="shrink-0 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">+ Novo</button>
+        <button id="profile-rename" class="shrink-0 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">Renomear</button>
+        <button id="profile-delete" class="shrink-0 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-red-500 hover:text-red-500">Excluir</button>
+        <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
+        <div class="shrink-0 inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
           <button data-lang="pt" class="lang-btn px-3 py-2">PT</button>
           <button data-lang="en" class="lang-btn px-3 py-2">EN</button>
         </div>
-        <div class="inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
+        <div class="shrink-0 inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
           <button data-style="linkedin" class="style-btn px-3 py-2">LinkedIn</button>
           <button data-style="ats"      class="style-btn px-3 py-2">ATS</button>
         </div>
-        <span class="h-6 w-px bg-[var(--color-border)]"></span>
-        <button id="save-btn"   class="text-xs px-4 py-2 bg-accent text-black font-semibold rounded-lg hover:opacity-90">Salvar</button>
-        <button id="export-btn" class="text-xs px-4 py-2 border border-accent text-accent rounded-lg hover:bg-accent hover:text-black transition">Exportar PDF</button>
+        <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
+        <button id="save-btn"   class="shrink-0 text-xs px-4 py-2 bg-accent text-black font-semibold rounded-lg hover:opacity-90">Salvar</button>
+        <button id="export-btn" class="shrink-0 text-xs px-4 py-2 border border-accent text-accent rounded-lg hover:bg-accent hover:text-black transition">Exportar PDF</button>
       </div>
 
       <!-- Carta-tab controls -->
-      <div id="ctrl-carta" class="hidden flex-wrap items-center gap-2 ml-auto">
-        <select id="letter-select" class="bg-transparent border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm"></select>
-        <button id="letter-new"    class="text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">+ Nova</button>
-        <button id="letter-rename" class="text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">Renomear</button>
-        <button id="letter-delete" class="text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-red-500 hover:text-red-500">Excluir</button>
-        <span class="h-6 w-px bg-[var(--color-border)]"></span>
-        <div class="inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
+      <div id="ctrl-carta" class="hidden flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar basis-full lg:basis-auto lg:flex-wrap lg:overflow-visible lg:ml-auto">
+        <select id="letter-select" class="shrink-0 bg-transparent border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm"></select>
+        <button id="letter-new"    class="shrink-0 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">+ Nova</button>
+        <button id="letter-rename" class="shrink-0 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">Renomear</button>
+        <button id="letter-delete" class="shrink-0 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-red-500 hover:text-red-500">Excluir</button>
+        <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
+        <div class="shrink-0 inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
           <button data-lang="pt" class="lang-btn px-3 py-2">PT</button>
           <button data-lang="en" class="lang-btn px-3 py-2">EN</button>
         </div>
-        <span class="h-6 w-px bg-[var(--color-border)]"></span>
-        <button id="letter-save-btn"   class="text-xs px-4 py-2 bg-accent text-black font-semibold rounded-lg hover:opacity-90">Salvar</button>
-        <button id="letter-export-btn" class="text-xs px-4 py-2 border border-accent text-accent rounded-lg hover:bg-accent hover:text-black transition">Exportar PDF</button>
+        <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
+        <button id="letter-save-btn"   class="shrink-0 text-xs px-4 py-2 bg-accent text-black font-semibold rounded-lg hover:opacity-90">Salvar</button>
+        <button id="letter-export-btn" class="shrink-0 text-xs px-4 py-2 border border-accent text-accent rounded-lg hover:bg-accent hover:text-black transition">Exportar PDF</button>
       </div>
 
       <!-- Links-tab controls (empty — actions are inline) -->
-      <div id="ctrl-links" class="hidden ml-auto"></div>
+      <div id="ctrl-links" class="hidden basis-full lg:basis-auto lg:ml-auto"></div>
 
-      <button id="signout-btn" class="text-xs px-3 py-2 text-text-muted-dark hover:text-red-500 shrink-0">Sair</button>
+      <button id="signout-btn" class="text-xs px-3 py-2 text-text-muted-dark hover:text-red-500 shrink-0 ml-auto lg:ml-0">Sair</button>
       <p id="save-status" class="basis-full text-xs text-text-muted-dark -mt-1"></p>
     </header>
 
     <!-- ── Profile tab ───────────────────────────────────────────────── -->
     <div id="tab-profile" class="tab-panel flex-1 grid lg:grid-cols-2 gap-0">
-      <div id="editor-pane"  class="p-6 lg:p-10 border-r border-[var(--color-border)] overflow-y-auto no-print space-y-8"></div>
-      <div class="bg-neutral-100 overflow-y-auto">
-        <div id="preview" class="mx-auto my-6 shadow-2xl bg-white"></div>
+      <div id="editor-pane"  class="min-w-0 p-5 sm:p-6 lg:p-10 border-r border-[var(--color-border)] overflow-y-auto no-print space-y-8"></div>
+      <div class="min-w-0 bg-neutral-100 overflow-y-auto overflow-x-auto">
+        <div id="preview-frame" class="mx-auto my-4 lg:my-6">
+          <div id="preview" class="shadow-2xl bg-white"></div>
+        </div>
       </div>
     </div>
 
     <!-- ── Carta tab ─────────────────────────────────────────────────── -->
     <div id="tab-carta" class="tab-panel hidden flex-1 grid lg:grid-cols-2 gap-0">
-      <div id="letter-editor-pane" class="p-6 lg:p-10 border-r border-[var(--color-border)] overflow-y-auto no-print space-y-8"></div>
-      <div class="bg-neutral-100 overflow-y-auto">
-        <div id="letter-preview" class="mx-auto my-6 shadow-2xl bg-white"></div>
+      <div id="letter-editor-pane" class="min-w-0 p-5 sm:p-6 lg:p-10 border-r border-[var(--color-border)] overflow-y-auto no-print space-y-8"></div>
+      <div class="min-w-0 bg-neutral-100 overflow-y-auto overflow-x-auto">
+        <div id="letter-preview-frame" class="mx-auto my-4 lg:my-6">
+          <div id="letter-preview" class="shadow-2xl bg-white"></div>
+        </div>
       </div>
     </div>
 
     <!-- ── Links tab ─────────────────────────────────────────────────── -->
-    <div id="tab-links" class="tab-panel hidden flex-1 flex items-start justify-center p-10">
+    <div id="tab-links" class="tab-panel hidden flex-1 flex items-start justify-center p-5 sm:p-10">
       <div id="links-panel" class="w-full max-w-lg space-y-4"></div>
     </div>
 
