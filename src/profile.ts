@@ -313,16 +313,22 @@ function inp(label: string, value: string, onchange: (v: string) => void, type =
   return wrap
 }
 
+function autoGrowTextarea(t: HTMLTextAreaElement) {
+  t.style.height = 'auto'
+  t.style.height = t.scrollHeight + 'px'
+}
+
 function textarea(label: string, value: string, onchange: (v: string) => void, rows = 3, preview?: () => void): HTMLDivElement {
   const wrap = el<HTMLDivElement>('div', { class: 'space-y-1' })
   wrap.appendChild(el('label', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, label))
   const t = el<HTMLTextAreaElement>('textarea', {
     rows: String(rows),
-    class: 'w-full bg-transparent border border-[var(--color-border)] rounded px-3 py-2 text-sm focus:outline-none focus:border-accent'
+    class: 'w-full bg-transparent border border-[var(--color-border)] rounded px-3 py-2 text-sm resize-none overflow-hidden focus:outline-none focus:border-accent'
   })
   t.value = value
-  t.addEventListener('input', () => { onchange(t.value); markDirty(); preview?.() })
+  t.addEventListener('input', () => { onchange(t.value); markDirty(); autoGrowTextarea(t); preview?.() })
   wrap.appendChild(t)
+  requestAnimationFrame(() => autoGrowTextarea(t))
   return wrap
 }
 
