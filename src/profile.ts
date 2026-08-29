@@ -779,16 +779,35 @@ function exportPDF(which: 'resume' | 'letter') {
   // one left behind, so nothing accumulates even if cleanup never runs.
   target.replaceChildren(clone)
 
+  // Safari stamps the document URL into the printed page's header/footer and
+  // gives no CSS hook to suppress it, so every exported PDF would carry the
+  // private /profile.html path. It reads that URL when the sheet is composed,
+  // so show the site root for the duration of the print and restore after.
+  const realUrl = location.pathname + location.search + location.hash
+  const setUrl = (url: string) => {
+    try { history.replaceState(null, '', url) } catch { /* non-fatal: only affects the printed header */ }
+  }
+  setUrl('/')
+
   // Never clear synchronously after print(). Desktop browsers block inside
   // print() until the dialog closes, but iOS Safari returns immediately and
   // composes the sheet afterwards — clearing here empties the page before it
   // is captured, which is why Safari exported a blank sheet. Clean up on
   // afterprint instead; if that never fires the clone simply stays in the
   // hidden #print-target until the next export replaces it.
+  let done = false
   const cleanup = () => {
+    if (done) return
+    done = true
+    clearTimeout(fallback)
+    setUrl(realUrl)
     target.replaceChildren()
     window.removeEventListener('afterprint', cleanup)
   }
+  // iOS Safari does not reliably fire afterprint, and the address bar must not
+  // be left pointing at the site root. The delay only has to outlast the
+  // browser capturing the sheet, which happens right after print() is called.
+  const fallback = setTimeout(cleanup, 10000)
   window.addEventListener('afterprint', cleanup)
   window.print()
 }
