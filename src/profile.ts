@@ -775,9 +775,22 @@ function exportPDF(which: 'resume' | 'letter') {
   const clone = source.cloneNode(true) as HTMLElement
   clone.removeAttribute('id')
   clone.style.transform = 'none' // undo the mobile fit-to-viewport scale — PDF is always full size
-  target.appendChild(clone)
+  // replaceChildren, not appendChild: each export supersedes whatever the last
+  // one left behind, so nothing accumulates even if cleanup never runs.
+  target.replaceChildren(clone)
+
+  // Never clear synchronously after print(). Desktop browsers block inside
+  // print() until the dialog closes, but iOS Safari returns immediately and
+  // composes the sheet afterwards — clearing here empties the page before it
+  // is captured, which is why Safari exported a blank sheet. Clean up on
+  // afterprint instead; if that never fires the clone simply stays in the
+  // hidden #print-target until the next export replaces it.
+  const cleanup = () => {
+    target.replaceChildren()
+    window.removeEventListener('afterprint', cleanup)
+  }
+  window.addEventListener('afterprint', cleanup)
   window.print()
-  target.innerHTML = ''
 }
 
 /* ─── Mobile fit-to-viewport ─────────────────────────────────────────── */
