@@ -787,6 +787,16 @@ html.pa-locked body { visibility: hidden; }
 
 @media print {
   @page { size: A4; margin: 0; }
+  /* The app shell is dark, and a background set on <body> propagates to the
+     print canvas — painting every sheet edge to edge, behind and beyond the
+     content box. Any area #print-target does not cover (the tail of the last
+     page, or the whole sheet when the print dialog scales content down) then
+     comes out black. Force the printed page white and paint it from the root. */
+  html, body {
+    background: #fff !important;
+    color: #111 !important;
+    color-scheme: light !important;
+  }
   body > *:not(#print-target) { display: none !important; }
   #print-target { display: block !important; background: #fff; }
   #print-target > * { margin: 0 !important; box-shadow: none !important; padding: 16mm 16mm 0 16mm !important; }
