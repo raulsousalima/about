@@ -103,7 +103,9 @@ async function loadAll() {
       }
       state.letters.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: ld as LetterData })
     } else {
-      state.resumes.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: { ...emptyResume(), ...row.data } })
+      const rd = { ...emptyResume(), ...row.data } as ResumeData
+      migrateExperienceLocation(rd)
+      state.resumes.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: rd })
     }
   }
 
@@ -118,6 +120,24 @@ async function loadAll() {
   if (!state.letters.has(state.letterKey)) state.letterKey = state.letters.keys().next().value!
 
   renderAll()
+}
+
+// Experience.location used to be a single string, so a stored row could render
+// "São Paulo, Brazil · Presencial" inside an English CV. Split it per language on
+// load, translating the work-model suffix so existing rows come out right in
+// English without hand-editing every entry.
+const WORK_MODEL: Record<string, string> = { 'Presencial': 'On-site', 'Híbrido': 'Hybrid', 'Hibrido': 'Hybrid', 'Remoto': 'Remote' }
+
+function migrateExperienceLocation(d: ResumeData) {
+  for (const exp of d.experience) {
+    const loc = exp.location as unknown
+    if (typeof loc !== 'string') continue
+    let en = loc
+    for (const [pt, translated] of Object.entries(WORK_MODEL)) {
+      if (en.includes(pt)) en = en.replace(pt, translated)
+    }
+    exp.location = { pt: loc, en }
+  }
 }
 
 function emptyResume(): ResumeData {
@@ -426,7 +446,7 @@ function renderResumeEditor() {
   // Experience
   const es = el<HTMLDivElement>('section', { class: 'space-y-4' })
   es.appendChild(sectionTitle('Experiência', () => d.experience.unshift({
-    company: '', role: { pt: '', en: '' }, location: '', start: '', end: '', current: false,
+    company: '', role: { pt: '', en: '' }, location: { pt: '', en: '' }, start: '', end: '', current: false,
     summary: { pt: '', en: '' }, achievements: [],
   })))
   d.experience.forEach((exp: Experience, i: number) => {
@@ -437,8 +457,8 @@ function renderResumeEditor() {
     c.appendChild(head)
     c.appendChild(inp('Empresa', exp.company, v => { exp.company = v; refresh() }))
     c.appendChild(localized('Cargo', exp.role, 'input', refresh))
-    const r = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-3 gap-3' })
-    r.appendChild(inp('Local', exp.location, v => { exp.location = v; refresh() }))
+    c.appendChild(localized('Local', exp.location, 'input', refresh))
+    const r = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
     r.appendChild(inp('Início (MM/AAAA)', exp.start, v => { exp.start = v; refresh() }))
     r.appendChild(inp('Fim (MM/AAAA)', exp.end, v => { exp.end = v; refresh() }))
     c.appendChild(r)
@@ -644,14 +664,36 @@ function sortExperienceByDate(experience: Experience[]) {
     return parseDateKey(b.start) - parseDateKey(a.start)
   })
 }
+const MONTHS = {
+  pt: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
+  en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+}
+
+// ATS date parsers key off month names and a plain hyphen. "07/2025 — Present"
+// (numeric, em dash) is far weaker than "July 2025 - Present", which is what the
+// LinkedIn export that parses correctly uses. Anything that is not MM/YYYY is
+// passed through untouched, so free-form entries still render as typed.
+function fmtMonth(value: string): string {
+  const m = (value || '').trim().match(/^(\d{1,2})\s*\/\s*(\d{4})$/)
+  if (!m) return value || ''
+  const idx = parseInt(m[1], 10) - 1
+  const name = MONTHS[state.lang][idx]
+  return name ? `${name} ${m[2]}` : value
+}
+
 function fmtDate(exp: { start: string; end: string; current: boolean }): string {
   const endLabel = state.lang === 'pt' ? 'Atual' : 'Present'
-  return `${esc(exp.start)} — ${exp.current ? endLabel : esc(exp.end)}`.replace(/^ — /, '')
+  const start = esc(fmtMonth(exp.start))
+  const end = exp.current ? endLabel : esc(fmtMonth(exp.end))
+  if (!start) return end
+  if (!end) return start
+  return `${start} - ${end}`
 }
+
 function labels() {
   return state.lang === 'pt'
-    ? { summary: 'Resumo', experience: 'Experiência', education: 'Formação', skills: 'Competências', languages: 'Idiomas', certifications: 'Certificações' }
-    : { summary: 'Summary', experience: 'Experience', education: 'Education', skills: 'Skills', languages: 'Languages', certifications: 'Certifications' }
+    ? { contact: 'Contato', summary: 'Resumo', experience: 'Experiência', education: 'Formação', skills: 'Competências', languages: 'Idiomas', certifications: 'Certificações' }
+    : { contact: 'Contact', summary: 'Summary', experience: 'Experience', education: 'Education', skills: 'Skills', languages: 'Languages', certifications: 'Certifications' }
 }
 
 /* ─── Resume preview ─────────────────────────────────────────────────── */
@@ -681,13 +723,13 @@ function linkedinTemplate(d: ResumeData): string {
     ${d.experience.length ? `<section class="cv-section"><h2>${l.experience}</h2>${d.experience.map(x => `
       <div class="cv-item">
         <div class="cv-item__head"><strong>${L(x.role)}</strong><span class="cv-item__meta">${fmtDate(x)}</span></div>
-        <div class="cv-item__sub">${esc(x.company)}${x.location ? ' · ' + esc(x.location) : ''}</div>
+        <div class="cv-item__sub">${esc(x.company)}${L(x.location) ? ' · ' + L(x.location) : ''}</div>
         ${L(x.summary) ? `<p class="cv-item__body">${L(x.summary)}</p>` : ''}
         ${x.achievements.length ? `<ul class="cv-list">${x.achievements.map(a => `<li>${L(a)}</li>`).join('')}</ul>` : ''}
       </div>`).join('')}</section>` : ''}
     ${d.education.length ? `<section class="cv-section"><h2>${l.education}</h2>${d.education.map(ed => `
       <div class="cv-item">
-        <div class="cv-item__head"><strong>${L(ed.degree)}</strong><span class="cv-item__meta">${esc(ed.start)}${ed.end ? ' — ' + esc(ed.end) : ''}</span></div>
+        <div class="cv-item__head"><strong>${L(ed.degree)}</strong><span class="cv-item__meta">${esc(fmtMonth(ed.start))}${ed.end ? ' - ' + esc(fmtMonth(ed.end)) : ''}</span></div>
         <div class="cv-item__sub">${esc(ed.school)}</div>
       </div>`).join('')}</section>` : ''}
     ${d.skills.length ? `<section class="cv-section"><h2>${l.skills}</h2>${d.skills.map(sk => `<div class="cv-skill"><strong>${L(sk.category)}:</strong> ${sk.items.map(esc).join(' · ')}</div>`).join('')}</section>` : ''}
@@ -702,13 +744,14 @@ function atsTemplate(d: ResumeData): string {
   return `<article class="cv-page cv-ats__page">
     <h1 class="cv-ats__name">${esc(d.header.name)}</h1>
     <p class="cv-ats__headline">${L(d.header.headline)}</p>
+    <h2>${l.contact}</h2>
     <p class="cv-ats__contacts">${contacts}</p>
     ${L(d.summary) ? `<h2>${l.summary}</h2><p>${L(d.summary).replace(/\n/g, '<br/>')}</p>` : ''}
     ${d.experience.length ? `<h2>${l.experience}</h2>${d.experience.map(x => `
-      <p><strong>${L(x.role)}</strong> — ${esc(x.company)}${x.location ? ', ' + esc(x.location) : ''}<br/><em>${fmtDate(x)}</em></p>
+      <p><strong>${L(x.role)}</strong> — ${esc(x.company)}${L(x.location) ? ', ' + L(x.location) : ''}<br/><em>${fmtDate(x)}</em></p>
       ${L(x.summary) ? `<p>${L(x.summary)}</p>` : ''}
       ${x.achievements.length ? `<ul>${x.achievements.map(a => `<li>${L(a)}</li>`).join('')}</ul>` : ''}`).join('')}` : ''}
-    ${d.education.length ? `<h2>${l.education}</h2>${d.education.map(ed => `<p><strong>${L(ed.degree)}</strong> — ${esc(ed.school)}<br/><em>${esc(ed.start)}${ed.end ? ' — ' + esc(ed.end) : ''}</em></p>`).join('')}` : ''}
+    ${d.education.length ? `<h2>${l.education}</h2>${d.education.map(ed => `<p><strong>${L(ed.degree)}</strong> — ${esc(ed.school)}<br/><em>${esc(fmtMonth(ed.start))}${ed.end ? ' - ' + esc(fmtMonth(ed.end)) : ''}</em></p>`).join('')}` : ''}
     ${d.skills.length ? `<h2>${l.skills}</h2>${d.skills.map(sk => `<p><strong>${L(sk.category)}:</strong> ${sk.items.map(esc).join(', ')}</p>`).join('')}` : ''}
     ${d.languages.length ? `<h2>${l.languages}</h2><p>${d.languages.map(lg => `${L(lg.name)} (${L(lg.level)})`).join(', ')}</p>` : ''}
     ${d.certifications.length ? `<h2>${l.certifications}</h2>${d.certifications.map(c => `<p>${esc(c.name)} — ${esc(c.issuer)}${c.year ? ', ' + esc(c.year) : ''}</p>`).join('')}` : ''}
