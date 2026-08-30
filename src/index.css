@@ -744,7 +744,8 @@ html.pa-locked body { visibility: hidden; }
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 11pt;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  /* No letter-spacing: it widens the glyph gaps enough that PDF text extraction
+     splits headings ("L ANGUAGES"), which stops ATS parsers matching sections. */
   color: #111;
   margin: 18px 0 8px;
   padding-bottom: 4px;

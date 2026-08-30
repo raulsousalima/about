@@ -1,7 +1,7 @@
 export interface Localized { pt: string; en: string }
 
 export interface Experience {
-  company: string; role: Localized; location: string
+  company: string; role: Localized; location: Localized
   start: string; end: string; current: boolean
   summary: Localized; achievements: Localized[]
 }
@@ -69,7 +69,7 @@ Throughout my career, I have contributed to and led digital products reaching 1M
 const EXP_DAYCOVAL: Experience = {
   company: 'Banco Daycoval',
   role: { pt: 'Product Designer Specialist', en: 'Product Designer Specialist' },
-  location: 'São Paulo, Brazil · Presencial',
+  location: { pt: 'São Paulo, Brazil · Presencial', en: 'São Paulo, Brazil · On-site' },
   start: '07/2025', end: '', current: true,
   summary: {
     pt: 'Atuando junto ao time de UX para fortalecer a cultura de experiência do usuário, a maturidade de design e as práticas de desenvolvimento de produto da organização.',
@@ -87,7 +87,7 @@ const EXP_DAYCOVAL: Experience = {
 const EXP_GOKK_COORD: Experience = {
   company: 'GOK.K | Digital Innovation',
   role: { pt: 'Coordenador de Product Design', en: 'Coordinator of Product Design' },
-  location: 'São Paulo, Brazil · Híbrido',
+  location: { pt: 'São Paulo, Brazil · Híbrido', en: 'São Paulo, Brazil · Hybrid' },
   start: '07/2022', end: '', current: true,
   summary: {
     pt: 'Liderança e gestão de um time multidisciplinar de 14 Product Designers, apoiando múltiplos clientes, produtos e squads em diferentes contextos de negócio.',
@@ -118,7 +118,7 @@ const EXP_GOKK_COORD_DECATHLON: Experience = {
 const EXP_GOKK_LEADER: Experience = {
   company: 'GOK.K | Digital Innovation',
   role: { pt: 'Product Design Leader', en: 'Product Design Leader' },
-  location: 'São Paulo, Brazil',
+  location: { pt: 'São Paulo, Brazil', en: 'São Paulo, Brazil' },
   start: '01/2017', end: '08/2022', current: false,
   summary: {
     pt: 'Liderança de um time multidisciplinar de 9 Designers em múltiplos produtos e squads. Projeto em destaque: Grupo RD Saúde — liderou time de quatro Designers no mapeamento de principais pontos de atrito em plataformas digitais, unificando sistemas e apoiando o refatoramento de ecossistemas digitais complexos.',
@@ -135,7 +135,7 @@ const EXP_GOKK_LEADER: Experience = {
 const EXP_GOKK_SENIOR: Experience = {
   company: 'GOK.K | Digital Innovation',
   role: { pt: 'Senior Product Designer', en: 'Senior Product Designer' },
-  location: 'São Paulo, Brazil',
+  location: { pt: 'São Paulo, Brazil', en: 'São Paulo, Brazil' },
   start: '01/2015', end: '12/2016', current: false,
   summary: {
     pt: 'Responsável por projetos end-to-end de Product Design em múltiplas indústrias. Projetos: Pefisa / Pernambucanas (conta digital), Caixa Seguradoras (plano de saúde mobile), Stoneridge (rastreamento IoT de frotas, EUA), Cenoura & Bronze (engajamento mobile), Positron (segurança veicular com geofencing).',
@@ -151,7 +151,7 @@ const EXP_GOKK_SENIOR: Experience = {
 const EXP_GOKK_PD: Experience = {
   company: 'GOK.K | Digital Innovation',
   role: { pt: 'Product Designer', en: 'Product Designer' },
-  location: 'São Paulo, Brazil',
+  location: { pt: 'São Paulo, Brazil', en: 'São Paulo, Brazil' },
   start: '01/2014', end: '12/2014', current: false,
   summary: {
     pt: 'Projetos: Spark (solução mobile e web para capas personalizadas de smartphone), Risqué (simulador mobile de esmalte e catálogo de produtos para promotoras).',
@@ -163,7 +163,7 @@ const EXP_GOKK_PD: Experience = {
 const EXP_PD_2013: Experience = {
   company: 'GOK.K | Digital Innovation',
   role: { pt: 'Product Designer', en: 'Product Designer' },
-  location: 'São Paulo, Brazil',
+  location: { pt: 'São Paulo, Brazil', en: 'São Paulo, Brazil' },
   start: '01/2013', end: '12/2013', current: false,
   summary: {
     pt: 'Produtos digitais envolvendo IoT, iOS/Android, web responsivo e geolocalização. Projeto em destaque: Porto Seguro — Assistente Tempo — solução de logística para atendimento ao cliente usando geolocalização, melhorando a eficiência operacional.',
@@ -175,7 +175,7 @@ const EXP_PD_2013: Experience = {
 const EXP_DIGITAL_DESIGNER: Experience = {
   company: 'Digital Designer',
   role: { pt: 'Digital Designer', en: 'Digital Designer' },
-  location: 'São Paulo, Brazil',
+  location: { pt: 'São Paulo, Brazil', en: 'São Paulo, Brazil' },
   start: '02/2012', end: '01/2013', current: false,
   summary: {
     pt: 'Design de produtos digitais e websites, direção de arte, desenvolvimento de conceitos, design para redes sociais e comunicação digital.',
@@ -187,7 +187,7 @@ const EXP_DIGITAL_DESIGNER: Experience = {
 const EXP_ADPLIST: Experience = {
   company: 'ADPList',
   role: { pt: 'Mentor de Design', en: 'Design Mentor' },
-  location: 'Remoto',
+  location: { pt: 'Remoto', en: 'Remote' },
   start: '02/2022', end: '', current: true,
   summary: {
     pt: 'Mentoria para Product Designers e profissionais em transição para Design: Carreira · Product Design · Processos · Gestão · Liderança · Design Thinking.',
@@ -199,7 +199,7 @@ const EXP_ADPLIST: Experience = {
 const EXP_AWARI: Experience = {
   company: 'AWARI',
   role: { pt: 'Especialista em UI Design', en: 'UI Designer Specialist' },
-  location: 'Remoto',
+  location: { pt: 'Remoto', en: 'Remote' },
   start: '05/2022', end: '05/2023', current: false,
   summary: {
     pt: 'Instrutor com foco em UI Design, sistemas visuais, interfaces digitais e colaboração escalável em times Ágeis.',
