@@ -729,8 +729,8 @@ function linkedinTemplate(d: ResumeData): string {
       </div>`).join('')}</section>` : ''}
     ${d.education.length ? `<section class="cv-section"><h2>${l.education}</h2>${d.education.map(ed => `
       <div class="cv-item">
-        <div class="cv-item__head"><strong>${L(ed.degree)}</strong><span class="cv-item__meta">${esc(fmtMonth(ed.start))}${ed.end ? ' - ' + esc(fmtMonth(ed.end)) : ''}</span></div>
-        <div class="cv-item__sub">${esc(ed.school)}</div>
+        <div class="cv-item__head"><strong>${esc(ed.school)}</strong><span class="cv-item__meta">${esc(fmtMonth(ed.start))}${ed.end ? ' - ' + esc(fmtMonth(ed.end)) : ''}</span></div>
+        <div class="cv-item__sub">${L(ed.degree)}</div>
       </div>`).join('')}</section>` : ''}
     ${d.skills.length ? `<section class="cv-section"><h2>${l.skills}</h2>${d.skills.map(sk => `<div class="cv-skill"><strong>${L(sk.category)}:</strong> ${sk.items.map(esc).join(' · ')}</div>`).join('')}</section>` : ''}
     ${d.languages.length ? `<section class="cv-section"><h2>${l.languages}</h2><ul class="cv-inline">${d.languages.map(lg => `<li>${L(lg.name)} — <em>${L(lg.level)}</em></li>`).join('')}</ul></section>` : ''}
@@ -751,7 +751,7 @@ function atsTemplate(d: ResumeData): string {
       <p><strong>${L(x.role)}</strong> — ${esc(x.company)}${L(x.location) ? ', ' + L(x.location) : ''}<br/><em>${fmtDate(x)}</em></p>
       ${L(x.summary) ? `<p>${L(x.summary)}</p>` : ''}
       ${x.achievements.length ? `<ul>${x.achievements.map(a => `<li>${L(a)}</li>`).join('')}</ul>` : ''}`).join('')}` : ''}
-    ${d.education.length ? `<h2>${l.education}</h2>${d.education.map(ed => `<p><strong>${L(ed.degree)}</strong> — ${esc(ed.school)}<br/><em>${esc(fmtMonth(ed.start))}${ed.end ? ' - ' + esc(fmtMonth(ed.end)) : ''}</em></p>`).join('')}` : ''}
+    ${d.education.length ? `<h2>${l.education}</h2>${d.education.map(ed => `<p><strong>${esc(ed.school)}</strong><br/>${L(ed.degree)}<br/><em>${esc(fmtMonth(ed.start))}${ed.end ? ' - ' + esc(fmtMonth(ed.end)) : ''}</em></p>`).join('')}` : ''}
     ${d.skills.length ? `<h2>${l.skills}</h2>${d.skills.map(sk => `<p><strong>${L(sk.category)}:</strong> ${sk.items.map(esc).join(', ')}</p>`).join('')}` : ''}
     ${d.languages.length ? `<h2>${l.languages}</h2><p>${d.languages.map(lg => `${L(lg.name)} (${L(lg.level)})`).join(', ')}</p>` : ''}
     ${d.certifications.length ? `<h2>${l.certifications}</h2>${d.certifications.map(c => `<p>${esc(c.name)} — ${esc(c.issuer)}${c.year ? ', ' + esc(c.year) : ''}</p>`).join('')}` : ''}

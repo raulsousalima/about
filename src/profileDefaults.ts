@@ -213,12 +213,12 @@ const EXP_AWARI: Experience = {
 const EDUCATION: Education[] = [
   {
     school: 'PUCRS — Pontifícia Universidade Católica do Rio Grande do Sul',
-    degree: { pt: 'Pós-graduação — User Experience Design e Além', en: 'Postgraduate Degree — User Experience Design and Beyond' },
+    degree: { pt: 'Pós-graduação, User Experience Design e Além', en: 'Postgraduate Degree, User Experience Design and Beyond' },
     start: '2023', end: '2024',
   },
   {
     school: 'UNINOVE — Universidade Nove de Julho',
-    degree: { pt: 'Bacharelado — Comunicação Social & Publicidade e Propaganda', en: "Bachelor's Degree — Social Communication & Advertising" },
+    degree: { pt: 'Bacharelado, Comunicação Social & Publicidade e Propaganda', en: "Bachelor's Degree, Social Communication & Advertising" },
     start: '2010', end: '2014',
   },
 ]
