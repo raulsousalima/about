@@ -15,6 +15,9 @@ const state = {
   lang:       (localStorage.getItem('cv:lang')   as Lang)  || 'pt',
   style:      (localStorage.getItem('cv:style')  as Style) || 'linkedin',
   tab:        (localStorage.getItem('cv:tab')    as Tab)   || 'profile',
+  // The document itself is the point of the page, so it opens as a plain
+  // preview; the form only takes half the screen once you ask to edit.
+  editing:    localStorage.getItem('cv:editing') === '1',
   resumeKey:  localStorage.getItem('cv:key')   || 'especialista',
   letterKey:  localStorage.getItem('cv:lkey')  || 'carta-padrao',
   resumes:    new Map<string, { id?: string; profile_key: string; profile_name: string; data: ResumeData }>(),
@@ -258,21 +261,49 @@ function renderAll() {
   localStorage.setItem('cv:lang',  state.lang)
   localStorage.setItem('cv:style', state.style)
   localStorage.setItem('cv:tab',   state.tab)
+  localStorage.setItem('cv:editing', state.editing ? '1' : '0')
 
   renderTabs()
   renderLangStyleToggles()
+  // Before rendering: the preview scales itself to its column, so the column
+  // has to be at its final width first.
+  applyEditingLayout()
 
   if (state.tab === 'profile') {
     renderResumeSelect()
-    renderResumeEditor()
+    if (state.editing) renderResumeEditor()
     renderResumePreview()
   } else if (state.tab === 'carta') {
     renderLetterSelect()
-    renderLetterEditor()
+    if (state.editing) renderLetterEditor()
     renderLetterPreview()
   } else {
     renderLinks()
   }
+}
+
+/* ─── Preview / edit mode ────────────────────────────────────────────── */
+
+function applyEditingLayout() {
+  const panes: [string, string][] = [
+    ['tab-profile', 'editor-pane'],
+    ['tab-carta', 'letter-editor-pane'],
+  ]
+  for (const [panelId, paneId] of panes) {
+    const panel = document.getElementById(panelId)
+    const pane = document.getElementById(paneId)
+    if (!panel || !pane) continue
+    pane.classList.toggle('hidden', !state.editing)
+    // Dropping the two-column split lets the preview use the full width.
+    panel.classList.toggle('lg:grid-cols-2', state.editing)
+  }
+
+  document.querySelectorAll<HTMLElement>('.edit-btn').forEach(b => {
+    b.classList.toggle('bg-accent', state.editing)
+    b.classList.toggle('text-black', state.editing)
+    const label = b.querySelector('.edit-btn__label')
+    if (label) label.textContent = state.editing ? 'Fechar edição' : 'Editar'
+  })
 }
 
 /* ─── Tab switching ──────────────────────────────────────────────────── */
@@ -904,6 +935,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Tabs
   document.querySelectorAll<HTMLButtonElement>('.tab-btn').forEach(b => b.addEventListener('click', () => {
     state.tab = b.dataset.tab as Tab; renderAll()
+  }))
+
+  // Preview / edit mode
+  document.querySelectorAll<HTMLButtonElement>('.edit-btn').forEach(b => b.addEventListener('click', () => {
+    state.editing = !state.editing; renderAll()
   }))
 
   // Lang / Style
