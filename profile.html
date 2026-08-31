@@ -70,6 +70,11 @@
           <span class="hidden lg:inline">Excluir</span>
         </button>
         <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
+        <button class="edit-btn shrink-0 flex items-center gap-1.5 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M4 7h16"/><path d="M4 12h10"/><path d="M4 17h7"/></svg>
+          <span class="edit-btn__label">Editar</span>
+        </button>
+        <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
         <div class="shrink-0 inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
           <button data-lang="pt" class="lang-btn px-3 py-2">PT</button>
           <button data-lang="en" class="lang-btn px-3 py-2">EN</button>
@@ -96,6 +101,11 @@
           <span class="hidden lg:inline">Excluir</span>
         </button>
         <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
+        <button class="edit-btn shrink-0 flex items-center gap-1.5 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M4 7h16"/><path d="M4 12h10"/><path d="M4 17h7"/></svg>
+          <span class="edit-btn__label">Editar</span>
+        </button>
+        <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
         <div class="shrink-0 inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
           <button data-lang="pt" class="lang-btn px-3 py-2">PT</button>
           <button data-lang="en" class="lang-btn px-3 py-2">EN</button>
@@ -116,7 +126,7 @@
     <div id="tab-profile" class="tab-panel flex-1 grid lg:grid-cols-2 gap-0">
       <div id="editor-pane"  class="min-w-0 p-5 sm:p-6 lg:p-10 border-r border-[var(--color-border)] overflow-y-auto no-print space-y-8"></div>
       <div class="min-w-0 bg-neutral-100 overflow-y-auto overflow-x-auto">
-        <div id="preview-frame" class="mx-auto my-4 lg:my-6">
+        <div id="preview-frame" class="w-fit mx-auto my-4 lg:my-6">
           <div id="preview" class="shadow-2xl bg-white"></div>
         </div>
       </div>
@@ -126,7 +136,7 @@
     <div id="tab-carta" class="tab-panel hidden flex-1 grid lg:grid-cols-2 gap-0">
       <div id="letter-editor-pane" class="min-w-0 p-5 sm:p-6 lg:p-10 border-r border-[var(--color-border)] overflow-y-auto no-print space-y-8"></div>
       <div class="min-w-0 bg-neutral-100 overflow-y-auto overflow-x-auto">
-        <div id="letter-preview-frame" class="mx-auto my-4 lg:my-6">
+        <div id="letter-preview-frame" class="w-fit mx-auto my-4 lg:my-6">
           <div id="letter-preview" class="shadow-2xl bg-white"></div>
         </div>
       </div>
