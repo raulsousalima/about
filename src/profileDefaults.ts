@@ -32,6 +32,16 @@ export interface LetterData {
   closing: Localized
 }
 
+// Interview notes live alongside resumes and letters in the same table, so the
+// kind discriminator is what tells the three apart on load.
+export interface InterviewCase { title: Localized; body: Localized }
+
+export interface InterviewData {
+  kind: 'interview'
+  about: Localized
+  cases: InterviewCase[]
+}
+
 /* ─── Shared base data ─────────────────────────────────────────────────── */
 
 const HEADER: Header = {
@@ -325,5 +335,13 @@ I am particularly interested in opportunities that combine complex UX challenges
 I would be happy to connect for a conversation. My portfolio is available at raullima.vercel.app.`,
     },
     closing: { pt: 'Atenciosamente,\nRaul Lima', en: 'Sincerely,\nRaul Lima' },
+  }
+}
+
+export function defaultInterviewData(): InterviewData {
+  return {
+    kind: 'interview',
+    about: { pt: '', en: '' },
+    cases: [{ title: { pt: '', en: '' }, body: { pt: '', en: '' } }],
   }
 }

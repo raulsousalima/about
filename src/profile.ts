@@ -1,11 +1,11 @@
 import { supabase, ALLOWED_EMAIL } from './supabase'
 import type { Session } from '@supabase/supabase-js'
-import { especialistaData, coordenadorData, defaultLetterData } from './profileDefaults'
-import type { ResumeData, LetterData } from './profileDefaults'
+import { especialistaData, coordenadorData, defaultLetterData, defaultInterviewData } from './profileDefaults'
+import type { ResumeData, LetterData, InterviewData, InterviewCase } from './profileDefaults'
 
 type Lang = 'pt' | 'en'
 type Style = 'linkedin' | 'ats'
-type Tab = 'profile' | 'carta' | 'links'
+type Tab = 'profile' | 'carta' | 'links' | 'interview'
 type Localized = { pt: string; en: string }
 type Experience = ResumeData['experience'][number]
 
@@ -20,8 +20,10 @@ const state = {
   editing:    localStorage.getItem('cv:editing') === '1',
   resumeKey:  localStorage.getItem('cv:key')   || 'especialista',
   letterKey:  localStorage.getItem('cv:lkey')  || 'carta-padrao',
+  interviewKey: localStorage.getItem('cv:ikey') || 'interview-padrao',
   resumes:    new Map<string, { id?: string; profile_key: string; profile_name: string; data: ResumeData }>(),
   letters:    new Map<string, { id?: string; profile_key: string; profile_name: string; data: LetterData }>(),
+  interviews: new Map<string, { id?: string; profile_key: string; profile_name: string; data: InterviewData }>(),
   session:    null as Session | null,
   dirty:      false,
 }
@@ -32,6 +34,9 @@ const DEFAULT_RESUMES = [
 ]
 const DEFAULT_LETTERS = [
   { key: 'carta-padrao', name: 'Padrão', seed: defaultLetterData },
+]
+const DEFAULT_INTERVIEWS = [
+  { key: 'interview-padrao', name: 'Padrão', seed: defaultInterviewData },
 ]
 
 /* ─── Auth ───────────────────────────────────────────────────────────── */
@@ -96,6 +101,7 @@ async function loadAll() {
 
   state.resumes.clear()
   state.letters.clear()
+  state.interviews.clear()
 
   for (const row of (data || [])) {
     if (row.data?.kind === 'letter') {
@@ -105,6 +111,10 @@ async function loadAll() {
         delete ld.paragraphs
       }
       state.letters.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: ld as LetterData })
+    } else if (row.data?.kind === 'interview') {
+      const iv = { ...defaultInterviewData(), ...row.data } as InterviewData
+      if (!Array.isArray(iv.cases)) iv.cases = []
+      state.interviews.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: iv })
     } else {
       const rd = { ...emptyResume(), ...row.data } as ResumeData
       migrateExperienceLocation(rd)
@@ -118,9 +128,13 @@ async function loadAll() {
   for (const p of DEFAULT_LETTERS) {
     if (!state.letters.has(p.key)) state.letters.set(p.key, { profile_key: p.key, profile_name: p.name, data: p.seed() })
   }
+  for (const p of DEFAULT_INTERVIEWS) {
+    if (!state.interviews.has(p.key)) state.interviews.set(p.key, { profile_key: p.key, profile_name: p.name, data: p.seed() })
+  }
 
   if (!state.resumes.has(state.resumeKey)) state.resumeKey = state.resumes.keys().next().value!
   if (!state.letters.has(state.letterKey)) state.letterKey = state.letters.keys().next().value!
+  if (!state.interviews.has(state.interviewKey)) state.interviewKey = state.interviews.keys().next().value!
 
   renderAll()
 }
@@ -176,6 +190,18 @@ async function saveLetter() {
   setSaveStatus('Salvo às ' + new Date().toLocaleTimeString())
 }
 
+async function saveInterview() {
+  if (!state.session) return
+  const row = state.interviews.get(state.interviewKey)!
+  const payload = { user_id: state.session.user.id, profile_key: row.profile_key, profile_name: row.profile_name, data: row.data }
+  setSaveStatus('Salvando…')
+  const { data, error } = await supabase.from('resumes').upsert(payload, { onConflict: 'user_id,profile_key' }).select().single()
+  if (error) return setSaveStatus('Erro: ' + error.message)
+  row.id = (data as any).id
+  state.dirty = false
+  setSaveStatus('Salvo às ' + new Date().toLocaleTimeString())
+}
+
 async function deleteResume() {
   const row = state.resumes.get(state.resumeKey)!
   if (!confirm(`Excluir perfil "${row.profile_name}"?`)) return
@@ -208,6 +234,22 @@ async function deleteLetter() {
   renderAll()
 }
 
+async function deleteInterview() {
+  const row = state.interviews.get(state.interviewKey)!
+  if (!confirm(`Excluir interview "${row.profile_name}"?`)) return
+  if (row.id) {
+    const { error } = await supabase.from('resumes').delete().eq('id', row.id)
+    if (error) return setSaveStatus('Erro: ' + error.message)
+  }
+  state.interviews.delete(row.profile_key)
+  state.interviewKey = state.interviews.keys().next().value || 'interview-padrao'
+  if (!state.interviews.has(state.interviewKey)) {
+    state.interviews.set('interview-padrao', { profile_key: 'interview-padrao', profile_name: 'Padrão', data: defaultInterviewData() })
+    state.interviewKey = 'interview-padrao'
+  }
+  renderAll()
+}
+
 function newResume() {
   const name = prompt('Nome do novo perfil (ex: Product Design Lead)')?.trim()
   if (!name) return
@@ -232,6 +274,15 @@ function newLetter() {
   markDirty(); renderAll()
 }
 
+function newInterview() {
+  const name = prompt('Nome do novo interview (ex: Nubank — Design Lead)')?.trim()
+  if (!name) return
+  const key = 'interview-' + Date.now().toString(36)
+  state.interviews.set(key, { profile_key: key, profile_name: name, data: defaultInterviewData() })
+  state.interviewKey = key
+  markDirty(); renderAll()
+}
+
 function renameResume() {
   const row = state.resumes.get(state.resumeKey)!
   const name = prompt('Novo nome do perfil', row.profile_name)?.trim()
@@ -242,6 +293,13 @@ function renameResume() {
 function renameLetter() {
   const row = state.letters.get(state.letterKey)!
   const name = prompt('Novo nome da carta', row.profile_name)?.trim()
+  if (!name) return
+  row.profile_name = name; markDirty(); renderAll()
+}
+
+function renameInterview() {
+  const row = state.interviews.get(state.interviewKey)!
+  const name = prompt('Novo nome do interview', row.profile_name)?.trim()
   if (!name) return
   row.profile_name = name; markDirty(); renderAll()
 }
@@ -258,6 +316,7 @@ function markDirty() { state.dirty = true; setSaveStatus('Alterações não salv
 function renderAll() {
   localStorage.setItem('cv:key',   state.resumeKey)
   localStorage.setItem('cv:lkey',  state.letterKey)
+  localStorage.setItem('cv:ikey',  state.interviewKey)
   localStorage.setItem('cv:lang',  state.lang)
   localStorage.setItem('cv:style', state.style)
   localStorage.setItem('cv:tab',   state.tab)
@@ -277,6 +336,9 @@ function renderAll() {
     renderLetterSelect()
     if (state.editing) renderLetterEditor()
     renderLetterPreview()
+  } else if (state.tab === 'interview') {
+    renderInterviewSelect()
+    renderInterview()
   } else {
     renderLinks()
   }
@@ -432,6 +494,18 @@ function renderLetterSelect() {
     o.value = row.profile_key
     o.textContent = row.profile_name
     if (row.profile_key === state.letterKey) o.selected = true
+    sel.appendChild(o)
+  }
+}
+
+function renderInterviewSelect() {
+  const sel = document.getElementById('interview-select') as HTMLSelectElement
+  sel.innerHTML = ''
+  for (const row of state.interviews.values()) {
+    const o = document.createElement('option')
+    o.value = row.profile_key
+    o.textContent = row.profile_name
+    if (row.profile_key === state.interviewKey) o.selected = true
     sel.appendChild(o)
   }
 }
@@ -621,6 +695,107 @@ function renderLetterEditor() {
   cs.appendChild(sectionTitle('Encerramento'))
   cs.appendChild(localized('Encerramento', d.closing, 'area', refresh))
   pane.appendChild(cs)
+}
+
+/* ─── Interview tab ──────────────────────────────────────────────────── */
+// Free-form study notes: one About block plus as many Case blocks as needed.
+// Each block is written per language, following the PT/EN toggle in the top bar,
+// and carries its own Copiar button so a block can be pasted straight into an
+// application form or an interview prep doc.
+
+function copyBtn(getText: () => string): HTMLButtonElement {
+  const b = el<HTMLButtonElement>('button', {
+    class: 'text-xs px-3 py-1.5 border border-[var(--color-border)] rounded-lg hover:border-accent shrink-0',
+  }, 'Copiar')
+  b.addEventListener('click', async () => {
+    const text = getText()
+    if (!text.trim()) { b.textContent = 'Vazio'; setTimeout(() => b.textContent = 'Copiar', 1500); return }
+    try {
+      await navigator.clipboard.writeText(text)
+      b.textContent = 'Copiado!'
+    } catch {
+      b.textContent = 'Falhou'
+    }
+    setTimeout(() => b.textContent = 'Copiar', 1800)
+  })
+  return b
+}
+
+function interviewTextField(label: string, val: Localized, rows: number): HTMLDivElement {
+  const wrap = el<HTMLDivElement>('div', { class: 'space-y-2' })
+  const head = el<HTMLDivElement>('div', { class: 'flex items-center justify-between gap-3' })
+  head.appendChild(el('span', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, `${label} (${state.lang.toUpperCase()})`))
+  head.appendChild(copyBtn(() => val[state.lang] || ''))
+  wrap.appendChild(head)
+  const t = el<HTMLTextAreaElement>('textarea', {
+    rows: String(rows),
+    placeholder: 'Texto corrido…',
+    class: 'w-full bg-transparent border border-[var(--color-border)] rounded px-3 py-2 text-sm leading-relaxed resize-none overflow-hidden focus:outline-none focus:border-accent',
+  })
+  t.value = val[state.lang] || ''
+  t.addEventListener('input', () => { val[state.lang] = t.value; markDirty(); autoGrowTextarea(t) })
+  wrap.appendChild(t)
+  requestAnimationFrame(() => autoGrowTextarea(t))
+  return wrap
+}
+
+function renderInterview() {
+  const panel = document.getElementById('interview-panel')!
+  panel.innerHTML = ''
+  const d = state.interviews.get(state.interviewKey)!.data
+  if (!Array.isArray(d.cases)) d.cases = []
+
+  panel.appendChild(el('h2', { class: 'font-serif text-2xl font-semibold' }, 'Interview'))
+  panel.appendChild(el('p', { class: 'text-xs text-text-muted-dark' },
+    'Seu About e os cases para estudar antes da entrevista. Cada bloco tem um botão Copiar que copia o texto no idioma ativo (PT/EN). Lembre de Salvar.'))
+
+  // About
+  const about = el<HTMLElement>('section', { class: 'p-4 sm:p-5 border border-[var(--color-border)] rounded-lg space-y-3' })
+  about.appendChild(el('h3', { class: 'font-serif text-lg' }, 'About'))
+  about.appendChild(interviewTextField('Sobre mim', d.about, 8))
+  panel.appendChild(about)
+
+  // Cases
+  const casesHead = el<HTMLDivElement>('div', { class: 'flex items-center justify-between border-b border-[var(--color-border)] pb-2' })
+  casesHead.appendChild(el('h3', { class: 'font-serif text-lg' }, 'Cases'))
+  const add = el<HTMLButtonElement>('button', { class: 'text-xs px-3 py-1 border border-[var(--color-border)] rounded hover:border-accent' }, '+ Adicionar case')
+  add.addEventListener('click', () => {
+    d.cases.push({ title: { pt: '', en: '' }, body: { pt: '', en: '' } })
+    markDirty(); renderInterview()
+  })
+  casesHead.appendChild(add)
+  panel.appendChild(casesHead)
+
+  if (!d.cases.length) {
+    panel.appendChild(el('p', { class: 'text-sm text-text-muted-dark italic' }, 'Nenhum case ainda. Use “+ Adicionar case”.'))
+  }
+
+  d.cases.forEach((c: InterviewCase, i: number) => {
+    const card = el<HTMLDivElement>('div', { class: 'p-4 sm:p-5 border border-[var(--color-border)] rounded-lg space-y-3' })
+    const head = el<HTMLDivElement>('div', { class: 'flex items-center justify-between gap-3' })
+    head.appendChild(el('h4', { class: 'text-sm font-semibold' }, c.title[state.lang]?.trim() || `Case #${i + 1}`))
+    const rm = el<HTMLButtonElement>('button', { class: 'text-xs text-red-500 hover:underline shrink-0' }, 'Remover')
+    rm.addEventListener('click', () => {
+      if (!confirm(`Remover ${c.title[state.lang]?.trim() || `Case #${i + 1}`}?`)) return
+      d.cases.splice(i, 1); markDirty(); renderInterview()
+    })
+    head.appendChild(rm)
+    card.appendChild(head)
+
+    const titleWrap = el<HTMLDivElement>('div', { class: 'space-y-1' })
+    titleWrap.appendChild(el('label', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, `Título (${state.lang.toUpperCase()})`))
+    const ti = el<HTMLInputElement>('input', {
+      type: 'text', placeholder: 'Ex: Onboarding Daycoval — conversão +25%',
+      class: 'w-full bg-transparent border border-[var(--color-border)] rounded px-3 py-2 text-sm focus:outline-none focus:border-accent',
+    })
+    ti.value = c.title[state.lang] || ''
+    ti.addEventListener('input', () => { c.title[state.lang] = ti.value; markDirty() })
+    titleWrap.appendChild(ti)
+    card.appendChild(titleWrap)
+
+    card.appendChild(interviewTextField('Case', c.body, 8))
+    panel.appendChild(card)
+  })
 }
 
 /* ─── Links tab ──────────────────────────────────────────────────────── */
@@ -968,6 +1143,15 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('letter-delete')!.addEventListener('click', deleteLetter)
   ;(document.getElementById('letter-select') as HTMLSelectElement).addEventListener('change', (e) => {
     state.letterKey = (e.target as HTMLSelectElement).value; renderAll()
+  })
+
+  // Interview controls
+  document.getElementById('interview-save-btn')!.addEventListener('click', saveInterview)
+  document.getElementById('interview-new')!.addEventListener('click', newInterview)
+  document.getElementById('interview-rename')!.addEventListener('click', renameInterview)
+  document.getElementById('interview-delete')!.addEventListener('click', deleteInterview)
+  ;(document.getElementById('interview-select') as HTMLSelectElement).addEventListener('change', (e) => {
+    state.interviewKey = (e.target as HTMLSelectElement).value; renderAll()
   })
 
   window.addEventListener('beforeunload', (e) => {

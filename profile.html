@@ -55,6 +55,7 @@
         <button data-tab="profile" class="tab-btn px-3 sm:px-4 py-2">Curriculum</button>
         <button data-tab="carta"   class="tab-btn px-3 sm:px-4 py-2">Carta</button>
         <button data-tab="links"   class="tab-btn px-3 sm:px-4 py-2">Links</button>
+        <button data-tab="interview" class="tab-btn px-3 sm:px-4 py-2">Interview</button>
       </nav>
 
       <!-- Profile-tab controls: horizontally-scrolling toolbar on mobile, wraps normally on desktop -->
@@ -118,6 +119,27 @@
       <!-- Links-tab controls (empty — actions are inline) -->
       <div id="ctrl-links" class="hidden basis-full lg:basis-auto lg:ml-auto"></div>
 
+      <!-- Interview-tab controls -->
+      <div id="ctrl-interview" class="hidden flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar basis-full lg:basis-auto lg:flex-wrap lg:overflow-visible lg:ml-auto">
+        <select id="interview-select" class="shrink-0 bg-transparent border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm"></select>
+        <button id="interview-new"    class="shrink-0 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">+ Novo</button>
+        <button id="interview-rename" title="Renomear" class="shrink-0 flex items-center gap-1.5 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span class="hidden lg:inline">Renomear</span>
+        </button>
+        <button id="interview-delete" title="Excluir" class="shrink-0 flex items-center gap-1.5 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-red-500 hover:text-red-500">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          <span class="hidden lg:inline">Excluir</span>
+        </button>
+        <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
+        <div class="shrink-0 inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
+          <button data-lang="pt" class="lang-btn px-3 py-2">PT</button>
+          <button data-lang="en" class="lang-btn px-3 py-2">EN</button>
+        </div>
+        <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
+        <button id="interview-save-btn" class="shrink-0 text-xs px-4 py-2 bg-accent text-black font-semibold rounded-lg hover:opacity-90">Salvar</button>
+      </div>
+
       <button id="signout-btn" class="text-xs px-3 py-2 text-text-muted-dark hover:text-red-500 shrink-0 ml-auto lg:ml-0">Sair</button>
       <p id="save-status" class="basis-full text-xs text-text-muted-dark -mt-1"></p>
     </header>
@@ -145,6 +167,11 @@
     <!-- ── Links tab ─────────────────────────────────────────────────── -->
     <div id="tab-links" class="tab-panel hidden flex-1 flex items-start justify-center p-5 sm:p-10">
       <div id="links-panel" class="w-full max-w-lg space-y-4"></div>
+    </div>
+
+    <!-- ── Interview tab ─────────────────────────────────────────────── -->
+    <div id="tab-interview" class="tab-panel hidden flex-1 overflow-y-auto p-5 sm:p-10">
+      <div id="interview-panel" class="w-full max-w-3xl mx-auto space-y-6"></div>
     </div>
 
   </section>
