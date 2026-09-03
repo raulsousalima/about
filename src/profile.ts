@@ -699,9 +699,12 @@ function renderLetterEditor() {
 
 /* ─── Interview tab ──────────────────────────────────────────────────── */
 // Free-form study notes: one About block plus as many Case blocks as needed.
-// Each block is written per language, following the PT/EN toggle in the top bar,
-// and carries its own Copiar button so a block can be pasted straight into an
-// application form or an interview prep doc.
+// Every block is written in both languages side by side — PT on the left, EN on
+// the right — so a translation can be checked against its source without
+// flipping the top-bar toggle. Each column carries its own Copiar button, so a
+// block can be pasted straight into an application form or an interview prep doc.
+
+const LANGS: Lang[] = ['pt', 'en']
 
 function copyBtn(getText: () => string): HTMLButtonElement {
   const b = el<HTMLButtonElement>('button', {
@@ -721,33 +724,96 @@ function copyBtn(getText: () => string): HTMLButtonElement {
   return b
 }
 
+// Keeps the PT and EN textareas of one field the same height, so the two
+// columns stay aligned however unevenly the translations grow. Below the md
+// breakpoint the columns stack, where a matched height is only wasted space, so
+// each textarea grows on its own there.
+const sideBySide = () => window.matchMedia('(min-width: 768px)').matches
+
+function growPair(pair: HTMLTextAreaElement[]) {
+  let tallest = 0
+  for (const t of pair) {
+    t.style.height = 'auto'
+    tallest = Math.max(tallest, t.scrollHeight)
+  }
+  for (const t of pair) t.style.height = (sideBySide() ? tallest : t.scrollHeight) + 'px'
+}
+
+// Every pair on screen, so a resize that crosses the breakpoint re-measures.
+let interviewPairs: HTMLTextAreaElement[][] = []
+window.addEventListener('resize', () => interviewPairs.forEach(growPair))
+
 function interviewTextField(label: string, val: Localized, rows: number): HTMLDivElement {
   const wrap = el<HTMLDivElement>('div', { class: 'space-y-2' })
-  const head = el<HTMLDivElement>('div', { class: 'flex items-center justify-between gap-3' })
-  head.appendChild(el('span', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, `${label} (${state.lang.toUpperCase()})`))
-  head.appendChild(copyBtn(() => val[state.lang] || ''))
-  wrap.appendChild(head)
-  const t = el<HTMLTextAreaElement>('textarea', {
-    rows: String(rows),
-    placeholder: 'Texto corrido…',
-    class: 'w-full bg-transparent border border-[var(--color-border)] rounded px-3 py-2 text-sm leading-relaxed resize-none overflow-hidden focus:outline-none focus:border-accent',
-  })
-  t.value = val[state.lang] || ''
-  t.addEventListener('input', () => { val[state.lang] = t.value; markDirty(); autoGrowTextarea(t) })
-  wrap.appendChild(t)
-  requestAnimationFrame(() => autoGrowTextarea(t))
+  wrap.appendChild(el('span', { class: 'block text-[11px] uppercase tracking-widest text-text-muted-dark' }, label))
+
+  const grid = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3 items-start' })
+  const pair: HTMLTextAreaElement[] = []
+
+  for (const lang of LANGS) {
+    const col = el<HTMLDivElement>('div', { class: 'space-y-2 min-w-0' })
+    const head = el<HTMLDivElement>('div', { class: 'flex items-center justify-between gap-3' })
+    head.appendChild(el('span', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, lang.toUpperCase()))
+    head.appendChild(copyBtn(() => val[lang] || ''))
+    col.appendChild(head)
+
+    const t = el<HTMLTextAreaElement>('textarea', {
+      rows: String(rows),
+      placeholder: lang === 'pt' ? 'Texto corrido…' : 'Running text…',
+      class: 'w-full bg-transparent border border-[var(--color-border)] rounded px-3 py-2 text-sm leading-relaxed resize-none overflow-hidden focus:outline-none focus:border-accent',
+    })
+    t.value = val[lang] || ''
+    t.addEventListener('input', () => { val[lang] = t.value; markDirty(); growPair(pair) })
+    pair.push(t)
+    col.appendChild(t)
+    grid.appendChild(col)
+  }
+
+  wrap.appendChild(grid)
+  interviewPairs.push(pair)
+  requestAnimationFrame(() => growPair(pair))
   return wrap
+}
+
+function interviewTitleField(c: InterviewCase, onTitleChange: () => void): HTMLDivElement {
+  const wrap = el<HTMLDivElement>('div', { class: 'space-y-2' })
+  wrap.appendChild(el('span', { class: 'block text-[11px] uppercase tracking-widest text-text-muted-dark' }, 'Título'))
+
+  const grid = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3 items-start' })
+  for (const lang of LANGS) {
+    const col = el<HTMLDivElement>('div', { class: 'space-y-1 min-w-0' })
+    col.appendChild(el('label', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, lang.toUpperCase()))
+    const ti = el<HTMLInputElement>('input', {
+      type: 'text',
+      placeholder: lang === 'pt' ? 'Ex: Onboarding Daycoval — conversão +25%' : 'Ex: Daycoval onboarding — +25% conversion',
+      class: 'w-full bg-transparent border border-[var(--color-border)] rounded px-3 py-2 text-sm focus:outline-none focus:border-accent',
+    })
+    ti.value = c.title[lang] || ''
+    ti.addEventListener('input', () => { c.title[lang] = ti.value; markDirty(); onTitleChange() })
+    col.appendChild(ti)
+    grid.appendChild(col)
+  }
+
+  wrap.appendChild(grid)
+  return wrap
+}
+
+// The card heading needs one name for a case written in two languages: prefer
+// the active language, then whichever side has been filled in.
+function caseLabel(c: InterviewCase, i: number): string {
+  return c.title[state.lang]?.trim() || c.title.pt?.trim() || c.title.en?.trim() || `Case #${i + 1}`
 }
 
 function renderInterview() {
   const panel = document.getElementById('interview-panel')!
   panel.innerHTML = ''
+  interviewPairs = []
   const d = state.interviews.get(state.interviewKey)!.data
   if (!Array.isArray(d.cases)) d.cases = []
 
   panel.appendChild(el('h2', { class: 'font-serif text-2xl font-semibold' }, 'Interview'))
   panel.appendChild(el('p', { class: 'text-xs text-text-muted-dark' },
-    'Seu About e os cases para estudar antes da entrevista. Cada bloco tem um botão Copiar que copia o texto no idioma ativo (PT/EN). Lembre de Salvar.'))
+    'Seu About e os cases para estudar antes da entrevista. Português e inglês ficam lado a lado, e cada coluna tem seu próprio botão Copiar. Lembre de Salvar.'))
 
   // About
   const about = el<HTMLElement>('section', { class: 'p-4 sm:p-5 border border-[var(--color-border)] rounded-lg space-y-3' })
@@ -773,26 +839,17 @@ function renderInterview() {
   d.cases.forEach((c: InterviewCase, i: number) => {
     const card = el<HTMLDivElement>('div', { class: 'p-4 sm:p-5 border border-[var(--color-border)] rounded-lg space-y-3' })
     const head = el<HTMLDivElement>('div', { class: 'flex items-center justify-between gap-3' })
-    head.appendChild(el('h4', { class: 'text-sm font-semibold' }, c.title[state.lang]?.trim() || `Case #${i + 1}`))
+    const heading = el<HTMLHeadingElement>('h4', { class: 'text-sm font-semibold min-w-0 truncate' }, caseLabel(c, i))
+    head.appendChild(heading)
     const rm = el<HTMLButtonElement>('button', { class: 'text-xs text-red-500 hover:underline shrink-0' }, 'Remover')
     rm.addEventListener('click', () => {
-      if (!confirm(`Remover ${c.title[state.lang]?.trim() || `Case #${i + 1}`}?`)) return
+      if (!confirm(`Remover ${caseLabel(c, i)}?`)) return
       d.cases.splice(i, 1); markDirty(); renderInterview()
     })
     head.appendChild(rm)
     card.appendChild(head)
 
-    const titleWrap = el<HTMLDivElement>('div', { class: 'space-y-1' })
-    titleWrap.appendChild(el('label', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, `Título (${state.lang.toUpperCase()})`))
-    const ti = el<HTMLInputElement>('input', {
-      type: 'text', placeholder: 'Ex: Onboarding Daycoval — conversão +25%',
-      class: 'w-full bg-transparent border border-[var(--color-border)] rounded px-3 py-2 text-sm focus:outline-none focus:border-accent',
-    })
-    ti.value = c.title[state.lang] || ''
-    ti.addEventListener('input', () => { c.title[state.lang] = ti.value; markDirty() })
-    titleWrap.appendChild(ti)
-    card.appendChild(titleWrap)
-
+    card.appendChild(interviewTitleField(c, () => { heading.textContent = caseLabel(c, i) }))
     card.appendChild(interviewTextField('Case', c.body, 8))
     panel.appendChild(card)
   })
