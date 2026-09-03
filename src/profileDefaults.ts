@@ -7,20 +7,48 @@ export interface Experience {
 }
 
 export interface Education { school: string; degree: Localized; start: string; end: string }
-export interface Certification { name: string; issuer: string; year: string }
 export interface LangSkill { name: Localized; level: Localized }
 
+// Skill groups and certifications live once in the shared base; each CV version
+// only stores the ids it switches on, so the id is what ties the two together.
+export interface SkillGroup { id: string; category: Localized; items: string[] }
+export interface Certification { id: string; name: string; issuer: string; year: string }
+
 export interface Header {
-  name: string; headline: Localized; location: string
+  name: string; location: string
   email: string; phone: string
   website: string; linkedin: string; github: string; figma: string
   photo: string
 }
 
+// One shared base behind every CV version: the career itself, which does not
+// change from one application to the next. Editing it here changes every
+// version at once — that is the point of it being a base.
+export interface BaseData {
+  kind: 'base'
+  header: Header
+  experience: Experience[]
+  education: Education[]
+  languages: LangSkill[]
+  skills: SkillGroup[]
+  certifications: Certification[]
+}
+
+// A CV version carries only what actually differs between applications: the
+// headline, the About, and which of the shared skill groups and certifications
+// it includes.
 export interface ResumeData {
-  header: Header; summary: Localized; experience: Experience[]
-  education: Education[]; skills: { category: Localized; items: string[] }[]
-  languages: LangSkill[]; certifications: Certification[]
+  headline: Localized
+  summary: Localized
+  skills: string[]
+  certifications: string[]
+}
+
+// The base and one version composed into the shape the preview templates read.
+export interface ComposedResume {
+  header: Header; headline: Localized; summary: Localized
+  experience: Experience[]; education: Education[]
+  skills: SkillGroup[]; languages: LangSkill[]; certifications: Certification[]
 }
 
 export interface LetterData {
@@ -46,10 +74,6 @@ export interface InterviewData {
 
 const HEADER: Header = {
   name: 'Raul Lima',
-  headline: {
-    pt: 'Product Designer Specialist | Product Design Leadership | Designer Engineer | AI-driven Product Design',
-    en: 'Product Designer Specialist | Product Design Leadership | Designer Engineer | AI-driven Product Design',
-  },
   location: 'São Paulo, Brazil',
   email: 'raul.sousa.work@gmail.com',
   phone: '',
@@ -233,13 +257,13 @@ const EDUCATION: Education[] = [
   },
 ]
 
-const SKILLS = [
-  { category: { pt: 'Produto & Design', en: 'Product & Design' }, items: ['Product Design', 'UX Design', 'UI Design', 'UX Strategy', 'Product Discovery', 'User Research', 'Interaction Design', 'Design Thinking', 'Design Systems', 'Service Design', 'Experience Design', 'User-Centered Design', 'Prototyping', 'Usability Testing'] },
-  { category: { pt: 'Liderança', en: 'Leadership' }, items: ['Design Leadership', 'Team Management', 'Career Development', 'Mentoring', 'Facilitation', 'Stakeholder Management', 'Cross-functional Collaboration', 'Conflict Resolution', 'Strategic Planning'] },
-  { category: { pt: 'Dados & Produto', en: 'Data & Product' }, items: ['Data-driven Design', 'Product Analytics', 'Research Analysis', 'Conversion Optimization', 'Customer Journey', 'Funnel Optimization', 'Business Strategy'] },
-  { category: { pt: 'Tecnologia & IA', en: 'Technology & AI' }, items: ['Figma', 'Figma MCP', 'Claude', 'Claude Code', 'Cursor', 'Antigravity', 'AI Agents', 'Generative AI', 'Rapid Prototyping', 'Adobe Creative Suite'] },
-  { category: { pt: 'Metodologias', en: 'Methodologies' }, items: ['Design Thinking', 'Lean UX', 'Agile UX', 'Agile', 'Product Discovery', 'Design Sprint', 'Research-driven Design'] },
-  { category: { pt: 'Indústrias', en: 'Industries' }, items: ['Fintech', 'Banking', 'Retail', 'HealthTech', 'EdTech', 'AI', 'E-commerce', 'IoT'] },
+const SKILLS: SkillGroup[] = [
+  { id: 'sk-produto-design', category: { pt: 'Produto & Design', en: 'Product & Design' }, items: ['Product Design', 'UX Design', 'UI Design', 'UX Strategy', 'Product Discovery', 'User Research', 'Interaction Design', 'Design Thinking', 'Design Systems', 'Service Design', 'Experience Design', 'User-Centered Design', 'Prototyping', 'Usability Testing'] },
+  { id: 'sk-lideranca', category: { pt: 'Liderança', en: 'Leadership' }, items: ['Design Leadership', 'Team Management', 'Career Development', 'Mentoring', 'Facilitation', 'Stakeholder Management', 'Cross-functional Collaboration', 'Conflict Resolution', 'Strategic Planning'] },
+  { id: 'sk-dados-produto', category: { pt: 'Dados & Produto', en: 'Data & Product' }, items: ['Data-driven Design', 'Product Analytics', 'Research Analysis', 'Conversion Optimization', 'Customer Journey', 'Funnel Optimization', 'Business Strategy'] },
+  { id: 'sk-tecnologia-ia', category: { pt: 'Tecnologia & IA', en: 'Technology & AI' }, items: ['Figma', 'Figma MCP', 'Claude', 'Claude Code', 'Cursor', 'Antigravity', 'AI Agents', 'Generative AI', 'Rapid Prototyping', 'Adobe Creative Suite'] },
+  { id: 'sk-metodologias', category: { pt: 'Metodologias', en: 'Methodologies' }, items: ['Design Thinking', 'Lean UX', 'Agile UX', 'Agile', 'Product Discovery', 'Design Sprint', 'Research-driven Design'] },
+  { id: 'sk-industrias', category: { pt: 'Indústrias', en: 'Industries' }, items: ['Fintech', 'Banking', 'Retail', 'HealthTech', 'EdTech', 'AI', 'E-commerce', 'IoT'] },
 ]
 
 const LANGUAGES: LangSkill[] = [
@@ -248,66 +272,83 @@ const LANGUAGES: LangSkill[] = [
 ]
 
 const CERTIFICATIONS: Certification[] = [
-  { name: 'Marketing Digital, Design Thinking e UX', issuer: 'PUCRS', year: '2024' },
-  { name: 'Strategic Leadership', issuer: 'CFCPro', year: '2024' },
-  { name: 'Artificial Intelligence: Productivity & Career', issuer: 'Escola Conquer', year: '2024' },
-  { name: 'English Certificate', issuer: 'International English Test', year: '2024' },
-  { name: 'Customer Experience (CX)', issuer: 'Escola Conquer', year: '2023' },
-  { name: 'Communication & Public Speaking', issuer: 'Evolive', year: '2023' },
-  { name: 'Professional Adaptability: Emotional Intelligence, Personal Finance & Leadership', issuer: 'PUCRS', year: '2022' },
-  { name: '100 Mentorship Minutes — Mentor', issuer: 'ADPList', year: '2022' },
-  { name: 'Exponential Leadership', issuer: 'StartSe', year: '2021' },
-  { name: 'Enterprise Design Thinking', issuer: 'IBM', year: '2021' },
-  { name: 'Product Analytics Certification (PAC)', issuer: 'Product School', year: '2021' },
-  { name: 'Global Designer Acceleration', issuer: 'Inter', year: '2021' },
-  { name: 'Virtual Team Management', issuer: 'LinkedIn', year: '2020' },
-  { name: 'Facilitation Experience', issuer: 'Echos Desirable Futures Lab', year: '2018' },
-  { name: 'Design Thinking Experience', issuer: 'Echos Desirable Futures Lab', year: '2018' },
+  { id: 'ct-pucrs-mkt-ux', name: 'Marketing Digital, Design Thinking e UX', issuer: 'PUCRS', year: '2024' },
+  { id: 'ct-cfcpro-strategic', name: 'Strategic Leadership', issuer: 'CFCPro', year: '2024' },
+  { id: 'ct-conquer-ai', name: 'Artificial Intelligence: Productivity & Career', issuer: 'Escola Conquer', year: '2024' },
+  { id: 'ct-english-test', name: 'English Certificate', issuer: 'International English Test', year: '2024' },
+  { id: 'ct-conquer-cx', name: 'Customer Experience (CX)', issuer: 'Escola Conquer', year: '2023' },
+  { id: 'ct-evolive-comm', name: 'Communication & Public Speaking', issuer: 'Evolive', year: '2023' },
+  { id: 'ct-pucrs-adapt', name: 'Professional Adaptability: Emotional Intelligence, Personal Finance & Leadership', issuer: 'PUCRS', year: '2022' },
+  { id: 'ct-adplist-100min', name: '100 Mentorship Minutes — Mentor', issuer: 'ADPList', year: '2022' },
+  { id: 'ct-startse-exp', name: 'Exponential Leadership', issuer: 'StartSe', year: '2021' },
+  { id: 'ct-ibm-edt', name: 'Enterprise Design Thinking', issuer: 'IBM', year: '2021' },
+  { id: 'ct-ps-pac', name: 'Product Analytics Certification (PAC)', issuer: 'Product School', year: '2021' },
+  { id: 'ct-inter-gda', name: 'Global Designer Acceleration', issuer: 'Inter', year: '2021' },
+  { id: 'ct-linkedin-vtm', name: 'Virtual Team Management', issuer: 'LinkedIn', year: '2020' },
+  { id: 'ct-echos-facilitation', name: 'Facilitation Experience', issuer: 'Echos Desirable Futures Lab', year: '2018' },
+  { id: 'ct-echos-dt', name: 'Design Thinking Experience', issuer: 'Echos Desirable Futures Lab', year: '2018' },
 ]
 
-/* ─── Resume profiles ─────────────────────────────────────────────────── */
+/* ─── Shared base ─────────────────────────────────────────────────────── */
 
-export function especialistaData(): ResumeData {
+// Seed only: the real base is built from the saved CVs the first time the page
+// loads after this change, and lives in its own row from then on.
+export function defaultBaseData(): BaseData {
   return {
-    header: { ...HEADER, headline: { pt: 'Product Designer Specialist · Fintech · Banking · AI-driven Product Design', en: 'Product Designer Specialist · Fintech · Banking · AI-driven Product Design' } },
-    summary: SUMMARY,
+    kind: 'base',
+    header: { ...HEADER },
     experience: [
       EXP_DAYCOVAL,
       EXP_GOKK_COORD_DECATHLON,
+      EXP_GOKK_LEADER,
       EXP_GOKK_SENIOR,
       EXP_GOKK_PD,
       EXP_PD_2013,
       EXP_DIGITAL_DESIGNER,
       EXP_ADPLIST,
+      EXP_AWARI,
     ],
     education: EDUCATION,
-    skills: SKILLS,
     languages: LANGUAGES,
+    skills: SKILLS,
     certifications: CERTIFICATIONS,
+  }
+}
+
+export const ALL_SKILL_IDS = SKILLS.map(s => s.id)
+export const ALL_CERT_IDS = CERTIFICATIONS.map(c => c.id)
+
+/* ─── Resume versions ─────────────────────────────────────────────────── */
+
+export function especialistaData(): ResumeData {
+  return {
+    headline: {
+      pt: 'Product Designer Specialist · Fintech · Banking · AI-driven Product Design',
+      en: 'Product Designer Specialist · Fintech · Banking · AI-driven Product Design',
+    },
+    summary: SUMMARY,
+    skills: [...ALL_SKILL_IDS],
+    certifications: [...ALL_CERT_IDS],
   }
 }
 
 export function coordenadorData(): ResumeData {
   return {
-    header: { ...HEADER, headline: { pt: 'Coordenador de Product Design | Liderança de Times · Design Leadership · AI-driven Product Design', en: 'Coordinator of Product Design | Team Leadership · Design Leadership · AI-driven Product Design' } },
+    headline: {
+      pt: 'Coordenador de Product Design | Liderança de Times · Design Leadership · AI-driven Product Design',
+      en: 'Coordinator of Product Design | Team Leadership · Design Leadership · AI-driven Product Design',
+    },
     summary: {
       pt: SUMMARY.pt + '\n\nImpactos-chave em liderança:\n• Gerenciamento e desenvolvimento de times de 5–15+ Designers.\n• Liderança de experiências omnichannel em 6+ unidades de negócio.\n• Mentoria de Designers em diferentes estágios de carreira.',
       en: SUMMARY.en + '\n\nKey leadership impact:\n• Managed and developed Design teams of 5–15+ professionals.\n• Led omnichannel experiences across 6+ business units.\n• Mentored Designers at different career stages.',
     },
-    experience: [
-      EXP_DAYCOVAL,
-      EXP_GOKK_COORD,
-      EXP_GOKK_LEADER,
-      EXP_GOKK_SENIOR,
-      EXP_GOKK_PD,
-      EXP_ADPLIST,
-      EXP_AWARI,
-    ],
-    education: EDUCATION,
-    skills: SKILLS,
-    languages: LANGUAGES,
-    certifications: CERTIFICATIONS,
+    skills: [...ALL_SKILL_IDS],
+    certifications: [...ALL_CERT_IDS],
   }
+}
+
+export function emptyResumeVersion(): ResumeData {
+  return { headline: { pt: '', en: '' }, summary: { pt: '', en: '' }, skills: [], certifications: [] }
 }
 
 /* ─── Cover letter defaults ───────────────────────────────────────────── */

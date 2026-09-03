@@ -1,13 +1,12 @@
 import { supabase, ALLOWED_EMAIL } from './supabase'
 import type { Session } from '@supabase/supabase-js'
-import { especialistaData, coordenadorData, defaultLetterData, defaultInterviewData } from './profileDefaults'
-import type { ResumeData, LetterData, InterviewData, InterviewCase } from './profileDefaults'
+import { especialistaData, coordenadorData, defaultLetterData, defaultInterviewData, defaultBaseData, emptyResumeVersion } from './profileDefaults'
+import type { ResumeData, LetterData, InterviewData, InterviewCase, BaseData, ComposedResume, SkillGroup, Certification, Header, Experience } from './profileDefaults'
 
 type Lang = 'pt' | 'en'
 type Style = 'linkedin' | 'ats'
 type Tab = 'profile' | 'carta' | 'links' | 'interview'
 type Localized = { pt: string; en: string }
-type Experience = ResumeData['experience'][number]
 
 /* ─── State ──────────────────────────────────────────────────────────── */
 
@@ -21,7 +20,10 @@ const state = {
   resumeKey:  localStorage.getItem('cv:key')   || 'especialista',
   letterKey:  localStorage.getItem('cv:lkey')  || 'carta-padrao',
   interviewKey: localStorage.getItem('cv:ikey') || 'interview-padrao',
-  resumes:    new Map<string, { id?: string; profile_key: string; profile_name: string; data: ResumeData }>(),
+  // Header, experience, education, languages and the skill/certification
+  // catalogues live here once and feed every version.
+  base:       { row: null as { id?: string } | null, data: defaultBaseData(), dirty: false },
+  resumes:    new Map<string, { id?: string; profile_key: string; profile_name: string; data: ResumeData; legacy?: unknown }>(),
   letters:    new Map<string, { id?: string; profile_key: string; profile_name: string; data: LetterData }>(),
   interviews: new Map<string, { id?: string; profile_key: string; profile_name: string; data: InterviewData }>(),
   session:    null as Session | null,
@@ -32,6 +34,9 @@ const DEFAULT_RESUMES = [
   { key: 'especialista', name: 'Especialista', seed: especialistaData },
   { key: 'coordenador',  name: 'Coordenador',  seed: coordenadorData  },
 ]
+// Which saved CV supplies the career when the shared base is first built.
+const BASE_SOURCE_KEY = 'especialista'
+const BASE_KEY = 'base'
 const DEFAULT_LETTERS = [
   { key: 'carta-padrao', name: 'Padrão', seed: defaultLetterData },
 ]
@@ -103,8 +108,13 @@ async function loadAll() {
   state.letters.clear()
   state.interviews.clear()
 
+  const resumeRows: any[] = []
+  let baseRow: any = null
+
   for (const row of (data || [])) {
-    if (row.data?.kind === 'letter') {
+    if (row.data?.kind === 'base') {
+      baseRow = row
+    } else if (row.data?.kind === 'letter') {
       const ld = row.data as any
       if (Array.isArray(ld.paragraphs) && !ld.body) {
         ld.body = { pt: ld.paragraphs.map((p: any) => p.pt || '').join('\n\n'), en: ld.paragraphs.map((p: any) => p.en || '').join('\n\n') }
@@ -116,10 +126,30 @@ async function loadAll() {
       if (!Array.isArray(iv.cases)) iv.cases = []
       state.interviews.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: iv })
     } else {
-      const rd = { ...emptyResume(), ...row.data } as ResumeData
-      migrateExperienceLocation(rd)
-      state.resumes.set(row.profile_key, { id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data: rd })
+      resumeRows.push(row)
     }
+  }
+
+  const legacyRows = resumeRows.filter(r => isLegacyResume(r.data))
+
+  if (baseRow) {
+    state.base = { row: { id: baseRow.id }, data: normalizeBase(baseRow.data), dirty: false }
+  } else {
+    // First load after the shared-base change: fold the saved CVs into one base.
+    state.base = { row: null, data: buildBaseFromLegacy(legacyRows), dirty: true }
+  }
+  migrateExperienceLocation(state.base.data.experience)
+
+  for (const row of resumeRows) {
+    const data = isLegacyResume(row.data)
+      ? versionFromLegacy(row.data, state.base.data)
+      : normalizeVersion(row.data)
+    state.resumes.set(row.profile_key, {
+      id: row.id, profile_key: row.profile_key, profile_name: row.profile_name, data,
+      // The pre-base payload is kept verbatim so nothing a version used to hold
+      // is lost the first time it is saved in the new shape.
+      legacy: isLegacyResume(row.data) ? row.data : row.data?.legacy,
+    })
   }
 
   for (const p of DEFAULT_RESUMES) {
@@ -137,7 +167,135 @@ async function loadAll() {
   if (!state.interviews.has(state.interviewKey)) state.interviewKey = state.interviews.keys().next().value!
 
   renderAll()
+
+  // The base has to exist as a row before a version can point at it, so it is
+  // written once, on its own — the CV versions still wait for Salvar.
+  if (state.base.dirty) await saveBase('Base compartilhada criada a partir do Especialista.')
 }
+
+/* ─── Shared base: building and migration ────────────────────────────── */
+
+// Before the shared base, every version carried its own full CV; those rows are
+// the ones with a `header` inside `data`.
+function isLegacyResume(data: any): boolean {
+  return !!data && typeof data === 'object' && !data.kind && !!data.header
+}
+
+function slugId(prefix: string, text: string, taken: Set<string>): string {
+  const slug = (text || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'item'
+  let id = `${prefix}-${slug}`
+  let n = 2
+  while (taken.has(id)) id = `${prefix}-${slug}-${n++}`
+  taken.add(id)
+  return id
+}
+
+const skillKey = (g: any) => (g?.category?.pt || g?.category?.en || '').trim().toLowerCase()
+const certKey = (c: any) => `${(c?.name || '').trim().toLowerCase()}|${(c?.issuer || '').trim().toLowerCase()}`
+
+// The chosen base profile supplies the career itself; the skill and
+// certification catalogues take everything every version had, so switching a
+// group off in one version never deletes it for the others.
+function buildBaseFromLegacy(legacyRows: any[]): BaseData {
+  const source = legacyRows.find(r => r.profile_key === BASE_SOURCE_KEY) || legacyRows[0]
+  if (!source) return defaultBaseData()
+  const d = source.data
+
+  const { headline, ...header } = d.header || {}
+  void headline // headline is per version now
+
+  const skillIds = new Set<string>()
+  const skills: SkillGroup[] = []
+  const seenSkill = new Set<string>()
+  const certIds = new Set<string>()
+  const certifications: Certification[] = []
+  const seenCert = new Set<string>()
+
+  for (const row of [source, ...legacyRows.filter(r => r !== source)]) {
+    for (const g of (row.data?.skills || [])) {
+      const key = skillKey(g)
+      if (!key || seenSkill.has(key)) continue
+      seenSkill.add(key)
+      skills.push({ id: slugId('sk', g.category?.pt || g.category?.en, skillIds), category: g.category, items: [...(g.items || [])] })
+    }
+    for (const c of (row.data?.certifications || [])) {
+      const key = certKey(c)
+      if (key === '|' || seenCert.has(key)) continue
+      seenCert.add(key)
+      certifications.push({ id: slugId('ct', `${c.name} ${c.issuer}`, certIds), name: c.name, issuer: c.issuer, year: c.year })
+    }
+  }
+
+  return {
+    kind: 'base',
+    header: { ...defaultBaseData().header, ...header } as Header,
+    experience: d.experience || [],
+    education: d.education || [],
+    languages: d.languages || [],
+    skills,
+    certifications,
+  }
+}
+
+function normalizeBase(data: any): BaseData {
+  const seed = defaultBaseData()
+  const b = { ...seed, ...data, kind: 'base' as const }
+  b.header = { ...seed.header, ...(data?.header || {}) }
+  for (const k of ['experience', 'education', 'languages', 'skills', 'certifications'] as const) {
+    if (!Array.isArray(b[k])) (b as any)[k] = []
+  }
+  const skillIds = new Set<string>()
+  b.skills = b.skills.map((g: any) => g.id ? g : { ...g, id: slugId('sk', g.category?.pt || g.category?.en, skillIds) })
+  const certIds = new Set<string>()
+  b.certifications = b.certifications.map((c: any) => c.id ? c : { ...c, id: slugId('ct', `${c.name} ${c.issuer}`, certIds) })
+  return b
+}
+
+function normalizeVersion(data: any): ResumeData {
+  const v = emptyResumeVersion()
+  return {
+    headline: { ...v.headline, ...(data?.headline || {}) },
+    summary: { ...v.summary, ...(data?.summary || {}) },
+    skills: Array.isArray(data?.skills) ? data.skills.filter((s: any) => typeof s === 'string') : [],
+    certifications: Array.isArray(data?.certifications) ? data.certifications.filter((s: any) => typeof s === 'string') : [],
+  }
+}
+
+// A version keeps its headline and About; what it used to carry of the shared
+// sections becomes the set of catalogue entries it switches on.
+function versionFromLegacy(data: any, base: BaseData): ResumeData {
+  const skillByKey = new Map(base.skills.map(g => [skillKey(g), g.id]))
+  const certByKey = new Map(base.certifications.map(c => [certKey(c), c.id]))
+  const pick = <T,>(items: any[], key: (x: any) => string, index: Map<string, T>) =>
+    [...new Set((items || []).map(x => index.get(key(x))).filter(Boolean) as T[])]
+
+  return {
+    headline: { pt: data.header?.headline?.pt || '', en: data.header?.headline?.en || '' },
+    summary: { pt: data.summary?.pt || '', en: data.summary?.en || '' },
+    skills: pick(data.skills, skillKey, skillByKey),
+    certifications: pick(data.certifications, certKey, certByKey),
+  }
+}
+
+/* ─── Composing base + version ───────────────────────────────────────── */
+
+function composeResume(version: ResumeData): ComposedResume {
+  const b = state.base.data
+  return {
+    header: b.header,
+    headline: version.headline,
+    summary: version.summary,
+    experience: b.experience,
+    education: b.education,
+    languages: b.languages,
+    skills: b.skills.filter(g => version.skills.includes(g.id)),
+    certifications: b.certifications.filter(c => version.certifications.includes(c.id)),
+  }
+}
+
+function currentVersion(): ResumeData { return state.resumes.get(state.resumeKey)!.data }
 
 // Experience.location used to be a single string, so a stored row could render
 // "São Paulo, Brazil · Presencial" inside an English CV. Split it per language on
@@ -145,8 +303,8 @@ async function loadAll() {
 // English without hand-editing every entry.
 const WORK_MODEL: Record<string, string> = { 'Presencial': 'On-site', 'Híbrido': 'Hybrid', 'Hibrido': 'Hybrid', 'Remoto': 'Remote' }
 
-function migrateExperienceLocation(d: ResumeData) {
-  for (const exp of d.experience) {
+function migrateExperienceLocation(experience: Experience[]) {
+  for (const exp of experience) {
     const loc = exp.location as unknown
     if (typeof loc !== 'string') continue
     let en = loc
@@ -157,20 +315,37 @@ function migrateExperienceLocation(d: ResumeData) {
   }
 }
 
-function emptyResume(): ResumeData {
-  return {
-    header: { name: '', headline: { pt: '', en: '' }, location: '', email: '', phone: '', website: '', linkedin: '', github: '', figma: '', photo: '' },
-    summary: { pt: '', en: '' }, experience: [], education: [], skills: [], languages: [], certifications: [],
-  }
-}
-
 /* ─── Persistence ────────────────────────────────────────────────────── */
+
+async function saveBase(note?: string): Promise<boolean> {
+  if (!state.session) return false
+  const payload = {
+    user_id: state.session.user.id,
+    profile_key: BASE_KEY,
+    profile_name: 'Base compartilhada',
+    data: state.base.data,
+  }
+  const { data, error } = await supabase.from('resumes').upsert(payload, { onConflict: 'user_id,profile_key' }).select().single()
+  if (error) { setSaveStatus('Erro ao salvar a base: ' + error.message); return false }
+  state.base.row = { id: (data as any).id }
+  state.base.dirty = false
+  if (note) setSaveStatus(note)
+  return true
+}
 
 async function saveResume() {
   if (!state.session) return
   const row = state.resumes.get(state.resumeKey)!
-  const payload = { user_id: state.session.user.id, profile_key: row.profile_key, profile_name: row.profile_name, data: row.data }
   setSaveStatus('Salvando…')
+  // The base carries the sections every version shares, so it goes with any
+  // save from the Curriculum tab.
+  if (!await saveBase()) return
+  const payload = {
+    user_id: state.session.user.id,
+    profile_key: row.profile_key,
+    profile_name: row.profile_name,
+    data: row.legacy ? { ...row.data, legacy: row.legacy } : row.data,
+  }
   const { data, error } = await supabase.from('resumes').upsert(payload, { onConflict: 'user_id,profile_key' }).select().single()
   if (error) return setSaveStatus('Erro: ' + error.message)
   row.id = (data as any).id
@@ -254,13 +429,19 @@ function newResume() {
   const name = prompt('Nome do novo perfil (ex: Product Design Lead)')?.trim()
   if (!name) return
   const key = 'custom-' + Date.now().toString(36)
-  // Clone current profile — new profiles share the same experience, education,
-  // certifications and languages; only headline, summary and skills typically change.
-  const base = JSON.parse(JSON.stringify(state.resumes.get(state.resumeKey)!.data)) as ResumeData
-  base.header.headline = { pt: '', en: '' }
-  base.summary = { pt: '', en: '' }
-  base.skills = []
-  state.resumes.set(key, { profile_key: key, profile_name: name, data: base })
+  // Experience, education and languages already come from the shared base, so a
+  // new version starts with everything switched on and only needs its own
+  // headline and About.
+  state.resumes.set(key, {
+    profile_key: key,
+    profile_name: name,
+    data: {
+      headline: { pt: '', en: '' },
+      summary: { pt: '', en: '' },
+      skills: state.base.data.skills.map(g => g.id),
+      certifications: state.base.data.certifications.map(c => c.id),
+    },
+  })
   state.resumeKey = key
   markDirty(); renderAll()
 }
@@ -310,6 +491,10 @@ function setSaveStatus(t: string) {
 }
 
 function markDirty() { state.dirty = true; setSaveStatus('Alterações não salvas') }
+
+// An edit to a shared section changes every version, so the base row has to go
+// out with the next save too.
+function markBaseDirty() { state.base.dirty = true; markDirty() }
 
 /* ─── Render all ─────────────────────────────────────────────────────── */
 
@@ -512,86 +697,192 @@ function renderInterviewSelect() {
 
 /* ─── Resume editor ──────────────────────────────────────────────────── */
 
+// A card that is switched off still shows its fields — the content is shared,
+// so it stays editable — but reads as excluded from the version on screen.
+function includeToggle(isOn: () => boolean, set: (on: boolean) => void, card: HTMLElement): HTMLLabelElement {
+  const wrap = el<HTMLLabelElement>('label', { class: 'flex items-center gap-2 text-xs shrink-0 cursor-pointer select-none' })
+  const cb = el<HTMLInputElement>('input', { type: 'checkbox', class: 'accent-[var(--color-accent)] w-4 h-4' })
+  const label = el<HTMLSpanElement>('span', {})
+  const paint = () => {
+    const on = isOn()
+    cb.checked = on
+    label.textContent = on ? 'Incluído' : 'Fora desta versão'
+    label.className = on ? 'text-text-primary-dark' : 'text-text-muted-dark'
+    card.classList.toggle('opacity-45', !on)
+  }
+  cb.addEventListener('change', () => { set(cb.checked); paint(); markDirty(); renderResumePreview() })
+  paint()
+  wrap.appendChild(cb)
+  wrap.appendChild(label)
+  return wrap
+}
+
+// Section heading for a shared catalogue: add a new entry, or switch the whole
+// catalogue on or off for this version in one go.
+function catalogTitle(title: string, onAdd: () => void, onAll: () => void, onNone: () => void): HTMLElement {
+  const h = el<HTMLDivElement>('div', { class: 'flex flex-wrap items-center justify-between gap-2 border-b border-[var(--color-border)] pb-2 mb-4' })
+  h.appendChild(el('h2', { class: 'font-serif text-xl' }, title))
+  const acts = el<HTMLDivElement>('div', { class: 'flex items-center gap-2' })
+  const btn = (text: string, fn: () => void) => {
+    const b = el<HTMLButtonElement>('button', { class: 'text-xs px-3 py-1 border border-[var(--color-border)] rounded hover:border-accent' }, text)
+    b.addEventListener('click', () => { fn(); markDirty(); renderResumeEditor(); renderResumePreview() })
+    return b
+  }
+  acts.appendChild(btn('Todas', onAll))
+  acts.appendChild(btn('Nenhuma', onNone))
+  acts.appendChild(btn('+ Adicionar', onAdd))
+  h.appendChild(acts)
+  return h
+}
+
+function sharedBanner(text: string): HTMLElement {
+  return el('p', { class: 'text-[11px] leading-relaxed text-text-muted-dark border border-[var(--color-border)] rounded-lg px-3 py-2' }, text)
+}
+
 function renderResumeEditor() {
   const pane = document.getElementById('editor-pane')!
   pane.innerHTML = ''
-  const d = state.resumes.get(state.resumeKey)!.data
-  sortExperienceByDate(d.experience)
+  const v = currentVersion()
+  const b = state.base.data
+  sortExperienceByDate(b.experience)
   const refresh = () => renderResumePreview()
+  // Everything below the version block is shared, so editing it has to mark the
+  // base for saving as well.
+  const refreshBase = () => { state.base.dirty = true; renderResumePreview() }
+
+  /* ── This version ── */
+  const vs = el<HTMLDivElement>('section', { class: 'space-y-3' })
+  vs.appendChild(sectionTitle('Esta versão'))
+  vs.appendChild(sharedBanner('Só a Headline e o About mudam de uma versão para outra. Todo o resto vem da base compartilhada abaixo.'))
+  vs.appendChild(localized('Headline (cargo)', v.headline, 'input', refresh))
+  vs.appendChild(localized('About / Resumo', v.summary, 'area', refresh))
+  pane.appendChild(vs)
+
+  /* ── Skills: shared catalogue, per-version switches ── */
+  const sks = el<HTMLDivElement>('section', { class: 'space-y-4' })
+  sks.appendChild(catalogTitle('Competências',
+    () => { const g = { id: 'sk-' + Date.now().toString(36), category: { pt: '', en: '' }, items: [] }; b.skills.push(g); v.skills.push(g.id); state.base.dirty = true },
+    () => { v.skills = b.skills.map(g => g.id) },
+    () => { v.skills = [] }))
+  sks.appendChild(sharedBanner('As categorias são a mesma base em todas as versões: editar o conteúdo reflete em todas. O que muda por versão é quais entram no currículo.'))
+  b.skills.forEach((sk: SkillGroup, i: number) => {
+    const c = el<HTMLDivElement>('div', { class: 'p-4 border border-[var(--color-border)] rounded-lg space-y-3 transition-opacity' })
+    const head = el<HTMLDivElement>('div', { class: 'flex flex-wrap items-center justify-between gap-2' })
+    head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Categoria #${i + 1}`))
+    const right = el<HTMLDivElement>('div', { class: 'flex items-center gap-3' })
+    right.appendChild(includeToggle(
+      () => v.skills.includes(sk.id),
+      on => { v.skills = on ? [...v.skills, sk.id] : v.skills.filter(id => id !== sk.id) },
+      c))
+    right.appendChild(removeBtn(() => { b.skills.splice(i, 1); v.skills = v.skills.filter(id => id !== sk.id); state.base.dirty = true }))
+    head.appendChild(right)
+    c.appendChild(head)
+    c.appendChild(localized('Categoria', sk.category, 'input', refreshBase))
+    c.appendChild(textarea('Itens (separados por vírgula)', sk.items.join(', '), val => { sk.items = val.split(',').map(s => s.trim()).filter(Boolean); refreshBase() }, 2, refreshBase))
+    sks.appendChild(c)
+  })
+  pane.appendChild(sks)
+
+  /* ── Certifications: shared catalogue, per-version switches ── */
+  const cs = el<HTMLDivElement>('section', { class: 'space-y-4' })
+  cs.appendChild(catalogTitle('Certificações',
+    () => { const ct = { id: 'ct-' + Date.now().toString(36), name: '', issuer: '', year: '' }; b.certifications.push(ct); v.certifications.push(ct.id); state.base.dirty = true },
+    () => { v.certifications = b.certifications.map(x => x.id) },
+    () => { v.certifications = [] }))
+  cs.appendChild(sharedBanner('Mesma base para todas as versões. Marque as que entram nesta.'))
+  b.certifications.forEach((ct: Certification, i: number) => {
+    const c = el<HTMLDivElement>('div', { class: 'p-4 border border-[var(--color-border)] rounded-lg space-y-3 transition-opacity' })
+    const head = el<HTMLDivElement>('div', { class: 'flex flex-wrap items-center justify-between gap-2' })
+    head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Certificação #${i + 1}`))
+    const right = el<HTMLDivElement>('div', { class: 'flex items-center gap-3' })
+    right.appendChild(includeToggle(
+      () => v.certifications.includes(ct.id),
+      on => { v.certifications = on ? [...v.certifications, ct.id] : v.certifications.filter(id => id !== ct.id) },
+      c))
+    right.appendChild(removeBtn(() => { b.certifications.splice(i, 1); v.certifications = v.certifications.filter(id => id !== ct.id); state.base.dirty = true }))
+    head.appendChild(right)
+    c.appendChild(head)
+    c.appendChild(inp('Nome', ct.name, val => { ct.name = val; refreshBase() }))
+    const r = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
+    r.appendChild(inp('Emissor', ct.issuer, val => { ct.issuer = val; refreshBase() }))
+    r.appendChild(inp('Ano', ct.year, val => { ct.year = val; refreshBase() }))
+    c.appendChild(r)
+    cs.appendChild(c)
+  })
+  pane.appendChild(cs)
+
+  /* ── Shared base ── */
+  const baseIntro = el<HTMLDivElement>('section', { class: 'space-y-3 pt-2' })
+  baseIntro.appendChild(sectionTitle('Base compartilhada'))
+  baseIntro.appendChild(sharedBanner('Cabeçalho, Experiência, Formação e Idiomas são os mesmos em todas as versões. Editar aqui altera todas elas.'))
+  pane.appendChild(baseIntro)
 
   // Header
   const hs = el<HTMLDivElement>('section', { class: 'space-y-3' })
   hs.appendChild(sectionTitle('Cabeçalho'))
-  hs.appendChild(inp('Nome completo', d.header.name, v => { d.header.name = v; refresh() }))
-  hs.appendChild(localized('Headline', d.header.headline, 'input', refresh))
+  hs.appendChild(inp('Nome completo', b.header.name, val => { b.header.name = val; refreshBase() }))
   const r1 = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
-  r1.appendChild(inp('Localização', d.header.location, v => { d.header.location = v; refresh() }))
-  r1.appendChild(inp('Email', d.header.email, v => { d.header.email = v; refresh() }, 'email'))
+  r1.appendChild(inp('Localização', b.header.location, val => { b.header.location = val; refreshBase() }))
+  r1.appendChild(inp('Email', b.header.email, val => { b.header.email = val; refreshBase() }, 'email'))
   hs.appendChild(r1)
   const r2 = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
-  r2.appendChild(inp('Telefone', d.header.phone, v => { d.header.phone = v; refresh() }))
-  r2.appendChild(inp('Website / Portfólio', d.header.website, v => { d.header.website = v; refresh() }))
+  r2.appendChild(inp('Telefone', b.header.phone, val => { b.header.phone = val; refreshBase() }))
+  r2.appendChild(inp('Website / Portfólio', b.header.website, val => { b.header.website = val; refreshBase() }))
   hs.appendChild(r2)
   const r3 = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
-  r3.appendChild(inp('LinkedIn', d.header.linkedin, v => { d.header.linkedin = v; refresh() }))
-  r3.appendChild(inp('Figma Portfólio', d.header.figma || '', v => { d.header.figma = v; refresh() }))
+  r3.appendChild(inp('LinkedIn', b.header.linkedin, val => { b.header.linkedin = val; refreshBase() }))
+  r3.appendChild(inp('Figma Portfólio', b.header.figma || '', val => { b.header.figma = val; refreshBase() }))
   hs.appendChild(r3)
   const r4 = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
-  r4.appendChild(inp('GitHub', d.header.github, v => { d.header.github = v; refresh() }))
-  r4.appendChild(inp('Foto (URL)', d.header.photo, v => { d.header.photo = v; refresh() }))
+  r4.appendChild(inp('GitHub', b.header.github, val => { b.header.github = val; refreshBase() }))
+  r4.appendChild(inp('Foto (URL)', b.header.photo, val => { b.header.photo = val; refreshBase() }))
   hs.appendChild(r4)
   pane.appendChild(hs)
 
-  // Summary
-  const ss = el<HTMLDivElement>('section', { class: 'space-y-3' })
-  ss.appendChild(sectionTitle('Resumo'))
-  ss.appendChild(localized('Resumo profissional', d.summary, 'area', refresh))
-  pane.appendChild(ss)
-
   // Experience
   const es = el<HTMLDivElement>('section', { class: 'space-y-4' })
-  es.appendChild(sectionTitle('Experiência', () => d.experience.unshift({
+  es.appendChild(sectionTitle('Experiência', () => { b.experience.unshift({
     company: '', role: { pt: '', en: '' }, location: { pt: '', en: '' }, start: '', end: '', current: false,
     summary: { pt: '', en: '' }, achievements: [],
-  })))
-  d.experience.forEach((exp: Experience, i: number) => {
+  }); state.base.dirty = true }))
+  b.experience.forEach((exp: Experience, i: number) => {
     const c = el<HTMLDivElement>('div', { class: 'p-4 border border-[var(--color-border)] rounded-lg space-y-3' })
     const head = el<HTMLDivElement>('div', { class: 'flex items-center justify-between' })
     head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Experiência #${i + 1}`))
-    head.appendChild(removeBtn(() => d.experience.splice(i, 1)))
+    head.appendChild(removeBtn(() => { b.experience.splice(i, 1); state.base.dirty = true }))
     c.appendChild(head)
-    c.appendChild(inp('Empresa', exp.company, v => { exp.company = v; refresh() }))
-    c.appendChild(localized('Cargo', exp.role, 'input', refresh))
-    c.appendChild(localized('Local', exp.location, 'input', refresh))
+    c.appendChild(inp('Empresa', exp.company, val => { exp.company = val; refreshBase() }))
+    c.appendChild(localized('Cargo', exp.role, 'input', refreshBase))
+    c.appendChild(localized('Local', exp.location, 'input', refreshBase))
     const r = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
-    r.appendChild(inp('Início (MM/AAAA)', exp.start, v => { exp.start = v; refresh() }))
-    r.appendChild(inp('Fim (MM/AAAA)', exp.end, v => { exp.end = v; refresh() }))
+    r.appendChild(inp('Início (MM/AAAA)', exp.start, val => { exp.start = val; refreshBase() }))
+    r.appendChild(inp('Fim (MM/AAAA)', exp.end, val => { exp.end = val; refreshBase() }))
     c.appendChild(r)
     const cur = el<HTMLLabelElement>('label', { class: 'flex items-center gap-2 text-xs' })
     const chk = el<HTMLInputElement>('input', { type: 'checkbox' })
     chk.checked = exp.current
-    chk.addEventListener('change', () => { exp.current = chk.checked; markDirty(); refresh() })
+    chk.addEventListener('change', () => { exp.current = chk.checked; markBaseDirty(); renderResumePreview() })
     cur.appendChild(chk); cur.appendChild(document.createTextNode('Emprego atual'))
     c.appendChild(cur)
-    c.appendChild(localized('Resumo do cargo', exp.summary, 'area', refresh))
+    c.appendChild(localized('Resumo do cargo', exp.summary, 'area', refreshBase))
     // Achievements
     const ach = el<HTMLDivElement>('div', { class: 'space-y-2' })
     const ahead = el<HTMLDivElement>('div', { class: 'flex items-center justify-between' })
     ahead.appendChild(el('span', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, 'Bullets / Conquistas'))
     const addA = el<HTMLButtonElement>('button', { class: 'text-xs px-2 py-1 border border-[var(--color-border)] rounded hover:border-accent' }, '+ Bullet')
-    addA.addEventListener('click', () => { exp.achievements.push({ pt: '', en: '' }); renderResumeEditor(); refresh(); markDirty() })
+    addA.addEventListener('click', () => { exp.achievements.push({ pt: '', en: '' }); markBaseDirty(); renderResumeEditor(); renderResumePreview() })
     ahead.appendChild(addA)
     ach.appendChild(ahead)
     exp.achievements.forEach((a, ai) => {
       const line = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-[1fr_1fr_auto] gap-2 items-start' })
       const tpt = el<HTMLInputElement>('input', { type: 'text', placeholder: 'PT', class: 'bg-transparent border border-[var(--color-border)] rounded px-2 py-1 text-sm' })
       tpt.value = a.pt
-      tpt.addEventListener('input', () => { a.pt = tpt.value; markDirty(); refresh() })
+      tpt.addEventListener('input', () => { a.pt = tpt.value; markBaseDirty(); renderResumePreview() })
       const ten = el<HTMLInputElement>('input', { type: 'text', placeholder: 'EN', class: 'bg-transparent border border-[var(--color-border)] rounded px-2 py-1 text-sm' })
       ten.value = a.en
-      ten.addEventListener('input', () => { a.en = ten.value; markDirty(); refresh() })
+      ten.addEventListener('input', () => { a.en = ten.value; markBaseDirty(); renderResumePreview() })
       const rb = el<HTMLButtonElement>('button', { class: 'text-xs text-red-500 hover:underline' }, 'Rem')
-      rb.addEventListener('click', () => { exp.achievements.splice(ai, 1); renderResumeEditor(); refresh(); markDirty() })
+      rb.addEventListener('click', () => { exp.achievements.splice(ai, 1); markBaseDirty(); renderResumeEditor(); renderResumePreview() })
       line.appendChild(tpt); line.appendChild(ten); line.appendChild(rb)
       ach.appendChild(line)
     })
@@ -602,70 +893,37 @@ function renderResumeEditor() {
 
   // Education
   const eds = el<HTMLDivElement>('section', { class: 'space-y-4' })
-  eds.appendChild(sectionTitle('Formação', () => d.education.unshift({ school: '', degree: { pt: '', en: '' }, start: '', end: '' })))
-  d.education.forEach((ed, i) => {
+  eds.appendChild(sectionTitle('Formação', () => { b.education.unshift({ school: '', degree: { pt: '', en: '' }, start: '', end: '' }); state.base.dirty = true }))
+  b.education.forEach((ed, i) => {
     const c = el<HTMLDivElement>('div', { class: 'p-4 border border-[var(--color-border)] rounded-lg space-y-3' })
     const head = el<HTMLDivElement>('div', { class: 'flex items-center justify-between' })
     head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Formação #${i + 1}`))
-    head.appendChild(removeBtn(() => d.education.splice(i, 1)))
+    head.appendChild(removeBtn(() => { b.education.splice(i, 1); state.base.dirty = true }))
     c.appendChild(head)
-    c.appendChild(inp('Instituição', ed.school, v => { ed.school = v; refresh() }))
-    c.appendChild(localized('Grau / Curso', ed.degree, 'input', refresh))
+    c.appendChild(inp('Instituição', ed.school, val => { ed.school = val; refreshBase() }))
+    c.appendChild(localized('Grau / Curso', ed.degree, 'input', refreshBase))
     const r = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
-    r.appendChild(inp('Início', ed.start, v => { ed.start = v; refresh() }))
-    r.appendChild(inp('Fim', ed.end, v => { ed.end = v; refresh() }))
+    r.appendChild(inp('Início', ed.start, val => { ed.start = val; refreshBase() }))
+    r.appendChild(inp('Fim', ed.end, val => { ed.end = val; refreshBase() }))
     c.appendChild(r)
     eds.appendChild(c)
   })
   pane.appendChild(eds)
 
-  // Skills
-  const sks = el<HTMLDivElement>('section', { class: 'space-y-4' })
-  sks.appendChild(sectionTitle('Competências', () => d.skills.push({ category: { pt: '', en: '' }, items: [] })))
-  d.skills.forEach((sk, i) => {
-    const c = el<HTMLDivElement>('div', { class: 'p-4 border border-[var(--color-border)] rounded-lg space-y-3' })
-    const head = el<HTMLDivElement>('div', { class: 'flex items-center justify-between' })
-    head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Categoria #${i + 1}`))
-    head.appendChild(removeBtn(() => d.skills.splice(i, 1)))
-    c.appendChild(head)
-    c.appendChild(localized('Categoria', sk.category, 'input', refresh))
-    c.appendChild(textarea('Itens (separados por vírgula)', sk.items.join(', '), v => { sk.items = v.split(',').map(s => s.trim()).filter(Boolean); refresh() }, 2, refresh))
-    sks.appendChild(c)
-  })
-  pane.appendChild(sks)
-
   // Languages
   const ls = el<HTMLDivElement>('section', { class: 'space-y-4' })
-  ls.appendChild(sectionTitle('Idiomas', () => d.languages.push({ name: { pt: '', en: '' }, level: { pt: '', en: '' } })))
-  d.languages.forEach((lg, i) => {
+  ls.appendChild(sectionTitle('Idiomas', () => { b.languages.push({ name: { pt: '', en: '' }, level: { pt: '', en: '' } }); state.base.dirty = true }))
+  b.languages.forEach((lg, i) => {
     const c = el<HTMLDivElement>('div', { class: 'p-4 border border-[var(--color-border)] rounded-lg space-y-3' })
     const head = el<HTMLDivElement>('div', { class: 'flex items-center justify-between' })
     head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Idioma #${i + 1}`))
-    head.appendChild(removeBtn(() => d.languages.splice(i, 1)))
+    head.appendChild(removeBtn(() => { b.languages.splice(i, 1); state.base.dirty = true }))
     c.appendChild(head)
-    c.appendChild(localized('Idioma', lg.name, 'input', refresh))
-    c.appendChild(localized('Nível', lg.level, 'input', refresh))
+    c.appendChild(localized('Idioma', lg.name, 'input', refreshBase))
+    c.appendChild(localized('Nível', lg.level, 'input', refreshBase))
     ls.appendChild(c)
   })
   pane.appendChild(ls)
-
-  // Certifications
-  const cs = el<HTMLDivElement>('section', { class: 'space-y-4' })
-  cs.appendChild(sectionTitle('Certificações', () => d.certifications.push({ name: '', issuer: '', year: '' })))
-  d.certifications.forEach((ct, i) => {
-    const c = el<HTMLDivElement>('div', { class: 'p-4 border border-[var(--color-border)] rounded-lg space-y-3' })
-    const head = el<HTMLDivElement>('div', { class: 'flex items-center justify-between' })
-    head.appendChild(el('h3', { class: 'text-sm font-semibold' }, `Certificação #${i + 1}`))
-    head.appendChild(removeBtn(() => d.certifications.splice(i, 1)))
-    c.appendChild(head)
-    c.appendChild(inp('Nome', ct.name, v => { ct.name = v; refresh() }))
-    const r = el<HTMLDivElement>('div', { class: 'grid md:grid-cols-2 gap-3' })
-    r.appendChild(inp('Emissor', ct.issuer, v => { ct.issuer = v; refresh() }))
-    r.appendChild(inp('Ano', ct.year, v => { ct.year = v; refresh() }))
-    c.appendChild(r)
-    cs.appendChild(c)
-  })
-  pane.appendChild(cs)
 }
 
 /* ─── Letter editor ──────────────────────────────────────────────────── */
@@ -861,7 +1119,7 @@ function renderLinks() {
   const panel = document.getElementById('links-panel')!
   panel.innerHTML = ''
 
-  const header = state.resumes.get(state.resumeKey)?.data.header
+  const header = state.base.data.header
 
   const links: { label: string; key: keyof typeof header; placeholder: string }[] = [
     { label: 'LinkedIn',          key: 'linkedin', placeholder: 'linkedin.com/in/...' },
@@ -963,14 +1221,14 @@ function labels() {
 
 function renderResumePreview() {
   const p = document.getElementById('preview')!
-  const d = state.resumes.get(state.resumeKey)!.data
+  const d = composeResume(currentVersion())
   sortExperienceByDate(d.experience)
   p.innerHTML = state.style === 'linkedin' ? linkedinTemplate(d) : atsTemplate(d)
   p.className = `shadow-2xl bg-white ${state.style === 'linkedin' ? 'cv-linkedin' : 'cv-ats'}`
   fitPreviewToViewport('preview-frame', 'preview')
 }
 
-function linkedinTemplate(d: ResumeData): string {
+function linkedinTemplate(d: ComposedResume): string {
   const l = labels()
   const contacts = [d.header.email, d.header.phone, d.header.location, d.header.website, d.header.linkedin, d.header.github, d.header.figma].filter(Boolean).map(esc).join(' · ')
   return `<article class="cv-page">
@@ -978,7 +1236,7 @@ function linkedinTemplate(d: ResumeData): string {
       ${d.header.photo ? `<img src="${esc(d.header.photo)}" alt="" class="cv-linkedin__photo"/>` : ''}
       <div>
         <h1 class="cv-linkedin__name">${esc(d.header.name)}</h1>
-        <p class="cv-linkedin__headline">${L(d.header.headline)}</p>
+        <p class="cv-linkedin__headline">${L(d.headline)}</p>
         <p class="cv-linkedin__contacts">${contacts}</p>
       </div>
     </header>
@@ -1001,12 +1259,12 @@ function linkedinTemplate(d: ResumeData): string {
   </article>`
 }
 
-function atsTemplate(d: ResumeData): string {
+function atsTemplate(d: ComposedResume): string {
   const l = labels()
   const contacts = [d.header.email, d.header.phone, d.header.location, d.header.linkedin, d.header.github, d.header.figma, d.header.website].filter(Boolean).map(esc).join(' | ')
   return `<article class="cv-page cv-ats__page">
     <h1 class="cv-ats__name">${esc(d.header.name)}</h1>
-    <p class="cv-ats__headline">${L(d.header.headline)}</p>
+    <p class="cv-ats__headline">${L(d.headline)}</p>
     <h2>${l.contact}</h2>
     <p class="cv-ats__contacts">${contacts}</p>
     ${L(d.summary) ? `<h2>${l.summary}</h2><p>${L(d.summary).replace(/\n/g, '<br/>')}</p>` : ''}
@@ -1027,7 +1285,7 @@ function renderLetterPreview() {
   const p = document.getElementById('letter-preview')!
   if (!p) return
   const d = state.letters.get(state.letterKey)!.data
-  const header = state.resumes.get(state.resumeKey)?.data.header
+  const header = state.base.data.header
   const isLinkedin = state.style === 'linkedin'
 
   const contacts = header
