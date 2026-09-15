@@ -863,8 +863,9 @@ function renderLinks() {
 
   const header = state.resumes.get(state.resumeKey)?.data.header
 
-  const links: { label: string; key: keyof typeof header; placeholder: string }[] = [
+  const links: { label: string; key?: keyof typeof header; url?: string; placeholder: string }[] = [
     { label: 'LinkedIn',          key: 'linkedin', placeholder: 'linkedin.com/in/...' },
+    { label: 'Portfolio (Website) Público', url: 'https://raullima.vercel.app', placeholder: 'raullima.vercel.app' },
     { label: 'Portfolio (Website)', key: 'website',  placeholder: 'raullima.vercel.app' },
     { label: 'Figma Portfólio',   key: 'figma',    placeholder: 'figma.com/proto/...' },
     { label: 'GitHub',            key: 'github',   placeholder: 'github.com/...' },
@@ -874,7 +875,7 @@ function renderLinks() {
   panel.appendChild(el('p', { class: 'text-xs text-text-muted-dark mb-6' }, 'Clique em Copiar para copiar o link. Os valores são lidos do Curriculum ativo.'))
 
   for (const link of links) {
-    const value = (header?.[link.key] || '') as string
+    const value = (link.url || (link.key ? header?.[link.key] : '') || '') as string
     const row = el<HTMLDivElement>('div', { class: 'flex items-center gap-3 p-4 border border-[var(--color-border)] rounded-lg' })
 
     const info = el<HTMLDivElement>('div', { class: 'flex-1 min-w-0' })
