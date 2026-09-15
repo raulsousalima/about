@@ -410,12 +410,20 @@
         Cases</p>
       <div class="flex items-end justify-between mb-16">
         <h2 class="font-serif text-4xl md:text-5xl font-bold" style="color:#111" data-i18n="cases.heading">Projetos</h2>
+        <!-- Admin tabs — hidden until token/admin (see caseAdmin.ts) -->
+        <div id="cases-tabs" class="hidden items-center gap-1 bg-black/05 rounded-full p-1 border border-black/10">
+          <button id="cases-tab-projetos" class="px-4 py-2 rounded-full text-sm font-medium transition-all bg-black text-white">Projetos</button>
+          <button id="cases-tab-gerenciar" class="px-4 py-2 rounded-full text-sm font-medium transition-all text-text-muted-light">Gerenciar</button>
+        </div>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-6">
+      <!-- Admin manage panel (built by caseAdmin.ts) -->
+      <div id="cases-admin" class="hidden mb-16"></div>
+
+      <div id="cases-grid" class="grid md:grid-cols-3 gap-6">
 
         <!-- Case Pernambucanas -->
-        <a href="case/pernambucanas.html" class="case-card reveal group bg-white border border-black/06 block">
+        <a href="case/pernambucanas.html" data-case-slug="pernambucanas" class="case-card reveal group bg-white border border-black/06 block">
           <div class="aspect-video w-full overflow-hidden bg-gray-100 relative">
             <div class="absolute inset-0 bg-black/20 z-10 group-hover:bg-black/10 transition-colors duration-500"></div>
             <img src="img/cases/pernambucanas/bannerhero.png" alt="Pernambucanas cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-0" />
@@ -432,7 +440,7 @@
         </a>
 
         <!-- Case 2 -->
-        <a href="case/decathlon.html" class="case-card reveal group bg-white border border-black/06 block">
+        <a href="case/decathlon.html" data-case-slug="decathlon" class="case-card reveal group bg-white border border-black/06 block">
           <div class="aspect-video w-full overflow-hidden bg-gray-100 relative">
             <div class="absolute inset-0 bg-black/20 z-10 group-hover:bg-black/10 transition-colors duration-500"></div>
             <img src="img/cases/decathlon/bannerhero.png" alt="Decathlon cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-0" />
@@ -450,7 +458,7 @@
         </a>
 
         <!-- Case 3 -->
-        <a href="case/nofrictionai.html" class="case-card reveal group bg-white border border-black/06 block">
+        <a href="case/nofrictionai.html" data-case-slug="nofrictionai" class="case-card reveal group bg-white border border-black/06 block">
           <div class="aspect-video w-full overflow-hidden bg-gray-100 relative">
             <div class="absolute inset-0 bg-black/20 z-10 group-hover:bg-black/10 transition-colors duration-500"></div>
             <img src="img/cases/nofrictionai/bannerhero.png" alt="No Friction AI cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-0" />
@@ -468,7 +476,7 @@
         </a>
 
         <!-- Case Daycoval (private — revealed only in private mode via token) -->
-        <a href="case/daycoval.html" data-private-case="daycoval" class="case-card reveal pa-hidden group bg-white border border-black/06 block">
+        <a href="case/daycoval.html" data-case-slug="daycoval" class="case-card reveal pa-hidden group bg-white border border-black/06 block">
           <div class="aspect-video w-full overflow-hidden bg-gray-100 relative">
             <div class="absolute inset-0 bg-black/20 z-10 group-hover:bg-black/10 transition-colors duration-500"></div>
             <img src="img/cases/daycoval/banner_hero.webp" alt="Banco Daycoval cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-0" />
@@ -485,7 +493,7 @@
         </a>
 
         <!-- Case Starbem -->
-        <a href="case/starbem.html" class="case-card reveal group bg-white border border-black/06 block">
+        <a href="case/starbem.html" data-case-slug="starbem" class="case-card reveal group bg-white border border-black/06 block">
           <div class="aspect-video w-full overflow-hidden bg-gray-100 relative">
             <div class="absolute inset-0 bg-black/20 z-10 group-hover:bg-black/10 transition-colors duration-500"></div>
             <img src="img/cases/starbem/bannerhero.png" alt="Starbem cover" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-0" />

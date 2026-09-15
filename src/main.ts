@@ -1,5 +1,6 @@
 import './index.css'
-import { initPrivateAccess } from './privateAccess'
+import { initCaseAccess } from './caseAccess'
+import { initCaseAdmin } from './caseAdmin'
 import { initI18n } from './i18n'
 import { initTheme } from './theme'
 import { initTypewriter } from './typewriter'
@@ -9,9 +10,10 @@ import { initScrollSequence } from './scrollSequence'
 import { initGalleryMosaic } from './gallery'
 import { initGalleryParticles } from './particles'
 
-// Private case gate — run first so locked visitors are redirected before the
-// rest of the page initializes (and private cards are resolved pre-paint).
-initPrivateAccess()
+// Case access gate — run first so restricted cards/pages resolve before the
+// rest of the page initializes. Admin tab wires up the manage panel.
+initCaseAccess()
+initCaseAdmin()
 
 // Scroll-reveal: observe all .reveal elements
 const observer = new IntersectionObserver(
