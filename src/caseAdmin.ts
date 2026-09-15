@@ -8,7 +8,7 @@ import {
   signOut,
   onAccessChange,
 } from './caseAccess'
-import { ADMIN_EMAIL } from './supabaseClient'
+import { ALLOWED_EMAIL as ADMIN_EMAIL } from './supabase'
 
 const CASE_NAMES: Record<string, string> = {
   pernambucanas: 'Pernambucanas',

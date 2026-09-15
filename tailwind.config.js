@@ -3,6 +3,7 @@ export default {
   content: [
     "./index.html",
     "./styleguide.html",
+    "./profile.html",
     "./case/**/*.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],

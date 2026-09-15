@@ -1,4 +1,4 @@
-import { supabase, ADMIN_EMAIL } from './supabaseClient'
+import { supabase, ALLOWED_EMAIL as ADMIN_EMAIL } from './supabase'
 
 // ---------------------------------------------------------------------------
 // Case access model
