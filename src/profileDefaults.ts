@@ -57,7 +57,7 @@ const HEADER: Header = {
   linkedin: 'linkedin.com/in/raullsousa',
   github: '',
   figma: '',
-  photo: '',
+  photo: '/img/raul.webp',
 }
 
 const SUMMARY: Localized = {
