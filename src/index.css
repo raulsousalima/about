@@ -769,7 +769,8 @@ html.pa-locked body { visibility: hidden; }
   margin-bottom: 12px;
 }
 .cv-linkedin__photo {
-  width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #0a66c2;
+  width: 90px; height: 90px; flex: 0 0 90px; aspect-ratio: 1 / 1; border-radius: 50%;
+  object-fit: cover; object-position: center 25%; border: 3px solid #0a66c2;
 }
 .cv-linkedin__name {
   font-family: 'Fraunces', 'Inter', serif;
