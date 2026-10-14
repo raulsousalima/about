@@ -2,8 +2,10 @@ import {
   ALL_CASES,
   canManageView,
   getIsAdmin,
+  isHidden,
   isRestricted,
-  setRestricted,
+  setFlag,
+  type CaseFlag,
   signInWithPassword,
   signOut,
   onAccessChange,
@@ -16,6 +18,7 @@ const CASE_NAMES: Record<string, string> = {
   nofrictionai: 'No Friction AI',
   daycoval: 'Banco Daycoval',
   starbem: 'Starbem',
+  pefisa: 'Pefisa',
 }
 
 export function initCaseAdmin(): void {
@@ -87,14 +90,16 @@ export function initCaseAdmin(): void {
     panel!.querySelectorAll<HTMLInputElement>('input[data-toggle-slug]').forEach((cb) => {
       cb.addEventListener('change', async () => {
         const slug = cb.getAttribute('data-toggle-slug')!
-        const wanted = cb.checked // checked = restricted
+        const flag = cb.getAttribute('data-toggle-flag') as CaseFlag
+        const wanted = cb.checked // checked = flag on
         cb.disabled = true
-        const ok = await setRestricted(slug, wanted)
+        const ok = await setFlag(slug, flag, wanted)
         cb.disabled = false
         if (!ok) {
           cb.checked = !wanted // revert on failure
           flashError(cb)
         }
+        // On success, onAccessChange re-renders the panel with the new state.
       })
     })
     panel!.querySelector<HTMLButtonElement>('#admin-logout-btn')?.addEventListener('click', async () => {
@@ -130,16 +135,18 @@ function loginMarkup(): string {
 function adminMarkup(): string {
   const rows = ALL_CASES.map((slug) => {
     const name = CASE_NAMES[slug] || slug
-    const checked = isRestricted(slug) ? 'checked' : ''
+    const state = isHidden(slug) ? 'Oculto' : isRestricted(slug) ? 'Restrito' : 'Público'
     return `
-      <label class="flex items-center justify-between gap-4 py-4 border-b border-black/08 last:border-0">
-        <span class="text-base font-medium" style="color:#111">${name}</span>
+      <div class="flex flex-wrap items-center justify-between gap-4 py-4 border-b border-black/08 last:border-0">
         <span class="inline-flex items-center gap-3">
-          <span class="text-xs uppercase tracking-widest text-text-muted-light" data-state-for="${slug}">${isRestricted(slug) ? 'Restrito' : 'Público'}</span>
-          <input type="checkbox" data-toggle-slug="${slug}" ${checked}
-            class="h-5 w-5 accent-black cursor-pointer" />
+          <span class="text-base font-medium" style="color:#111">${name}</span>
+          <span class="text-xs uppercase tracking-widest text-text-muted-light" data-state-for="${slug}">${state}</span>
         </span>
-      </label>`
+        <span class="inline-flex items-center gap-5">
+          ${toggleMarkup(slug, 'restricted', 'Restrito', isRestricted(slug))}
+          ${toggleMarkup(slug, 'hidden', 'Oculto', isHidden(slug))}
+        </span>
+      </div>`
   }).join('')
   return `
     <div class="max-w-xl rounded-2xl border border-black/10 bg-white p-8">
@@ -147,13 +154,24 @@ function adminMarkup(): string {
         <h3 class="font-serif text-xl font-bold" style="color:#111">Gerenciar cases</h3>
         <button id="admin-logout-btn" class="text-sm text-text-muted-light hover:text-black transition-colors underline underline-offset-4">Sair</button>
       </div>
-      <p class="text-sm text-text-muted-light mb-4">Marque um case como <strong>Restrito</strong> para escondê-lo do acesso normal. Ele só aparece com o link <code>?preview=rl-cases</code> ou logado aqui. Vale para todos os visitantes.</p>
+      <p class="text-sm text-text-muted-light mb-2"><strong>Restrito</strong>: escondido do acesso normal; aparece com o link <code>?preview=rl-cases</code> ou logado aqui.</p>
+      <p class="text-sm text-text-muted-light mb-4"><strong>Oculto</strong>: rascunho; não aparece para ninguém, nem com o link de preview. Só você vê, logado aqui. Vale para todos os visitantes.</p>
       <div>${rows}</div>
     </div>`
 }
 
+function toggleMarkup(slug: string, flag: CaseFlag, label: string, on: boolean): string {
+  return `
+    <label class="inline-flex items-center gap-2 cursor-pointer">
+      <input type="checkbox" data-toggle-slug="${slug}" data-toggle-flag="${flag}" ${on ? 'checked' : ''}
+        class="h-5 w-5 accent-black cursor-pointer" />
+      <span class="text-sm text-text-muted-light">${label}</span>
+    </label>`
+}
+
 function flashError(cb: HTMLInputElement) {
-  const state = cb.closest('label')?.querySelector('[data-state-for]') as HTMLElement | null
+  const slug = cb.getAttribute('data-toggle-slug')
+  const state = document.querySelector(`[data-state-for="${slug}"]`) as HTMLElement | null
   if (state) {
     const prev = state.textContent
     state.textContent = 'Erro ao salvar'
