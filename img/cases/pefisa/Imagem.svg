@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#0B1E3F"/>
+  <g font-family="Helvetica, Arial, sans-serif" fill="#FFFFFF">
+    <rect x="90" y="150" width="240" height="420" rx="32" fill="#FFFFFF" fill-opacity=".08" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="3"/>
+    <text x="210" y="380" font-size="30" font-weight="700" text-anchor="middle">Nativo</text>
+    <rect x="470" y="150" width="240" height="420" rx="32" fill="#FFFFFF" fill-opacity=".08" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="3" stroke-dasharray="10 10"/>
+    <text x="590" y="380" font-size="30" font-weight="700" text-anchor="middle">White label</text>
+    <text x="400" y="372" font-size="44" text-anchor="middle" fill-opacity=".6">≠</text>
+    <text x="400" y="660" font-size="26" text-anchor="middle" fill-opacity=".7">2 bases · 4 apps · custo duplicado</text>
+  </g>
+</svg>

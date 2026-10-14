@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" class="pa-locked">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pefisa — Unificação de Contas Digitais | Raul Lima</title>
+  <meta name="description"
+    content="Case study: análise de 4 contas digitais da Pefisa e proposta de unificação, com -35% no custo de manutenção e +15 pontos de NPS projetados." />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>R</text></svg>" />
+  <!-- Tabler Icons Standard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+
+<body>
+
+  <!-- ======================================
+       NAVIGATION (same as index.html)
+  ======================================= -->
+  <header id="home" class="fixed top-0 inset-x-0 z-50 glass-nav">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
+      <a href="../index.html"
+        class="flex items-center justify-center w-9 h-9 rounded-full bg-accent font-bold text-sm text-black leading-none select-none transition-transform hover:scale-105">R</a>
+
+      <!-- Nav links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-text-muted-dark">
+        <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+        <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+          data-i18n="nav.experience">Experiência</a>
+        <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.skills">Competências</a>
+        <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+      </nav>
+
+      <!-- Social + CTA + Lang Toggle -->
+      <div class="flex items-center gap-4">
+        <!-- Language Toggle -->
+        <div class="flex items-center gap-1 text-xs font-medium">
+          <button data-lang-btn="en"
+            class="px-2 py-1 rounded-full transition-all text-accent font-bold cursor-pointer hover:opacity-80">EN</button>
+          <span class="text-text-muted-dark opacity-50">|</span>
+          <button data-lang-btn="pt"
+            class="px-2 py-1 rounded-full transition-all text-text-muted-dark cursor-pointer hover:opacity-80">PT</button>
+        </div>
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="text-text-muted-dark hover:text-text-primary-dark transition-colors mx-1" aria-label="Toggle Theme">
+          <i class="ti ti-moon text-2xl" id="theme-icon"></i>
+        </button>
+        <!-- LinkedIn -->
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-linkedin text-2xl"></i>
+        </a>
+        <!-- Behance -->
+        <a href="https://www.behance.net/raulsousa" target="_blank" rel="noopener" aria-label="Behance"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-behance text-2xl"></i>
+        </a>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--alpha-15)] text-sm font-medium text-text-muted-dark hover:border-accent hover:text-accent transition-all">
+          <i class="ti ti-mail text-lg"></i> <span data-i18n="nav.contact">Contato</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+
+  <main class="pt-[72px]">
+
+    <!-- ======================================
+         §1 CASE HERO
+    ======================================= -->
+    <section class="pt-[60px] pb-16">
+      <div class="max-w-7xl mx-auto px-6">
+        <!-- Back button -->
+        <a href="../index.html#cases"
+          class="inline-flex items-center gap-2 text-sm text-text-muted-dark hover:text-accent transition-colors mb-6 group">
+          <i class="ti ti-arrow-left text-lg transition-transform group-hover:-translate-x-1"></i>
+          <span data-i18n="case.back">Voltar</span>
+        </a>
+
+        <!-- Case title -->
+        <h1 class="font-serif text-4xl md:text-5xl font-bold mb-[60px] heading-accent reveal"
+          data-i18n="case.pefisa.title">
+          Unificando Contas Digitais para Reduzir Custos e Escalar a Experiência
+        </h1>
+      </div>
+
+      <!-- Hero banner — FULL WIDTH (placeholder: trocar por img/cases/pefisa/bannerhero.png) -->
+      <div class="case-hero-banner reveal" style="background-image: url('../img/cases/pefisa/bannerhero.svg'); border-radius: 0;">
+        <!-- Overlay for contrast -->
+        <div class="absolute inset-0 bg-black/40 z-0"></div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         §2 OVERVIEW
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-[280px_1fr] gap-12 items-start reveal">
+          <!-- Company logo -->
+          <div class="case-img-placeholder p-8">
+            <!-- Logo Pefisa (Dinâmico Dark/Light) — placeholder: substituir pelos SVGs oficiais -->
+            <img src="../img/cases/pefisa/logo_dark.svg" alt="Pefisa" class="show-in-dark" style="max-width: 220px; height: auto;" />
+            <img src="../img/cases/pefisa/logo_light.svg" alt="Pefisa" class="show-in-light" style="max-width: 220px; height: auto;" />
+          </div>
+          <!-- Description -->
+          <p class="text-lg md:text-xl leading-relaxed text-text-muted-dark" data-i18n="case.pefisa.overview.company">
+            Pefisa é a financeira do grupo Pernambucanas, responsável pelos serviços financeiros do ecossistema — cartões, crédito e Conta Digital. Sua base tecnológica sustenta não só a conta da própria Pefisa, mas também soluções de parceiros como Pernambucanas, Leroy Merlin e Palmeiras Pay.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         §3 CONTEXT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-4xl reveal">
+          <h2 class="font-serif text-4xl md:text-5xl font-bold mb-8 heading-accent" data-i18n="case.pefisa.context.title">
+            Contexto
+          </h2>
+
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.pefisa.context.p1">
+            A Pefisa enfrentava <strong class="text-text-primary-dark">custos elevados de tecnologia</strong> por manter, em paralelo, duas soluções de Conta Digital: uma aplicação nativa e outra no formato white label.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.pefisa.context.p2">
+            O objetivo central da análise foi <strong class="text-text-primary-dark">comparar as soluções existentes e propor um plano de migração ou reestruturação</strong>, considerando desempenho, experiência do usuário e usabilidade.
+          </p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark" data-i18n="case.pefisa.context.p3">
+            O resultado deveria orientar a estratégia digital da empresa para o médio e longo prazo — com uma recomendação sustentada por dados, e não por preferência.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         §4 CHALLENGE
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
+
+          <!-- Image placeholder -->
+          <div class="reveal">
+            <div class="case-img-placeholder aspect-square" style="max-width: 400px;">
+              <img src="../img/cases/pefisa/Imagem.svg" alt="Challenge visual — duas bases de Conta Digital (nativa e white label)" />
+            </div>
+          </div>
+
+          <!-- Challenge text -->
+          <div class="reveal">
+            <span class="case-label mb-6" data-i18n="case.pefisa.challenge.label">Desafio</span>
+
+            <p class="text-lg md:text-xl leading-relaxed mt-6 mb-6" data-i18n="case.pefisa.challenge.intro">
+              O principal desafio foi <strong>decidir qual base manter</strong> entre quatro produtos que compartilhavam a mesma tecnologia, mas evoluíam de forma independente.
+            </p>
+
+            <p class="text-base leading-relaxed text-text-muted-dark mb-6" data-i18n="case.pefisa.challenge.research">
+              Pefisa, Pernambucanas, Leroy Merlin e Palmeiras Pay rodavam sobre <strong class="text-text-primary-dark">duas bases de código distintas</strong>. Como resultado:
+            </p>
+
+            <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.pefisa.challenge.list.1">Custo de manutenção duplicado para entregar as mesmas funcionalidades</span>
+              </li>
+            <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.pefisa.challenge.list.2">Funcionalidades redundantes e experiências inconsistentes entre os apps</span>
+              </li>
+            <li class="flex items-start gap-3 text-text-muted-dark">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <span data-i18n="case.pefisa.challenge.list.3">Roadmap disperso, com esforço do time dividido entre múltiplas frentes</span>
+              </li>
+            </ul>
+
+            <p class="text-base leading-relaxed text-text-muted-dark" data-i18n="case.pefisa.challenge.conclusion">
+              O desafio era <strong class="text-text-primary-dark">criar um framework de análise objetivo</strong> que comparasse as soluções e apontasse o caminho com maior potencial de escala e centralização.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         §5 PROCESS
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.pefisa.process.label">Processo</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.pefisa.process.intro">
+            A avaliação foi conduzida a partir de <strong class="text-text-primary-dark">três pilares — Performance, Experiência e Usabilidade</strong> — consolidados em um scorecard comparativo.
+          </p>
+        </div>
+
+        <!-- Timeline -->
+        <div class="process-timeline rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)] overflow-hidden reveal">
+          <!-- Step 1 -->
+          <div class="process-step">
+            <div class="step-number">01</div>
+            <h3 class="step-title" data-i18n="case.pefisa.process.step1.title">Performance</h3>
+            <p class="step-desc" data-i18n="case.pefisa.process.step1.desc">
+              Entrevistas técnicas com o time de tecnologia, avaliação de bugs críticos e tempo médio de resposta das aplicações.
+            </p>
+          </div>
+          <!-- Step 2 -->
+          <div class="process-step">
+            <div class="step-number">02</div>
+            <h3 class="step-title" data-i18n="case.pefisa.process.step2.title">Experiência</h3>
+            <p class="step-desc" data-i18n="case.pefisa.process.step2.desc">
+              Análise das métricas de NPS e leitura dos feedbacks dos usuários na Google Play e na App Store.
+            </p>
+          </div>
+          <!-- Step 3 -->
+          <div class="process-step">
+            <div class="step-number">03</div>
+            <h3 class="step-title" data-i18n="case.pefisa.process.step3.title">Usabilidade</h3>
+            <p class="step-desc" data-i18n="case.pefisa.process.step3.desc">
+              Avaliação heurística e mapeamento comparativo das funcionalidades entre as quatro soluções.
+            </p>
+          </div>
+          <!-- Step 4 -->
+          <div class="process-step">
+            <div class="step-number">04</div>
+            <h3 class="step-title" data-i18n="case.pefisa.process.step4.title">Scorecard</h3>
+            <p class="step-desc" data-i18n="case.pefisa.process.step4.desc">
+              Score de 1 a 5 por valor para o usuário, alinhamento com o negócio, redução de complexidade e retorno financeiro.
+            </p>
+          </div>
+          <!-- Step 5 -->
+          <div class="process-step">
+            <div class="step-number">05</div>
+            <h3 class="step-title" data-i18n="case.pefisa.process.step5.title">Proposta</h3>
+            <p class="step-desc" data-i18n="case.pefisa.process.step5.desc">
+              Recomendação de unificação a partir da solução com melhor desempenho geral, incorporando os diferenciais das demais.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         §6 PROJECT GALLERY
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.pefisa.gallery.label">Produtos analisados</span>
+        </div>
+
+        <!-- App View — telas das 4 contas digitais analisadas -->
+        <div id="gallery-app-view" class="case-gallery show-grid pb-8 reveal">
+          <!-- Gallery item 1 -->
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.pefisa.gallery.title1">Pernambucanas</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/pernambucanas/1.png" alt="Conta Digital Pernambucanas — tela analisada" />
+              </div>
+            </div>
+          </div>
+          <!-- Gallery item 2 -->
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.pefisa.gallery.title2">Pefisa</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/pernambucanas/2.png" alt="Conta Digital Pefisa — tela analisada" />
+              </div>
+            </div>
+          </div>
+          <!-- Gallery item 3 -->
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.pefisa.gallery.title3">Palmeiras Pay</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/pernambucanas/3.png" alt="Conta Digital Palmeiras Pay — tela analisada" />
+              </div>
+            </div>
+          </div>
+          <!-- Gallery item 4 -->
+          <div class="case-gallery-item-wrapper">
+            <h4 class="case-item-title" data-i18n="case.pefisa.gallery.title4">Leroy Merlin</h4>
+            <div class="case-gallery-item">
+              <div class="case-gallery-scroll">
+                <img src="../img/cases/pernambucanas/4.png" alt="Conta Digital Leroy Merlin — tela analisada" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- §6.5 STRATEGY -->
+        <div class="case-strategy-section reveal">
+          <div class="case-strategy-content">
+            <p data-i18n="case.pefisa.strategy.p1">Mais do que comparar telas, a análise precisava responder a uma pergunta de negócio: <strong>faz sentido continuar sustentando duas bases para entregar o mesmo produto?</strong></p>
+
+            <p data-i18n="case.pefisa.strategy.p2">Para isso, combinei métricas quantitativas e qualitativas em um mesmo framework. As principais métricas coletadas foram:</p>
+
+            <ul class="space-y-4 my-8">
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <strong data-i18n="case.pefisa.strategy.item1">Performance — volume de bugs críticos e tempo médio de resposta de cada aplicação.</strong>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <strong data-i18n="case.pefisa.strategy.item2">Experiência — NPS médio por aplicativo e nota nas lojas Google Play e App Store.</strong>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0"></span>
+                <strong data-i18n="case.pefisa.strategy.item3">Usabilidade — quantidade de funcionalidades redundantes entre as soluções.</strong>
+              </li>
+            </ul>
+
+            <p data-i18n="case.pefisa.strategy.p3">Com elas, construí um scorecard comparativo (escala de 1 a 5) cruzando valor para o usuário, alinhamento com o negócio, redução de complexidade e retorno financeiro — o que permitiu identificar qual solução tinha maior potencial de escalabilidade e centralização.</p>
+
+            <p data-i18n="case.pefisa.strategy.p4">A recomendação final foi <strong>unificar as soluções em uma única aplicação</strong>, tomando como base aquela com melhor desempenho geral e incorporando os diferenciais relevantes das demais.</p>
+
+            <p data-i18n="case.pefisa.strategy.p5">A unificação traz redução de custos, simplificação do roadmap, maior eficiência técnica e menor dispersão de esforços entre múltiplas bases de código — com aumento de eficiência do time e da velocidade de entregas.</p>
+
+            <p data-i18n="case.pefisa.strategy.p6">Os dados levantados deram clareza à decisão e sustentaram a proposta com ganhos concretos em custo, performance, experiência do usuário e escalabilidade — fortalecendo a estratégia digital da Pefisa para o médio e longo prazo.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================
+         §7 IMPACT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="case-label mb-4" data-i18n="case.pefisa.impact.label">Impacto estimado</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-4xl" data-i18n="case.pefisa.impact.intro">
+            A estratégia de unificação projeta ganhos significativos em custo, qualidade e experiência, além de aumentar a eficiência do time e a velocidade de entregas.
+          </p>
+        </div>
+
+        <!-- Metrics grid -->
+        <div class="grid md:grid-cols-3 gap-6 reveal">
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value" data-i18n="case.pefisa.impact.metric1.value">-35%</p>
+            <p class="metric-desc" data-i18n="case.pefisa.impact.metric1.desc">
+              <strong>no custo de manutenção tecnológica</strong>, ao concentrar o investimento em uma única base de código
+            </p>
+          </div>
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value" data-i18n="case.pefisa.impact.metric2.value">+15</p>
+            <p class="metric-desc" data-i18n="case.pefisa.impact.metric2.desc">
+              <strong>pontos de NPS projetados</strong> no índice geral, com uma experiência consistente entre as marcas
+            </p>
+          </div>
+          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
+            <p class="metric-value" data-i18n="case.pefisa.impact.metric3.value">-40%</p>
+            <p class="metric-desc" data-i18n="case.pefisa.impact.metric3.desc">
+              <strong>de bugs</strong> com a consolidação do código e o fim das funcionalidades redundantes
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         §8 BACK TO HOME
+    ======================================= -->
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-6">
+        <hr class="border-[var(--color-border)] mb-10" />
+        <div class="text-center">
+          <a href="../index.html#cases"
+            class="inline-flex items-center gap-2 text-base font-medium hover:text-accent transition-colors underline underline-offset-4"
+            data-i18n="case.pefisa.back_home">
+            voltar para home
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================
+       FOOTER (same as index.html)
+  ======================================= -->
+  <footer id="contact" class="py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="mb-16 reveal text-center">
+        <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-8" data-i18n="footer.cta.label">
+          Vamos conversar?</p>
+        <h2 class="font-serif text-5xl md:text-7xl font-bold leading-[0.95] mb-10" data-i18n="footer.cta.heading">
+          Thank's for<br /><em>Watching.</em>
+        </h2>
+        <a href="mailto:raul.sousa.work@gmail.com"
+          class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-bg-dark font-semibold text-base hover:opacity-90 transition-all active:scale-95">
+          raul.sousa.work@gmail.com →
+        </a>
+      </div>
+
+      <hr class="border-[var(--color-border)] mb-10" />
+
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <p class="text-xs text-text-muted-dark" data-i18n="footer.copyright">© 2026 Raul Lima. Todos os direitos
+          reservados.</p>
+        <nav class="flex flex-wrap gap-6 text-xs text-text-muted-dark">
+          <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+          <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.experience">Experiência</a>
+          <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.skills">Competências</a>
+          <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+          <a href="../styleguide.html" class="text-accent hover:underline transition-colors">Styleguide</a>
+          <a href="https://calendly.com" target="_blank" rel="noopener" class="hover:text-accent transition-colors"
+            data-i18n="footer.schedule">Minha Agenda</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+
+  <div class="gallery-lightbox" id="gallery-lightbox">
+    <button class="gallery-lightbox-close" id="gallery-lightbox-close" aria-label="Fechar"><i class="ti ti-x"></i></button>
+    <img class="gallery-lightbox-img" id="gallery-lightbox-img" src="" alt="" />
+  </div>
+
+  <script type="module" src="../src/main.ts"></script>
+
+
+</body>
+
+</html>

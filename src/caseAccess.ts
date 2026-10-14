@@ -3,12 +3,14 @@ import { supabase, ALLOWED_EMAIL as ADMIN_EMAIL } from './supabase'
 // ---------------------------------------------------------------------------
 // Case access model
 //
-//  - Which cases are "restricted" lives in Supabase (table case_flags), so the
-//    owner can flip them from the admin tab without a redeploy. Reads are
-//    public; writes are locked to the owner's account by RLS.
+//  - Which cases are "restricted" or "hidden" lives in Supabase (table
+//    case_flags), so the owner can flip them from the admin tab without a
+//    redeploy. Reads are public; writes are locked to the owner's account by RLS.
 //  - VIEWING restricted cases is unlocked either by the share token
 //    (?preview=rl-cases, persisted in localStorage) or by being the logged-in
 //    admin.
+//  - HIDDEN cases (drafts) are stricter: only the logged-in admin sees them;
+//    the share token does not unlock them.
 //  - EVERYTHING degrades gracefully: before Supabase answers, and whenever it
 //    is unreachable (e.g. the free-tier project is paused), we fall back to
 //    DEFAULT_RESTRICTED and a per-session cache, so the site never breaks.
@@ -18,12 +20,18 @@ const ACCESS_TOKENS = ['rl-cases']
 const STORAGE_KEY = 'pa_unlock'
 const FLAGS_CACHE_KEY = 'case_flags_cache'
 
-// Fallback restricted set (used until Supabase responds, and if it never does).
+// Fallback flag sets (used until Supabase responds, and if it never does).
 const DEFAULT_RESTRICTED = ['daycoval']
+const DEFAULT_HIDDEN = ['pefisa']
 
-export const ALL_CASES = ['pernambucanas', 'decathlon', 'nofrictionai', 'daycoval', 'starbem']
+export const ALL_CASES = ['pernambucanas', 'decathlon', 'nofrictionai', 'daycoval', 'starbem', 'pefisa']
 
-let restricted = new Set<string>(readCachedFlags() ?? DEFAULT_RESTRICTED)
+export type CaseFlag = 'restricted' | 'hidden'
+type Flags = { restricted: Set<string>; hidden: Set<string> }
+
+const cachedFlags = readCachedFlags()
+let restricted = cachedFlags?.restricted ?? new Set<string>(DEFAULT_RESTRICTED)
+let hidden = cachedFlags?.hidden ?? new Set<string>(DEFAULT_HIDDEN)
 let isAdmin = false
 let flagsLoaded = false
 
@@ -53,43 +61,59 @@ export function canManageView(): boolean {
 }
 export function getIsAdmin(): boolean { return isAdmin }
 export function isRestricted(slug: string): boolean { return restricted.has(slug) }
+export function isHidden(slug: string): boolean { return hidden.has(slug) }
 export function restrictedSlugs(): string[] { return [...restricted] }
 
+/** Can the current visitor see this case (home card and internal page)? */
+function canView(slug: string): boolean {
+  if (hidden.has(slug)) return isAdmin
+  if (restricted.has(slug)) return canManageView()
+  return true
+}
+
 // ---- flags cache (per session) --------------------------------------------
-function readCachedFlags(): Set<string> | null {
+function readCachedFlags(): Flags | null {
   try {
     const raw = sessionStorage.getItem(FLAGS_CACHE_KEY)
     if (!raw) return null
-    return new Set(JSON.parse(raw) as string[])
+    const parsed = JSON.parse(raw) as { restricted?: string[]; hidden?: string[] }
+    if (!Array.isArray(parsed.restricted) || !Array.isArray(parsed.hidden)) return null
+    return { restricted: new Set(parsed.restricted), hidden: new Set(parsed.hidden) }
   } catch { return null }
 }
-function writeCachedFlags(set: Set<string>): void {
-  try { sessionStorage.setItem(FLAGS_CACHE_KEY, JSON.stringify([...set])) } catch { /* ignore */ }
+function writeCachedFlags(): void {
+  try {
+    sessionStorage.setItem(FLAGS_CACHE_KEY, JSON.stringify({ restricted: [...restricted], hidden: [...hidden] }))
+  } catch { /* ignore */ }
 }
 
 // ---- Supabase read/write --------------------------------------------------
-async function fetchFlags(): Promise<Set<string> | null> {
+async function fetchFlags(): Promise<Flags | null> {
   try {
     const res = await withTimeout(
-      supabase.from('case_flags').select('slug,restricted'),
+      supabase.from('case_flags').select('slug,restricted,hidden'),
       4000,
       { data: null, error: true } as any,
     )
-    const { data, error } = res as { data: { slug: string; restricted: boolean }[] | null; error: unknown }
+    const { data, error } = res as { data: { slug: string; restricted: boolean; hidden: boolean }[] | null; error: unknown }
     if (error || !data) return null
-    return new Set(data.filter((r) => r.restricted).map((r) => r.slug))
+    return {
+      restricted: new Set(data.filter((r) => r.restricted).map((r) => r.slug)),
+      hidden: new Set(data.filter((r) => r.hidden).map((r) => r.slug)),
+    }
   } catch { return null }
 }
 
-/** Write a case's restricted flag. Returns true on success. Admin only (RLS). */
-export async function setRestricted(slug: string, value: boolean): Promise<boolean> {
+/** Write one of a case's flags. Returns true on success. Admin only (RLS). */
+export async function setFlag(slug: string, flag: CaseFlag, value: boolean): Promise<boolean> {
   try {
     const { error } = await supabase
       .from('case_flags')
-      .upsert({ slug, restricted: value, updated_at: new Date().toISOString() }, { onConflict: 'slug' })
+      .upsert({ slug, [flag]: value, updated_at: new Date().toISOString() }, { onConflict: 'slug' })
     if (error) return false
-    if (value) restricted.add(slug); else restricted.delete(slug)
-    writeCachedFlags(restricted)
+    const set = flag === 'hidden' ? hidden : restricted
+    if (value) set.add(slug); else set.delete(slug)
+    writeCachedFlags()
     applyHomeGrid()
     notify()
     return true
@@ -137,8 +161,7 @@ async function refreshSession(): Promise<void> {
 function applyHomeGrid(): void {
   document.querySelectorAll<HTMLElement>('[data-case-slug]').forEach((card) => {
     const slug = card.getAttribute('data-case-slug') || ''
-    const show = !restricted.has(slug) || canManageView()
-    card.classList.toggle('pa-hidden', !show)
+    card.classList.toggle('pa-hidden', !canView(slug))
   })
 }
 
@@ -175,7 +198,7 @@ export function initCaseAccess(): void {
   if (slug) {
     // Internal case page. Token unlock => reveal now. Otherwise decide with the
     // best info we have synchronously; confirm (and correct) asynchronously.
-    if (unlocked || !restricted.has(slug)) {
+    if (!hidden.has(slug) && (unlocked || !restricted.has(slug))) {
       reveal()
     }
     // else: stay hidden (pa-locked) until the async check below.
@@ -185,13 +208,13 @@ export function initCaseAccess(): void {
   ;(async () => {
     await refreshSession()
     const fresh = await fetchFlags()
-    if (fresh) { restricted = fresh; writeCachedFlags(fresh) }
+    if (fresh) { restricted = fresh.restricted; hidden = fresh.hidden; writeCachedFlags() }
     flagsLoaded = true
 
     applyHomeGrid()
 
     if (slug) {
-      if (canManageView() || !restricted.has(slug)) reveal()
+      if (canView(slug)) reveal()
       else redirectHome()
     }
 
@@ -202,7 +225,7 @@ export function initCaseAccess(): void {
   supabase.auth.onAuthStateChange((_event, session) => {
     isAdmin = session?.user?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase()
     applyHomeGrid()
-    if (slug && (canManageView() || (flagsLoaded && !restricted.has(slug)))) reveal()
+    if (slug && flagsLoaded && canView(slug)) reveal()
     notify()
   })
 }
