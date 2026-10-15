@@ -9,8 +9,8 @@ import { supabase, ALLOWED_EMAIL as ADMIN_EMAIL } from './supabase'
 //  - VIEWING restricted cases is unlocked either by the share token
 //    (?preview=rl-cases, persisted in localStorage) or by being the logged-in
 //    admin.
-//  - HIDDEN cases (drafts) are stricter: only the logged-in admin sees them;
-//    the share token does not unlock them.
+//  - BACKLOG cases (column `hidden`) are stricter: only the logged-in admin
+//    sees them; the share token does not unlock them.
 //  - EVERYTHING degrades gracefully: before Supabase answers, and whenever it
 //    is unreachable (e.g. the free-tier project is paused), we fall back to
 //    DEFAULT_RESTRICTED and a per-session cache, so the site never breaks.
