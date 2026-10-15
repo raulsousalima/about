@@ -135,7 +135,7 @@ function loginMarkup(): string {
 function adminMarkup(): string {
   const rows = ALL_CASES.map((slug) => {
     const name = CASE_NAMES[slug] || slug
-    const state = isHidden(slug) ? 'Oculto' : isRestricted(slug) ? 'Restrito' : 'Público'
+    const state = isHidden(slug) ? 'Backlog' : isRestricted(slug) ? 'Restrito' : 'Público'
     return `
       <div class="flex flex-wrap items-center justify-between gap-4 py-4 border-b border-black/08 last:border-0">
         <span class="inline-flex items-center gap-3">
@@ -144,7 +144,7 @@ function adminMarkup(): string {
         </span>
         <span class="inline-flex items-center gap-5">
           ${toggleMarkup(slug, 'restricted', 'Restrito', isRestricted(slug))}
-          ${toggleMarkup(slug, 'hidden', 'Oculto', isHidden(slug))}
+          ${toggleMarkup(slug, 'hidden', 'Backlog', isHidden(slug))}
         </span>
       </div>`
   }).join('')
@@ -155,7 +155,7 @@ function adminMarkup(): string {
         <button id="admin-logout-btn" class="text-sm text-text-muted-light hover:text-black transition-colors underline underline-offset-4">Sair</button>
       </div>
       <p class="text-sm text-text-muted-light mb-2"><strong>Restrito</strong>: escondido do acesso normal; aparece com o link <code>?preview=rl-cases</code> ou logado aqui.</p>
-      <p class="text-sm text-text-muted-light mb-4"><strong>Oculto</strong>: rascunho; não aparece para ninguém, nem com o link de preview. Só você vê, logado aqui. Vale para todos os visitantes.</p>
+      <p class="text-sm text-text-muted-light mb-4"><strong>Backlog</strong>: case em preparação; fica oculto da visualização normal e também da restrita (nem o link de preview mostra). Só você vê, logado aqui. Vale para todos os visitantes.</p>
       <div>${rows}</div>
     </div>`
 }
