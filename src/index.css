@@ -674,6 +674,18 @@ html.pa-locked body { visibility: hidden; }
 .case-board-frame img { display: block; width: 100%; height: auto; cursor: zoom-in; }
 .case-board-frame:hover { transform: translateY(-4px); box-shadow: 0 24px 48px -12px rgba(0,0,0,0.35); }
 @media (max-width: 768px) { .case-board-frame { border-width: 6px; border-radius: 16px; } }
+/* Tall boards: fixed height with internal scroll so the page doesn't get too long. */
+.case-board-scroll {
+  max-height: 560px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--alpha-40) transparent;
+}
+.case-board-scroll:hover { transform: none; }
+.case-board-scroll img { cursor: auto; }
+.case-board-scroll:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+@media (max-width: 768px) { .case-board-scroll { max-height: 420px; } }
 
 /* ==================== Gallery Mosaic Section =================== */
 
