@@ -721,6 +721,89 @@
           </div>
           <p class="feat-note" data-i18n="case.pefisa.features.note">Recursos equivalentes com nomes diferentes foram agrupados em uma mesma linha, por isso o total pode ficar abaixo da lista original de cada aplicativo.</p>
         </div>
+
+        <!-- Análise de Usabilidade — 10 heurísticas de Nielsen (accordion) + radar por produto (src/radarChart.ts) -->
+        <div class="mt-20 mb-8 reveal">
+          <h2 class="text-lg md:text-xl font-bold mb-4 text-text-primary-dark" data-i18n="case.pefisa.usability.title">Análise de Usabilidade</h2>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark max-w-3xl" data-i18n="case.pefisa.usability.desc">
+            A usabilidade dos quatro aplicativos foi avaliada com base nas 10 heurísticas de Nielsen, princípios clássicos para identificar problemas de interface. Cada heurística recebeu uma nota por produto, e o gráfico abaixo compara a média de cada uma entre as soluções.
+          </p>
+          <div class="heur-accordion mt-6 max-w-3xl">
+            <details class="heur-item">
+              <summary><span class="heur-num">01</span><span data-i18n="case.pefisa.usability.h1.title">Visibilidade do status do sistema</span></summary>
+              <p data-i18n="case.pefisa.usability.h1.desc">O sistema mantém o usuário informado sobre o que está acontecendo, com feedback claro e no tempo certo.</p>
+            </details>
+            <details class="heur-item">
+              <summary><span class="heur-num">02</span><span data-i18n="case.pefisa.usability.h2.title">Correspondência entre o sistema e o mundo real</span></summary>
+              <p data-i18n="case.pefisa.usability.h2.desc">Usa a linguagem, os termos e os conceitos do usuário, em uma ordem natural e lógica.</p>
+            </details>
+            <details class="heur-item">
+              <summary><span class="heur-num">03</span><span data-i18n="case.pefisa.usability.h3.title">Controle e liberdade do usuário</span></summary>
+              <p data-i18n="case.pefisa.usability.h3.desc">Oferece saídas claras para desfazer, voltar ou cancelar uma ação feita por engano.</p>
+            </details>
+            <details class="heur-item">
+              <summary><span class="heur-num">04</span><span data-i18n="case.pefisa.usability.h4.title">Consistência e padrões</span></summary>
+              <p data-i18n="case.pefisa.usability.h4.desc">Mantém o mesmo comportamento e segue as convenções da plataforma em todas as telas.</p>
+            </details>
+            <details class="heur-item">
+              <summary><span class="heur-num">05</span><span data-i18n="case.pefisa.usability.h5.title">Prevenção de erros</span></summary>
+              <p data-i18n="case.pefisa.usability.h5.desc">Evita que o problema aconteça, com bons padrões e confirmações antes de ações críticas.</p>
+            </details>
+            <details class="heur-item">
+              <summary><span class="heur-num">06</span><span data-i18n="case.pefisa.usability.h6.title">Reconhecimento em vez de memorização</span></summary>
+              <p data-i18n="case.pefisa.usability.h6.desc">Deixa opções e informações visíveis, sem exigir que o usuário lembre de algo entre telas.</p>
+            </details>
+            <details class="heur-item">
+              <summary><span class="heur-num">07</span><span data-i18n="case.pefisa.usability.h7.title">Flexibilidade e eficiência de uso</span></summary>
+              <p data-i18n="case.pefisa.usability.h7.desc">Atende iniciantes e experientes, com atalhos que aceleram tarefas frequentes.</p>
+            </details>
+            <details class="heur-item">
+              <summary><span class="heur-num">08</span><span data-i18n="case.pefisa.usability.h8.title">Estética e design minimalista</span></summary>
+              <p data-i18n="case.pefisa.usability.h8.desc">Mostra só o que é relevante para a tarefa, sem informação que compita com o essencial.</p>
+            </details>
+            <details class="heur-item">
+              <summary><span class="heur-num">09</span><span data-i18n="case.pefisa.usability.h9.title">Ajudar a reconhecer, diagnosticar e recuperar erros</span></summary>
+              <p data-i18n="case.pefisa.usability.h9.desc">Mensagens de erro em linguagem simples, que explicam o problema e indicam a solução.</p>
+            </details>
+            <details class="heur-item">
+              <summary><span class="heur-num">10</span><span data-i18n="case.pefisa.usability.h10.title">Ajuda e documentação</span></summary>
+              <p data-i18n="case.pefisa.usability.h10.desc">Quando necessária, a ajuda é fácil de encontrar e focada na tarefa do usuário.</p>
+            </details>
+          </div>
+        </div>
+
+        <!-- Notas: data-series="[{key,label,values:[h1..h10]}]" na ordem das heurísticas, escala de 0 a data-max -->
+        <div class="radar-card reveal" data-radar data-max="5" data-series="[]">
+          <div class="radar-head">
+            <h3 class="text-base font-semibold text-text-primary-dark" data-i18n="case.pefisa.usability.chart.title">Média por heurística</h3>
+            <p class="text-sm text-text-muted-dark" data-i18n="case.pefisa.usability.chart.sub">Passe o mouse sobre um número para ver as notas</p>
+          </div>
+          <p class="radar-empty" data-radar-empty data-i18n="case.pefisa.usability.chart.empty">Gráfico aguardando as notas da avaliação heurística.</p>
+          <div class="radar-body">
+            <div class="radar-plot" data-radar-plot>
+              <div class="radar-tooltip" role="status"></div>
+            </div>
+            <div class="radar-side">
+              <div class="radar-legend" data-radar-legend></div>
+              <ol class="radar-key">
+                <li><span class="radar-key-num">1</span><span data-radar-axis data-i18n="case.pefisa.usability.h1.short">Status do sistema</span></li>
+                <li><span class="radar-key-num">2</span><span data-radar-axis data-i18n="case.pefisa.usability.h2.short">Mundo real</span></li>
+                <li><span class="radar-key-num">3</span><span data-radar-axis data-i18n="case.pefisa.usability.h3.short">Controle e liberdade</span></li>
+                <li><span class="radar-key-num">4</span><span data-radar-axis data-i18n="case.pefisa.usability.h4.short">Consistência</span></li>
+                <li><span class="radar-key-num">5</span><span data-radar-axis data-i18n="case.pefisa.usability.h5.short">Prevenção de erros</span></li>
+                <li><span class="radar-key-num">6</span><span data-radar-axis data-i18n="case.pefisa.usability.h6.short">Reconhecimento</span></li>
+                <li><span class="radar-key-num">7</span><span data-radar-axis data-i18n="case.pefisa.usability.h7.short">Flexibilidade</span></li>
+                <li><span class="radar-key-num">8</span><span data-radar-axis data-i18n="case.pefisa.usability.h8.short">Minimalismo</span></li>
+                <li><span class="radar-key-num">9</span><span data-radar-axis data-i18n="case.pefisa.usability.h9.short">Recuperação de erros</span></li>
+                <li><span class="radar-key-num">10</span><span data-radar-axis data-i18n="case.pefisa.usability.h10.short">Ajuda e documentação</span></li>
+              </ol>
+            </div>
+          </div>
+          <details class="radar-data">
+            <summary data-i18n="case.pefisa.usability.chart.table">Ver dados em tabela</summary>
+            <div class="radar-table-wrap"><table class="radar-table" data-radar-table></table></div>
+          </details>
+        </div>
       </div>
     </section>
 
