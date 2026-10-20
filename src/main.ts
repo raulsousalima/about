@@ -10,6 +10,7 @@ import { initScrollSequence } from './scrollSequence'
 import { initGalleryMosaic } from './gallery'
 import { initGalleryParticles } from './particles'
 import { initScorecardCharts } from './scorecardChart'
+import { initFeatureTables } from './featureTable'
 
 // Case access gate — run first so restricted cards/pages resolve before the
 // rest of the page initializes. Admin tab wires up the manage panel.
@@ -71,6 +72,7 @@ document.querySelector('a[href="#home"]')?.addEventListener('click', (e) => {
 // Initialize systems
 initI18n()
 initScorecardCharts()
+initFeatureTables()
 initTheme()
 initTypewriter()
 initGalleryToggle()
