@@ -335,6 +335,109 @@
     </section>
 
     <!-- ======================================
+         §6.8 SCORECARD — radial stacked charts (src/scorecardChart.ts)
+         Notas de 1 a 5 em data-scores="performance,usabilidade,experiencia".
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="scorecard reveal rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)] p-6 md:p-10" data-scorecard>
+          <div class="mb-10">
+            <span class="case-label mb-4" data-i18n="case.pefisa.scorecard.label">Scorecard</span>
+            <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-4xl" data-i18n="case.pefisa.scorecard.intro">
+              Comparativo das quatro contas digitais nos três pilares da análise, em escala de 1 a 5. No centro de cada gráfico, a média geral.
+            </p>
+            <!-- Pillar names used by the chart tooltips -->
+            <ul class="hidden">
+              <li data-pillar-label="performance" data-i18n="case.pefisa.scorecard.performance">Performance</li>
+              <li data-pillar-label="usability" data-i18n="case.pefisa.scorecard.usability">Usabilidade</li>
+              <li data-pillar-label="experience" data-i18n="case.pefisa.scorecard.experience">Experiência</li>
+            </ul>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-6">
+            <!-- Conta digital Pernambucanas — notas placeholder: substituir pelas notas reais do scorecard -->
+            <div class="flex flex-col items-center text-center gap-4" data-score-chart data-scores="3.8,4.0,3.6">
+              <div class="scorecard-plot">
+                <div class="scorecard-center">
+                  <span class="scorecard-avg" data-score-avg>–</span>
+                  <span class="scorecard-avg-label" data-i18n="case.pefisa.scorecard.avg">Média</span>
+                </div>
+                <div class="scorecard-tooltip" role="status"></div>
+              </div>
+              <div class="scorecard-logo">
+                <img src="../img/cases/pernambucanas/logo_dark.svg" alt="Pernambucanas" class="show-in-dark" />
+                <img src="../img/cases/pernambucanas/logo_light.svg" alt="Pernambucanas" class="show-in-light" />
+              </div>
+              <p class="text-sm font-medium text-text-primary-dark" data-score-name data-i18n="case.pefisa.scorecard.pernambucanas">Conta digital Pernambucanas</p>
+              <ul class="scorecard-legend w-full max-w-[180px] space-y-1.5 text-xs text-text-muted-dark">
+                <li><span class="scorecard-swatch scorecard-swatch-1"></span><span data-i18n="case.pefisa.scorecard.performance">Performance</span><span data-score-value="performance">–</span></li>
+                <li><span class="scorecard-swatch scorecard-swatch-2"></span><span data-i18n="case.pefisa.scorecard.usability">Usabilidade</span><span data-score-value="usability">–</span></li>
+                <li><span class="scorecard-swatch scorecard-swatch-3"></span><span data-i18n="case.pefisa.scorecard.experience">Experiência</span><span data-score-value="experience">–</span></li>
+              </ul>
+            </div>
+            <!-- Leroy Merlin — notas placeholder: substituir pelas notas reais do scorecard -->
+            <div class="flex flex-col items-center text-center gap-4" data-score-chart data-scores="3.4,3.6,3.2">
+              <div class="scorecard-plot">
+                <div class="scorecard-center">
+                  <span class="scorecard-avg" data-score-avg>–</span>
+                  <span class="scorecard-avg-label" data-i18n="case.pefisa.scorecard.avg">Média</span>
+                </div>
+                <div class="scorecard-tooltip" role="status"></div>
+              </div>
+              <div class="scorecard-logo">
+                <img src="../img/cases/pefisa/brands/leroymerlin.png" alt="Leroy Merlin Pay" />
+              </div>
+              <p class="text-sm font-medium text-text-primary-dark" data-score-name data-i18n="case.pefisa.scorecard.leroymerlin">Leroy Merlin</p>
+              <ul class="scorecard-legend w-full max-w-[180px] space-y-1.5 text-xs text-text-muted-dark">
+                <li><span class="scorecard-swatch scorecard-swatch-1"></span><span data-i18n="case.pefisa.scorecard.performance">Performance</span><span data-score-value="performance">–</span></li>
+                <li><span class="scorecard-swatch scorecard-swatch-2"></span><span data-i18n="case.pefisa.scorecard.usability">Usabilidade</span><span data-score-value="usability">–</span></li>
+                <li><span class="scorecard-swatch scorecard-swatch-3"></span><span data-i18n="case.pefisa.scorecard.experience">Experiência</span><span data-score-value="experience">–</span></li>
+              </ul>
+            </div>
+            <!-- Palmeiras Pay — notas placeholder: substituir pelas notas reais do scorecard -->
+            <div class="flex flex-col items-center text-center gap-4" data-score-chart data-scores="3.0,3.4,3.8">
+              <div class="scorecard-plot">
+                <div class="scorecard-center">
+                  <span class="scorecard-avg" data-score-avg>–</span>
+                  <span class="scorecard-avg-label" data-i18n="case.pefisa.scorecard.avg">Média</span>
+                </div>
+                <div class="scorecard-tooltip" role="status"></div>
+              </div>
+              <div class="scorecard-logo">
+                <img src="../img/cases/pefisa/brands/palmeiras.png" alt="Palmeiras Pay" />
+              </div>
+              <p class="text-sm font-medium text-text-primary-dark" data-score-name data-i18n="case.pefisa.scorecard.palmeiras">Palmeiras Pay</p>
+              <ul class="scorecard-legend w-full max-w-[180px] space-y-1.5 text-xs text-text-muted-dark">
+                <li><span class="scorecard-swatch scorecard-swatch-1"></span><span data-i18n="case.pefisa.scorecard.performance">Performance</span><span data-score-value="performance">–</span></li>
+                <li><span class="scorecard-swatch scorecard-swatch-2"></span><span data-i18n="case.pefisa.scorecard.usability">Usabilidade</span><span data-score-value="usability">–</span></li>
+                <li><span class="scorecard-swatch scorecard-swatch-3"></span><span data-i18n="case.pefisa.scorecard.experience">Experiência</span><span data-score-value="experience">–</span></li>
+              </ul>
+            </div>
+            <!-- Pefisa Pay — notas placeholder: substituir pelas notas reais do scorecard -->
+            <div class="flex flex-col items-center text-center gap-4" data-score-chart data-scores="4.2,4.4,4.0">
+              <div class="scorecard-plot">
+                <div class="scorecard-center">
+                  <span class="scorecard-avg" data-score-avg>–</span>
+                  <span class="scorecard-avg-label" data-i18n="case.pefisa.scorecard.avg">Média</span>
+                </div>
+                <div class="scorecard-tooltip" role="status"></div>
+              </div>
+              <div class="scorecard-logo">
+                <img src="../img/cases/pefisa/logo_dark.svg" alt="Pefisa" class="show-in-dark" />
+                <img src="../img/cases/pefisa/logo_light.svg" alt="Pefisa" class="show-in-light" />
+              </div>
+              <p class="text-sm font-medium text-text-primary-dark" data-score-name data-i18n="case.pefisa.scorecard.pefisa">Pefisa Pay</p>
+              <ul class="scorecard-legend w-full max-w-[180px] space-y-1.5 text-xs text-text-muted-dark">
+                <li><span class="scorecard-swatch scorecard-swatch-1"></span><span data-i18n="case.pefisa.scorecard.performance">Performance</span><span data-score-value="performance">–</span></li>
+                <li><span class="scorecard-swatch scorecard-swatch-2"></span><span data-i18n="case.pefisa.scorecard.usability">Usabilidade</span><span data-score-value="usability">–</span></li>
+                <li><span class="scorecard-swatch scorecard-swatch-3"></span><span data-i18n="case.pefisa.scorecard.experience">Experiência</span><span data-score-value="experience">–</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================
          §7 IMPACT
     ======================================= -->
     <section class="py-16 md:py-24">

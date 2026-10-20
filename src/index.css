@@ -360,6 +360,60 @@ html.pa-locked body { visibility: hidden; }
   background: var(--color-accent);
 }
 
+/* Scorecard radial charts (Pefisa case) — shadcn "Radial Chart - Stacked" look.
+   Categorical slots validated for CVD separation on each surface. */
+.scorecard {
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-3: #199e70;
+  --chart-track: rgba(255,255,255,0.06);
+}
+:root[data-theme="light"] .scorecard {
+  --chart-1: #2a78d6;
+  --chart-2: #eb6834;
+  --chart-3: #1baf7a;
+  --chart-track: rgba(0,0,0,0.05);
+}
+.scorecard-plot { position: relative; width: 100%; max-width: 240px; margin: 0 auto; }
+.scorecard-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.scorecard-track { fill: var(--chart-track); }
+.scorecard-hit { fill: transparent; stroke: transparent; stroke-width: 12; }
+.scorecard-seg { cursor: pointer; outline: none; }
+.scorecard-fill { transition: opacity .15s ease; }
+.scorecard-fill-1 { fill: var(--chart-1); }
+.scorecard-fill-2 { fill: var(--chart-2); }
+.scorecard-fill-3 { fill: var(--chart-3); }
+.scorecard-svg.has-focus .scorecard-seg:not(.is-active) .scorecard-fill { opacity: .35; }
+.scorecard-center {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; flex-direction: column; align-items: center; pointer-events: none;
+}
+.scorecard-avg {
+  font-family: var(--font-serif, 'Playfair Display', serif);
+  font-size: 2.25rem; font-weight: 700; line-height: 1;
+  color: var(--color-text-primary-dark);
+  font-variant-numeric: tabular-nums;
+}
+.scorecard-avg-label { font-size: .75rem; color: var(--color-text-muted-dark); margin-top: .25rem; }
+.scorecard-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.scorecard-swatch-1 { background: var(--chart-1); }
+.scorecard-swatch-2 { background: var(--chart-2); }
+.scorecard-swatch-3 { background: var(--chart-3); }
+.scorecard-tooltip {
+  position: absolute; z-index: 10; pointer-events: none;
+  transform: translate(-50%, calc(-100% - 12px));
+  display: none; align-items: center; gap: .5rem; white-space: nowrap;
+  padding: .4rem .65rem; border-radius: .5rem; font-size: .75rem;
+  background: var(--color-surface); color: var(--color-text-primary-dark);
+  border: 1px solid var(--alpha-15); box-shadow: 0 8px 24px rgba(0,0,0,.18);
+}
+.scorecard-tooltip.is-visible { display: inline-flex; }
+.scorecard-tooltip strong { font-variant-numeric: tabular-nums; margin-left: .25rem; }
+.scorecard-legend li { display: flex; align-items: center; gap: .5rem; }
+.scorecard-legend [data-score-value] { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--color-text-primary-dark); }
+.scorecard-logo { height: 48px; display: flex; align-items: center; justify-content: center; }
+.scorecard-logo img { max-height: 48px; max-width: 140px; width: auto; height: auto; }
+
 /* Impact metric card */
 .metric-card {
   text-align: center;
