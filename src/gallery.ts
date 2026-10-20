@@ -141,6 +141,11 @@ export function initGalleryMosaic() {
     })
   })
 
+  // Standalone images outside the mosaic (e.g. wide boards) that also zoom.
+  document.querySelectorAll<HTMLImageElement>('img[data-lightbox]').forEach((img) => {
+    img.addEventListener('click', () => openLightbox(img.currentSrc || img.src, img.alt))
+  })
+
   closeBtn?.addEventListener('click', closeLightbox)
 
   lightbox.addEventListener('click', (e) => {
