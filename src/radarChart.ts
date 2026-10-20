@@ -1,6 +1,6 @@
 // Radar chart with legend (visual based on shadcn/ui "Radar Chart - Legend").
 //
-// Markup: [data-radar] with data-max (scale top, default 5) and
+// Markup: [data-radar] with data-max (scale top, default 5), data-min (centre, default 0) and
 // data-series='[{"key":"pe","label":"Pernambucanas","values":[...]}]', one value
 // per [data-radar-axis] label inside it (in order). Legend items toggle a series;
 // hovering or focusing an axis shows every product's score for it. A data table
@@ -11,7 +11,6 @@ type Series = { key: string; label: string; values: number[] }
 const SIZE = 420
 const C = SIZE / 2
 const R = 150
-const RINGS = 5
 const NS = 'http://www.w3.org/2000/svg'
 
 function el<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string | number>): SVGElementTagNameMap[K] {
@@ -43,6 +42,8 @@ function render(root: HTMLElement): void {
   try { series = JSON.parse(root.getAttribute('data-series') || '[]') } catch { series = [] }
   series = series.filter((s) => Array.isArray(s.values) && s.values.length === axes.length)
   const max = parseFloat(root.getAttribute('data-max') || '5') || 5
+  const min = parseFloat(root.getAttribute('data-min') || '0') || 0 // centre of the chart
+  const rings = Math.max(1, Math.round(max - min))
   const n = axes.length
 
   if (empty) empty.hidden = series.length > 0
@@ -53,8 +54,8 @@ function render(root: HTMLElement): void {
 
   const svg = el('svg', { viewBox: `0 0 ${SIZE} ${SIZE}`, class: 'radar-svg', role: 'img' })
   // Grid: concentric polygons and spokes.
-  for (let ring = 1; ring <= RINGS; ring++) {
-    const pts = axes.map((_, i) => point(i, n, (R * ring) / RINGS).join(',')).join(' ')
+  for (let ring = 1; ring <= rings; ring++) {
+    const pts = axes.map((_, i) => point(i, n, (R * ring) / rings).join(',')).join(' ')
     svg.appendChild(el('polygon', { points: pts, class: 'radar-grid' }))
   }
   axes.forEach((_, i) => {
@@ -64,7 +65,7 @@ function render(root: HTMLElement): void {
   // Series polygons.
   series.forEach((s, si) => {
     if (hiddenKeys.has(s.key)) return
-    const pts = s.values.map((v, i) => point(i, n, (R * Math.max(0, Math.min(max, v))) / max).join(',')).join(' ')
+    const pts = s.values.map((v, i) => point(i, n, (R * (Math.max(min, Math.min(max, v)) - min)) / (max - min)).join(',')).join(' ')
     svg.appendChild(el('polygon', { points: pts, class: `radar-area radar-c${si + 1}` }))
   })
   // Axis labels + hover targets (bigger than the label itself).
