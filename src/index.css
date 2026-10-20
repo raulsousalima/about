@@ -361,17 +361,17 @@ html.pa-locked body { visibility: hidden; }
 }
 
 /* Scorecard radial charts (Pefisa case) — shadcn "Radial Chart - Stacked" look.
-   Categorical slots validated for CVD separation on each surface. */
+   Brand lime ramp; the per-pillar values in the legend carry identity too. */
 .scorecard {
-  --chart-1: #3987e5;
-  --chart-2: #d95926;
-  --chart-3: #199e70;
+  --chart-1: #C8F04D;
+  --chart-2: #A0C62A;
+  --chart-3: #718D1D;
   --chart-track: rgba(255,255,255,0.06);
 }
 :root[data-theme="light"] .scorecard {
-  --chart-1: #2a78d6;
-  --chart-2: #eb6834;
-  --chart-3: #1baf7a;
+  --chart-1: #C8F04D;
+  --chart-2: #A0C62A;
+  --chart-3: #718D1D;
   --chart-track: rgba(0,0,0,0.05);
 }
 .scorecard-plot { position: relative; width: 100%; max-width: 240px; margin: 0 auto; }

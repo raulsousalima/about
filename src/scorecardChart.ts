@@ -47,7 +47,42 @@ function pillarLabel(root: HTMLElement, pillar: string): string {
   return root.querySelector<HTMLElement>(`[data-pillar-label="${pillar}"]`)?.textContent?.trim() || pillar
 }
 
-function renderChart(root: HTMLElement, slot: HTMLElement): void {
+const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
+
+/** "Loading" sweep: segments fill left to right while the average counts up. */
+function animateChart(
+  segments: { el: SVGPathElement; start: number; end: number }[],
+  avgEl: HTMLElement | null,
+  avg: number,
+  delay = 0,
+): void {
+  const DURATION = 1200
+  const sweepEnd = segments.length ? segments[segments.length - 1].end : 180
+  const frame = (t: number) => {
+    const head = 180 - (180 - sweepEnd) * t // current leading angle
+    segments.forEach(({ el, start, end }) => {
+      if (head >= start) el.setAttribute('d', '')
+      else el.setAttribute('d', sector(start, Math.max(end, head)))
+    })
+    if (avgEl) avgEl.textContent = formatScore(avg * t)
+  }
+  frame(0)
+  let t0: number | null = null
+  const step = (now: number) => {
+    if (t0 === null) t0 = now + delay
+    if (now < t0) { requestAnimationFrame(step); return }
+    const p = Math.min(1, (now - t0) / DURATION)
+    frame(easeOutCubic(p))
+    if (p < 1) requestAnimationFrame(step)
+  }
+  requestAnimationFrame(step)
+}
+
+// 'pending' = drawn empty until the chart scrolls into view.
+type Mode = 'static' | 'animate' | 'pending'
+
+function renderChart(root: HTMLElement, slot: HTMLElement, mode: Mode = 'static', delay = 0): void {
   const scores = (slot.getAttribute('data-scores') || '')
     .split(',')
     .map((s) => Math.min(MAX_SCORE, Math.max(0, parseFloat(s) || 0)))
@@ -65,6 +100,7 @@ function renderChart(root: HTMLElement, slot: HTMLElement): void {
   track.setAttribute('class', 'scorecard-track')
   svg.appendChild(track)
 
+  const segments: { el: SVGPathElement; start: number; end: number }[] = []
   let angle = 180
   PILLARS.forEach((pillar, i) => {
     const span = (scores[i] / total) * 180
@@ -83,8 +119,10 @@ function renderChart(root: HTMLElement, slot: HTMLElement): void {
     hit.setAttribute('class', 'scorecard-hit')
     const seg = document.createElementNS(svgNS, 'path')
     const isLast = i === PILLARS.length - 1 || scores.slice(i + 1).every((s) => s <= 0)
-    seg.setAttribute('d', sector(start, isLast ? end : end + GAP_DEG))
+    const drawEnd = isLast ? end : end + GAP_DEG
+    seg.setAttribute('d', sector(start, drawEnd))
     seg.setAttribute('class', `scorecard-fill scorecard-fill-${i + 1}`)
+    segments.push({ el: seg, start, end: drawEnd })
     g.append(hit, seg)
     svg.appendChild(g)
   })
@@ -94,6 +132,13 @@ function renderChart(root: HTMLElement, slot: HTMLElement): void {
 
   const avgEl = slot.querySelector<HTMLElement>('[data-score-avg]')
   if (avgEl) avgEl.textContent = formatScore(avg)
+  if (mode !== 'static' && !prefersReducedMotion()) {
+    if (mode === 'animate') animateChart(segments, avgEl, avg, delay)
+    else {
+      segments.forEach(({ el }) => el.setAttribute('d', ''))
+      if (avgEl) avgEl.textContent = formatScore(0)
+    }
+  }
 
   // Legend values next to each pillar (identity never rests on colour alone).
   PILLARS.forEach((pillar, i) => {
@@ -149,9 +194,26 @@ export function initScorecardCharts(): void {
   if (!roots.length) return
   const renderAll = () =>
     roots.forEach((root) =>
-      root.querySelectorAll<HTMLElement>('[data-score-chart]').forEach((slot) => renderChart(root, slot)),
+      root.querySelectorAll<HTMLElement>('[data-score-chart]').forEach((slot) =>
+        renderChart(root, slot, slot.dataset.played ? 'static' : 'pending'),
+      ),
     )
   renderAll()
+  // Play the loading sweep once, when each chart scrolls into view.
+  const io = new IntersectionObserver(
+    (entries) =>
+      // Stagger charts that enter together (the desktop row), not ones that
+      // scroll in one by one on mobile.
+      entries.filter((e) => e.isIntersecting).forEach((e, order) => {
+        io.unobserve(e.target)
+        const slot = e.target as HTMLElement
+        slot.dataset.played = '1'
+        const root = slot.closest<HTMLElement>('[data-scorecard]')
+        if (root) renderChart(root, slot, 'animate', 300 + order * 150) // 300ms: let the card's reveal fade in first
+      }),
+    { threshold: 0.4 },
+  )
+  roots.forEach((root) => root.querySelectorAll<HTMLElement>('[data-score-chart]').forEach((slot) => io.observe(slot)))
   // Re-format numbers (4,2 vs 4.2) and labels when the language switches.
   new MutationObserver(renderAll).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] })
 }
