@@ -662,6 +662,19 @@ html.pa-locked body { visibility: hidden; }
   }
 }
 
+/* Wide board/screenshot frame (Pefisa "Projeto"): same rounded device frame as
+   the gallery items, at the image's own aspect ratio. Click opens the lightbox. */
+.case-board-frame {
+  border-radius: 24px;
+  overflow: hidden;
+  border: 8px solid var(--color-device-frame);
+  background: #FFFFFF;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.case-board-frame img { display: block; width: 100%; height: auto; cursor: zoom-in; }
+.case-board-frame:hover { transform: translateY(-4px); box-shadow: 0 24px 48px -12px rgba(0,0,0,0.35); }
+@media (max-width: 768px) { .case-board-frame { border-width: 6px; border-radius: 16px; } }
+
 /* ==================== Gallery Mosaic Section =================== */
 
 .gallery-section {
