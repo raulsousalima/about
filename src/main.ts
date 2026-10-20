@@ -11,6 +11,7 @@ import { initGalleryMosaic } from './gallery'
 import { initGalleryParticles } from './particles'
 import { initScorecardCharts } from './scorecardChart'
 import { initFeatureTables } from './featureTable'
+import { initRadarCharts } from './radarChart'
 
 // Case access gate — run first so restricted cards/pages resolve before the
 // rest of the page initializes. Admin tab wires up the manage panel.
@@ -73,6 +74,7 @@ document.querySelector('a[href="#home"]')?.addEventListener('click', (e) => {
 initI18n()
 initScorecardCharts()
 initFeatureTables()
+initRadarCharts()
 initTheme()
 initTypewriter()
 initGalleryToggle()
