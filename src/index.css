@@ -760,13 +760,12 @@ html.pa-locked body { visibility: hidden; }
 .heur-list .heur-num { padding-top: .1rem; }
 
 /* Radar chart card (Pefisa) — shadcn/ui "Radar Chart - Legend" look.
-   Categorical slots validated for CVD separation; the tooltip and data table
-   carry the values so colour is never the only cue. */
+   Series use each product's brand colour (same in both themes); logos, labels,
+   the tooltip and the data table carry identity, so colour is never the only cue. */
 .radar-card {
-  --radar-1: #3987e5; --radar-2: #d95926; --radar-3: #199e70; --radar-4: #c98500;
+  --radar-1: #FDDD05; --radar-2: #78BE21; --radar-3: #026436; --radar-4: #667CFF;
   border: 1px solid var(--color-border); border-radius: 1rem; background: var(--color-surface);
 }
-:root[data-theme="light"] .radar-card { --radar-1: #2a78d6; --radar-2: #eb6834; --radar-3: #1baf7a; --radar-4: #eda100; }
 .radar-head { padding: 1.25rem 1.25rem 0; }
 .radar-head p { margin-top: .25rem; }
 .radar-card.is-empty .radar-body, .radar-card.is-empty .radar-data { display: none; }
@@ -788,8 +787,12 @@ html.pa-locked body { visibility: hidden; }
 .radar-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
 .radar-swatch.radar-c1 { background: var(--radar-1); } .radar-swatch.radar-c2 { background: var(--radar-2); }
 .radar-swatch.radar-c3 { background: var(--radar-3); } .radar-swatch.radar-c4 { background: var(--radar-4); }
-.radar-legend { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin-bottom: 1.25rem; }
-.radar-legend-item { display: inline-flex; align-items: center; gap: .5rem; font-size: .8125rem; color: var(--color-text-primary-dark); }
+.radar-legend { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem .75rem; margin-bottom: 1.5rem; }
+@media (max-width: 480px) { .radar-legend { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.radar-legend-item { display: flex; flex-direction: column; align-items: center; gap: .6rem; font-size: .8125rem; color: var(--color-text-primary-dark); text-align: center; }
+.radar-legend-logo { height: 40px; display: flex; align-items: center; justify-content: center; }
+.radar-legend-logo img { max-height: 40px; max-width: 100px; width: auto; height: auto; }
+.radar-legend-label { display: inline-flex; align-items: center; gap: .45rem; }
 .radar-legend-item.is-off { opacity: .4; }
 .radar-legend-item:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 4px; }
 .radar-key { display: grid; gap: .4rem; font-size: .8125rem; color: var(--color-text-muted-dark); }

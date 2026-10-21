@@ -4,7 +4,8 @@
 // data-series='[{"key":"pe","label":"Pernambucanas","values":[...]}]', one value
 // per [data-radar-axis] label inside it (in order). Legend items toggle a series;
 // hovering or focusing an axis shows every product's score for it. A data table
-// is built alongside for screen readers and as the colour-free view.
+// is built alongside for screen readers and as the colour-free view. Logos for
+// the legend live in [data-logo-for="<key>"] elements inside the card.
 
 type Series = { key: string; label: string; values: number[] }
 
@@ -91,7 +92,10 @@ function render(root: HTMLElement): void {
     b.type = 'button'
     b.className = `radar-legend-item${hiddenKeys.has(s.key) ? ' is-off' : ''}`
     b.setAttribute('aria-pressed', String(!hiddenKeys.has(s.key)))
-    b.innerHTML = `<span class="radar-swatch radar-c${si + 1}"></span>${s.label}`
+    // Optional logo above the label, copied from [data-logo-for="key"] in the markup
+    // (kept in HTML so the build rewrites the image paths).
+    const logo = root.querySelector(`[data-logo-for="${s.key}"]`)?.innerHTML.trim() || ''
+    b.innerHTML = `${logo ? `<span class="radar-legend-logo">${logo}</span>` : ''}<span class="radar-legend-label"><span class="radar-swatch radar-c${si + 1}"></span>${s.label}</span>`
     b.addEventListener('click', () => {
       if (hiddenKeys.has(s.key)) hiddenKeys.delete(s.key)
       else if (hiddenKeys.size < series.length - 1) hiddenKeys.add(s.key) // keep at least one
