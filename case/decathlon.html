@@ -386,14 +386,11 @@
     ======================================= -->
     <section class="py-16 md:py-24">
       <div class="max-w-7xl mx-auto px-6">
-        <div class="mb-12 reveal flex flex-col items-start md:flex-row md:items-end justify-between gap-6">
-          <span class="case-label mb-4 md:mb-0" data-i18n="case.decathlon.gallery.label">Projeto</span>
-          <div class="flex items-center bg-[var(--alpha-5)] rounded-full p-1 border border-[var(--alpha-10)]" id="gallery-view-toggle">
-            <button id="view-mode-app-btn" class="px-5 py-2 rounded-full text-sm font-medium bg-surface text-[var(--color-text-primary-dark)] shadow-sm transition-all">App</button>
-            <button id="view-mode-web-btn" class="px-5 py-2 rounded-full text-sm font-medium text-[var(--color-text-muted-dark)] hover:text-[var(--color-text-primary-dark)] transition-all">Web</button>
-          </div>
+        <div class="mb-12 reveal">
+          <span class="case-label" data-i18n="case.decathlon.gallery.label">Projeto</span>
         </div>
 
+        <!-- App screens -->
         <div id="gallery-app-view" class="case-gallery show-grid pb-8 reveal">
           <!-- Gallery item 1 -->
           <div class="case-gallery-item-wrapper">
@@ -436,8 +433,8 @@
           </div>
         </div>
 
-        <!-- Web View (Hidden by default) -->
-        <div id="gallery-web-view" class="gallery-web-view hidden pb-8">
+        <!-- Web screens, shown below the app screens -->
+        <div id="gallery-web-view" class="gallery-web-view mt-12 pb-8 reveal">
           <!-- Desktop Mockup -->
           <div class="case-gallery-item-wrapper w-full" style="flex: 900;">
             <h4 class="case-item-title">Desktop View</h4>
