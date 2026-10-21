@@ -4,12 +4,14 @@
 
 type Trend = { dir: 'up' | 'down' | 'flat'; pct?: string; tone?: 'good' | 'bad' }
 type Metric = { value: string; trend?: Trend }
+type Theme = 'contas' | 'cartoes' | 'financeiro' | 'canais'
 type Review = {
   source: 'ai' | 'client'
-  theme: 'contas' | 'cartoes' | 'financeiro' | 'canais'
+  themes: Theme[]
   text: string
   name?: string
-  rating?: number // client stars (1–5) or AI criticality (1–5 flames)
+  rating?: number // client stars (1–5) or AI criticality (1–5 flames); omit for plain AI notes
+  count?: number // AI: how many reviews mention it
   date?: string
 }
 type Product = {
@@ -20,6 +22,7 @@ type Product = {
   nps: Metric
   total: Metric
   stars?: number
+  chart?: number // bar height in the comparison chart (average rating)
   reviews: Review[]
 }
 
@@ -32,7 +35,9 @@ const T = {
     ai: 'No Friction IA',
     themes: { contas: 'Contas', cartoes: 'Cartões', financeiro: 'Financeiro', canais: 'Canais' },
     client: 'Cliente',
-    empty: 'As avaliações deste produto serão adicionadas em breve.',
+    empty: 'Nenhuma avaliação neste filtro.',
+    mentions: '{n} menções',
+    mention: '1 menção',
   },
   en: {
     up: 'Up {p} from the previous version',
@@ -42,7 +47,9 @@ const T = {
     ai: 'No Friction AI',
     themes: { contas: 'Accounts', cartoes: 'Cards', financeiro: 'Financial', canais: 'Channels' },
     client: 'Customer',
-    empty: "This product's reviews will be added soon.",
+    empty: 'No reviews for this filter.',
+    mentions: '{n} mentions',
+    mention: '1 mention',
   },
 }
 
@@ -66,12 +73,12 @@ function icons(svg: string, cls: string, n: number): string {
   return Array.from({ length: 5 }, (_, i) => `<span class="${cls}${i < n ? ' is-on' : ''}">${svg}</span>`).join('')
 }
 
-function metric(el: HTMLElement | null, m: Metric | undefined, opts: { stars?: number } = {}): void {
+function metric(el: HTMLElement | null, m: Metric | undefined, opts: { stars?: number; bars?: boolean } = {}): void {
   if (!el || !m) return
   const tone = m.trend?.tone === 'bad' ? 'is-bad' : 'is-good'
   const pending = m.value === ''
   el.querySelector('[data-rdash-value]')!.innerHTML =
-    `<span>${pending ? '—' : esc(num(m.value))}</span>${pending ? '' : `<span class="rdash-bars ${tone}">${BARS}</span>`}`
+    `<span>${pending ? '—' : esc(num(m.value))}</span>${pending || opts.bars === false ? '' : `<span class="rdash-bars ${tone}">${BARS}</span>`}`
   const foot = el.querySelector('[data-rdash-foot]')!
   foot.innerHTML =
     (opts.stars !== undefined ? `<div class="rdash-stars" aria-hidden="true">${icons(STAR, 'rdash-star', Math.round(opts.stars))}</div>` : '') +
@@ -80,13 +87,14 @@ function metric(el: HTMLElement | null, m: Metric | undefined, opts: { stars?: n
 
 function reviewCard(r: Review): string {
   const s = T[lang()]
-  const theme = `<span class="rdash-tag">${esc(s.themes[r.theme])}</span>`
+  const theme = r.themes.map((t) => `<span class="rdash-tag">${esc(s.themes[t])}</span>`).join('')
   if (r.source === 'ai') {
+    const count = r.count ? `<span class="rdash-count">${esc(r.count === 1 ? s.mention : s.mentions.replace('{n}', String(r.count)))}</span>` : ''
     return `<article class="rdash-review is-ai">
       <header><span class="rdash-avatar is-ai">N</span><strong>${esc(s.ai)}</strong></header>
-      <div class="rdash-flames" aria-label="${r.rating ?? 0}/5">${icons(FLAME, 'rdash-flame', r.rating ?? 0)}</div>
+      ${r.rating ? `<div class="rdash-flames" aria-label="${r.rating}/5">${icons(FLAME, 'rdash-flame', r.rating)}</div>` : ''}
       <p>${esc(r.text)}</p>
-      <footer>${theme}</footer>
+      <footer>${theme}${count}</footer>
     </article>`
   }
   const initial = (r.name || '?').trim().charAt(0).toUpperCase()
@@ -96,6 +104,56 @@ function reviewCard(r: Review): string {
     <p>${esc(r.text)}</p>
     <footer>${theme}<span class="rdash-tag is-muted">${esc(s.client)}</span></footer>
   </article>`
+}
+
+// Bar chart (shadcn "Bar Chart - Active" look): one bar per product, the
+// selected product's bar is the active one; clicking a bar selects it.
+function barChart(root: HTMLElement, products: Product[], active: string): void {
+  const host = root.querySelector<HTMLElement>('[data-rdash-chart]')
+  if (!host) return
+  const max = 5
+  // Drawn at the container's pixel width so text keeps its size at any width.
+  const W = Math.max(260, Math.round(host.clientWidth || 320))
+  const H = 240, top = 28, bottom = 40
+  const gap = Math.max(12, Math.min(28, W * 0.05))
+  const n = products.length
+  const bw = (W - gap * (n + 1)) / n
+  // Narrow charts: smaller labels, two-word names on two lines.
+  const narrow = bw < 90
+  // Fit the longest single word in its slot (min 9px, max 12px).
+  const longest = Math.max(...products.map((p) => Math.max(...p.label.split(' ').map((w) => w.length))))
+  const fs = narrow ? Math.max(9, Math.min(12, (bw + gap - 6) / (longest * 0.6))) : 12
+  const label = (t: string, cx: number) => {
+    const words = t.split(' ')
+    if (!narrow || words.length < 2) return esc(t)
+    return `<tspan x="${cx}">${esc(words[0])}</tspan><tspan x="${cx}" dy="1.15em">${esc(words.slice(1).join(' '))}</tspan>`
+  }
+  const bars = products.map((p, i) => {
+    const v = p.chart ?? 0
+    const h = ((H - top - bottom) * v) / max
+    const x = gap + i * (bw + gap)
+    const y = H - bottom - h
+    const on = p.key === active
+    return `<g class="rdash-bar${on ? ' is-active' : ''}" data-bar="${p.key}" tabindex="0" role="button" aria-pressed="${on}" aria-label="${esc(p.label)}: ${num(v.toFixed(1))}">
+      <rect class="rdash-bar-hit" x="${x - gap / 2}" y="${top - 20}" width="${bw + gap}" height="${H - top - bottom + 20}" />
+      <rect class="rdash-bar-fill rdash-b-${p.key}" x="${x}" y="${y}" width="${bw}" height="${h}" rx="8" />
+      ${on ? `<rect class="rdash-bar-ring" x="${x - 4}" y="${y - 4}" width="${bw + 8}" height="${h + 8}" rx="10" />` : ''}
+      <text class="rdash-bar-value" x="${x + bw / 2}" y="${y - 10}" text-anchor="middle">${num(v.toFixed(1))}</text>
+      <text class="rdash-bar-label" x="${x + bw / 2}" y="${H - bottom + 22}" style="font-size:${fs}px" text-anchor="middle">${label(p.label, x + bw / 2)}</text>
+    </g>`
+  }).join('')
+  host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" class="rdash-chart-svg" role="group">
+    <line class="rdash-axis" x1="${gap / 2}" x2="${W - gap / 2}" y1="${H - bottom}" y2="${H - bottom}" />${bars}</svg>`
+  host.querySelectorAll<SVGGElement>('[data-bar]').forEach((g) => {
+    const pick = () => {
+      const key = g.getAttribute('data-bar') || ''
+      root.dataset.product = key
+      render(root, products)
+      root.querySelector<SVGGElement>(`[data-bar="${key}"]`)?.focus() // keep keyboard focus after re-render
+    }
+    g.addEventListener('click', pick)
+    g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick() } })
+  })
 }
 
 function render(root: HTMLElement, products: Product[]): void {
@@ -114,13 +172,14 @@ function render(root: HTMLElement, products: Product[]): void {
     b.classList.toggle('is-active', on)
     b.setAttribute('aria-pressed', String(on))
   })
+  barChart(root, products, p.key)
   const crumb = root.querySelector('[data-rdash-crumb]')
   if (crumb) crumb.textContent = p.label
 
   metric(root.querySelector('[data-rdash-metric="rating"]'), p.rating)
   metric(root.querySelector('[data-rdash-metric="insights"]'), p.insights)
   metric(root.querySelector('[data-rdash-metric="nps"]'), p.nps)
-  metric(root.querySelector('[data-rdash-metric="total"]'), p.total, { stars: p.stars })
+  metric(root.querySelector('[data-rdash-metric="total"]'), p.total, { stars: p.stars, bars: false })
 
   const list = root.querySelector<HTMLElement>('[data-rdash-reviews]')
   if (list) {
@@ -143,6 +202,14 @@ export function initReviewDashboards(): void {
       b.addEventListener('click', () => { root.dataset.filter = b.dataset.rdashFilter; render(root, products) }),
     )
     render(root, products)
+    const chart = root.querySelector('[data-rdash-chart]')
+    if (chart) {
+      let w = 0
+      new ResizeObserver(() => {
+        const nw = Math.round((chart as HTMLElement).clientWidth)
+        if (nw !== w) { w = nw; render(root, products) }
+      }).observe(chart)
+    }
     new MutationObserver(() => render(root, products)).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] })
   })
 }
