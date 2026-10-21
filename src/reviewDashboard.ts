@@ -20,8 +20,7 @@ type Product = {
   rating: Metric
   insights: Metric
   nps: Metric
-  total: Metric
-  stars?: number
+  total?: Metric // unused: the total is counted from the cards
   chart?: number // bar height in the comparison chart (average rating)
   reviews: Review[]
 }
@@ -32,6 +31,9 @@ const T = {
     down: 'Diminuição de {p} em relação à versão anterior',
     flat: 'Não houve variação em relação à versão anterior',
     pending: 'A calcular',
+    totalSplit: '{c} de clientes · {a} da No Friction IA',
+    starsAvg: 'Média {v} de 5 nas avaliações de clientes',
+    noClients: 'Sem avaliações de clientes neste produto',
     ai: 'No Friction IA',
     themes: { contas: 'Contas', cartoes: 'Cartões', financeiro: 'Financeiro', canais: 'Canais' },
     client: 'Cliente',
@@ -44,6 +46,9 @@ const T = {
     down: 'Down {p} from the previous version',
     flat: 'No change from the previous version',
     pending: 'To be calculated',
+    totalSplit: '{c} from customers · {a} from No Friction AI',
+    starsAvg: 'Average {v} out of 5 in customer reviews',
+    noClients: 'No customer reviews for this product',
     ai: 'No Friction AI',
     themes: { contas: 'Accounts', cartoes: 'Cards', financeiro: 'Financial', canais: 'Channels' },
     client: 'Customer',
@@ -179,7 +184,20 @@ function render(root: HTMLElement, products: Product[]): void {
   metric(root.querySelector('[data-rdash-metric="rating"]'), p.rating)
   metric(root.querySelector('[data-rdash-metric="insights"]'), p.insights)
   metric(root.querySelector('[data-rdash-metric="nps"]'), p.nps)
-  metric(root.querySelector('[data-rdash-metric="total"]'), p.total, { stars: p.stars, bars: false })
+  // Total = every card (customers + No Friction IA); stars = average of the
+  // customers' star ratings (AI flames measure criticality, not satisfaction).
+  const totalEl = root.querySelector<HTMLElement>('[data-rdash-metric="total"]')
+  if (totalEl) {
+    const s = T[lang()]
+    const clients = p.reviews.filter((r) => r.source === 'client' && r.rating)
+    const aiCount = p.reviews.filter((r) => r.source === 'ai').length
+    const avg = clients.length ? clients.reduce((a, r) => a + (r.rating || 0), 0) / clients.length : 0
+    totalEl.querySelector('[data-rdash-value]')!.innerHTML = `<span>${p.reviews.length}</span>`
+    totalEl.querySelector('[data-rdash-foot]')!.innerHTML =
+      (clients.length ? `<div class="rdash-stars" role="img" aria-label="${num(avg.toFixed(1))}/5">${icons(STAR, 'rdash-star', Math.round(avg))}</div>` : '') +
+      `<p class="rdash-trend">${esc(clients.length ? s.starsAvg.replace('{v}', num(avg.toFixed(1))) : s.noClients)}</p>` +
+      `<p class="rdash-trend">${esc(s.totalSplit.replace('{c}', String(clients.length)).replace('{a}', String(aiCount)))}</p>`
+  }
 
   const list = root.querySelector<HTMLElement>('[data-rdash-reviews]')
   if (list) {
@@ -191,6 +209,11 @@ function render(root: HTMLElement, products: Product[]): void {
 }
 
 export function initReviewDashboards(): void {
+  // Static numbers ([data-num]) follow the language's decimal separator.
+  const formatStatic = () =>
+    document.querySelectorAll<HTMLElement>('[data-num]').forEach((el) => { el.textContent = num(el.dataset.num || '') })
+  formatStatic()
+  new MutationObserver(formatStatic).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] })
   document.querySelectorAll<HTMLElement>('[data-rdash]').forEach((root) => {
     let products: Product[] = []
     try { products = JSON.parse(root.querySelector('[data-rdash-data]')?.textContent || '[]') } catch { products = [] }
