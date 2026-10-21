@@ -12,6 +12,7 @@ import { initGalleryParticles } from './particles'
 import { initScorecardCharts } from './scorecardChart'
 import { initFeatureTables } from './featureTable'
 import { initRadarCharts } from './radarChart'
+import { initReviewDashboards } from './reviewDashboard'
 
 // Case access gate — run first so restricted cards/pages resolve before the
 // rest of the page initializes. Admin tab wires up the manage panel.
@@ -75,6 +76,7 @@ initI18n()
 initScorecardCharts()
 initFeatureTables()
 initRadarCharts()
+initReviewDashboards()
 initTheme()
 initTypewriter()
 initGalleryToggle()
