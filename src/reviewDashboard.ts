@@ -208,7 +208,42 @@ function render(root: HTMLElement, products: Product[]): void {
   }
 }
 
+// Simple static bar chart: [data-static-bars] with data-bars='[{"label","sub","value","color"}]'
+// (scale 0–5), drawn at the container's pixel width like the comparison chart.
+function staticBars(host: HTMLElement): void {
+  let bars: { label: string; sub?: string; value: number; color: string }[] = []
+  try { bars = JSON.parse(host.dataset.bars || '[]') } catch { bars = [] }
+  if (!bars.length) return
+  const W = Math.max(240, Math.round(host.clientWidth || 300))
+  const H = 240, top = 28, bottom = 48
+  const n = bars.length
+  const gap = Math.max(24, W * 0.12)
+  const bw = Math.min(140, (W - gap * (n + 1)) / n)
+  const x0 = (W - (bw * n + gap * (n - 1))) / 2
+  const g = bars.map((b, i) => {
+    const h = ((H - top - bottom) * Math.max(0, Math.min(5, b.value))) / 5
+    const x = x0 + i * (bw + gap)
+    const y = H - bottom - h
+    const v = num(b.value.toFixed(1))
+    return `<g class="rdash-bar is-active" role="img" aria-label="${esc(b.label)}: ${v}">
+      <rect class="rdash-bar-fill" x="${x}" y="${y}" width="${bw}" height="${h}" rx="8" style="fill:${esc(b.color)}" />
+      <text class="rdash-bar-value" x="${x + bw / 2}" y="${y - 10}" text-anchor="middle">${v}</text>
+      <text class="rdash-bar-label" x="${x + bw / 2}" y="${H - bottom + 20}" text-anchor="middle">${esc(b.label)}</text>
+      ${b.sub ? `<text class="rdash-bar-sub" x="${x + bw / 2}" y="${H - bottom + 36}" text-anchor="middle">${esc(b.sub)}</text>` : ''}
+    </g>`
+  }).join('')
+  host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" class="rdash-chart-svg">
+    <line class="rdash-axis" x1="${gap / 2}" x2="${W - gap / 2}" y1="${H - bottom}" y2="${H - bottom}" />${g}</svg>`
+}
+
 export function initReviewDashboards(): void {
+  document.querySelectorAll<HTMLElement>('[data-static-bars]').forEach((host) => {
+    let w = 0
+    const draw = () => { const nw = Math.round(host.clientWidth); if (nw !== w) { w = nw; staticBars(host) } }
+    new ResizeObserver(draw).observe(host)
+    new MutationObserver(() => { w = 0; draw() }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] })
+    draw()
+  })
   // Static numbers ([data-num]) follow the language's decimal separator.
   const formatStatic = () =>
     document.querySelectorAll<HTMLElement>('[data-num]').forEach((el) => { el.textContent = num(el.dataset.num || '') })
