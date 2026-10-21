@@ -766,7 +766,10 @@ html.pa-locked body { visibility: hidden; }
   --radar-1: #FDDD05; --radar-2: #78BE21; --radar-3: #026436; --radar-4: #667CFF;
   border: 1px solid var(--color-border); border-radius: 1rem; background: var(--color-surface);
 }
-.radar-head { padding: 1.25rem 1.25rem 0; }
+.radar-summary { padding: 1.25rem 1.25rem 0; }
+.radar-summary .rdash-card { background: var(--color-surface-hover); }
+.radar-card.is-empty .radar-summary { display: none; }
+.radar-head { padding: 1.5rem 1.25rem 0; }
 .radar-head p { margin-top: .25rem; }
 .radar-card.is-empty .radar-body, .radar-card.is-empty .radar-data { display: none; }
 .radar-empty { padding: 2.5rem 1.25rem; text-align: center; font-size: .875rem; color: var(--color-text-muted-dark); }
