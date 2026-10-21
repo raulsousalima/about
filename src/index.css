@@ -892,6 +892,19 @@ html.pa-locked body { visibility: hidden; }
 .rdash-review footer { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
 .rdash-tag { padding: .15rem .45rem; border-radius: .3rem; font-size: .5625rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; background: var(--alpha-10); color: var(--color-text-primary-dark); }
 .rdash-tag.is-muted { background: transparent; border: 1px solid var(--alpha-15); color: var(--color-text-muted-dark); }
+.rdash-chip.is-static { cursor: default; }
+.rdash-chip.is-static:hover { color: var(--color-text-muted-dark); }
+.rdash-tech-grid { display: grid; gap: 1rem; grid-template-columns: repeat(1, minmax(0, 1fr)); }
+@media (min-width: 640px) { .rdash-tech-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .rdash-tech-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.rdash-tech-logo { height: 40px; display: flex; align-items: center; margin-bottom: 1rem; }
+.rdash-tech-logo img { max-height: 40px; max-width: 120px; width: auto; height: auto; }
+.rdash-stars-frac { position: relative; display: inline-block; margin-top: .75rem; line-height: 0; }
+.rdash-stars-base, .rdash-stars-fill { display: inline-flex; gap: 2px; white-space: nowrap; }
+.rdash-stars-fill { position: absolute; inset: 0 auto 0 0; overflow: hidden; }
+.rdash-stars-frac .rdash-star { width: 16px; height: 16px; flex-shrink: 0; }
+.rdash-stars-fill .rdash-star svg { fill: #F5A623; }
+.rdash-tech-note { font-size: .8125rem; line-height: 1.6; color: var(--color-text-muted-dark); max-width: 56rem; }
 .rdash-empty { grid-column: 1 / -1; padding: 2rem 1rem; text-align: center; font-size: .8125rem; color: var(--color-text-muted-dark); }
 
 /* ==================== Gallery Mosaic Section =================== */

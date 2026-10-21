@@ -209,6 +209,11 @@ function render(root: HTMLElement, products: Product[]): void {
 }
 
 export function initReviewDashboards(): void {
+  // Static numbers ([data-num]) follow the language's decimal separator.
+  const formatStatic = () =>
+    document.querySelectorAll<HTMLElement>('[data-num]').forEach((el) => { el.textContent = num(el.dataset.num || '') })
+  formatStatic()
+  new MutationObserver(formatStatic).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] })
   document.querySelectorAll<HTMLElement>('[data-rdash]').forEach((root) => {
     let products: Product[] = []
     try { products = JSON.parse(root.querySelector('[data-rdash-data]')?.textContent || '[]') } catch { products = [] }
