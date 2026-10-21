@@ -451,7 +451,8 @@
         </div>
 
         <!-- Avaliação técnica por produto — notas de performance da análise técnica (slides "Performance",
-             escala 1 a 5); estrelas preenchidas proporcionalmente à nota. -->
+             escala 1 a 5); estrelas preenchidas proporcionalmente à nota. Gráfico: Whitelabel = Palmeiras Pay;
+             Nativo = média de Pernambucanas, Leroy Merlin e Pefisa. -->
         <div class="rdash reveal mb-12">
           <header class="rdash-header">
             <span class="rdash-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
@@ -464,7 +465,13 @@
             </div>
           </header>
           <div class="rdash-body">
-            <div class="rdash-tech-grid">
+            <div class="rdash-top">
+              <div class="rdash-card rdash-chart-card">
+                <div class="rdash-card-head"><span data-i18n="case.pefisa.tech.chart">Whitelabel vs Nativo</span></div>
+                <p class="rdash-chart-sub" data-i18n="case.pefisa.tech.chart.sub">Nota técnica de 1 a 5 · Nativo = média de Pernambucanas, Leroy Merlin e Pefisa</p>
+                <div class="rdash-chart" data-static-bars data-bars="[{&quot;label&quot;: &quot;Nativo&quot;, &quot;sub&quot;: &quot;3 apps&quot;, &quot;value&quot;: 3.1, &quot;color&quot;: &quot;#C8F04D&quot;}, {&quot;label&quot;: &quot;Whitelabel&quot;, &quot;sub&quot;: &quot;Palmeiras Pay&quot;, &quot;value&quot;: 3.2, &quot;color&quot;: &quot;#667CFF&quot;}]"></div>
+              </div>
+              <div class="rdash-metrics">
               <div class="rdash-card rdash-tech-card">
                 <div class="rdash-tech-logo"><img src="../img/cases/pernambucanas/logo_dark.svg" alt="Pernambucanas" class="show-in-dark" /><img src="../img/cases/pernambucanas/logo_light.svg" alt="Pernambucanas" class="show-in-light" /></div>
                 <div class="rdash-card-head"><span data-i18n="case.pefisa.tech.card">Avaliação técnica</span></div>
@@ -499,7 +506,8 @@
                 <div class="rdash-stars-frac" role="img" aria-label="Pefisa: 2,9/5">
                   <span class="rdash-stars-base" aria-hidden="true"><span class="rdash-star"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.2-.9z"/></svg></span><span class="rdash-star"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.2-.9z"/></svg></span><span class="rdash-star"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.2-.9z"/></svg></span><span class="rdash-star"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.2-.9z"/></svg></span><span class="rdash-star"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.2-.9z"/></svg></span></span>
                   <span class="rdash-stars-fill" style="width: 58.0%" aria-hidden="true"><span class="rdash-star"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.2-.9z"/></svg></span><span class="rdash-star"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.2-.9z"/></svg></span><span class="rdash-star"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.2-.9z"/></svg></span><span class="rdash-star"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.2-.9z"/></svg></span><span class="rdash-star"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.2-.9z"/></svg></span></span>
-                </div>
+                  </div>
+            </div>
               </div>
             </div>
             <p class="rdash-tech-note" data-i18n="case.pefisa.tech.note">A análise técnica foi realizada em conjunto com o time de Engenharia, considerando critérios como performance, identificação de bugs, qualidade do código, responsividade e funcionamento das funcionalidades, com o objetivo de avaliar a qualidade técnica da solução e identificar oportunidades de melhoria.</p>
@@ -765,6 +773,9 @@
              ("Analise comparativa - Pernambucanas"); células sem avaliação não entram na média.
              Ordem dos valores = ordem das heurísticas (h1..h10). -->
         <div class="radar-card reveal" data-radar data-min="1" data-max="5" data-series="[{&quot;key&quot;: &quot;pe&quot;, &quot;label&quot;: &quot;Pernambucanas&quot;, &quot;values&quot;: [2.82, 3.45, 3.14, 3.32, 2.73, 3.18, 3.14, 2.82, 2.82, 3.27]}, {&quot;key&quot;: &quot;lm&quot;, &quot;label&quot;: &quot;Leroy Merlin&quot;, &quot;values&quot;: [2.86, 3.29, 3.07, 3.36, 2.71, 3.14, 3.36, 3.36, 2.79, 3.0]}, {&quot;key&quot;: &quot;pp&quot;, &quot;label&quot;: &quot;Palmeiras Pay&quot;, &quot;values&quot;: [3.37, 3.16, 3.05, 3.32, 2.89, 3.16, 3.16, 2.85, 2.84, 3.11]}, {&quot;key&quot;: &quot;pf&quot;, &quot;label&quot;: &quot;Pefisa&quot;, &quot;values&quot;: [2.82, 3.44, 2.94, 3.53, 2.24, 3.35, 3.31, 3.47, 2.29, 2.71]}]">
+          <!-- Média geral das 10 heurísticas por produto (calculada no radarChart.ts a partir de data-series) -->
+          <span hidden data-radar-summary-title data-i18n="case.pefisa.usability.summary">Avaliação heurística</span>
+          <div class="radar-summary rdash-tech-grid" data-radar-summary></div>
           <div class="radar-head">
             <h3 class="text-base font-semibold text-text-primary-dark" data-i18n="case.pefisa.usability.chart.title">Média por heurística</h3>
             <p class="text-sm text-text-muted-dark" data-i18n="case.pefisa.usability.chart.sub">Média das notas de 1 a 5 · passe o mouse sobre um número para ver os valores</p>

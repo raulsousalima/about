@@ -766,7 +766,10 @@ html.pa-locked body { visibility: hidden; }
   --radar-1: #FDDD05; --radar-2: #78BE21; --radar-3: #026436; --radar-4: #667CFF;
   border: 1px solid var(--color-border); border-radius: 1rem; background: var(--color-surface);
 }
-.radar-head { padding: 1.25rem 1.25rem 0; }
+.radar-summary { padding: 1.25rem 1.25rem 0; }
+.radar-summary .rdash-card { background: var(--color-surface-hover); }
+.radar-card.is-empty .radar-summary { display: none; }
+.radar-head { padding: 1.5rem 1.25rem 0; }
 .radar-head p { margin-top: .25rem; }
 .radar-card.is-empty .radar-body, .radar-card.is-empty .radar-data { display: none; }
 .radar-empty { padding: 2.5rem 1.25rem; text-align: center; font-size: .875rem; color: var(--color-text-muted-dark); }
@@ -851,6 +854,7 @@ html.pa-locked body { visibility: hidden; }
 .rdash-b-pe { fill: #FDDD05; } .rdash-b-lm { fill: #78BE21; } .rdash-b-pp { fill: #026436; } .rdash-b-pf { fill: #667CFF; }
 .rdash-bar-value { font-size: 13px; font-weight: 600; fill: var(--color-text-primary-dark); font-variant-numeric: tabular-nums; }
 .rdash-bar-label { font-size: 12px; fill: var(--color-text-muted-dark); }
+.rdash-bar-sub { font-size: 10.5px; fill: var(--color-text-muted-dark); }
 .rdash-bar.is-active .rdash-bar-label { fill: var(--color-text-primary-dark); font-weight: 600; }
 .rdash-count { margin-left: auto; align-self: center; padding: .1rem .45rem; border-radius: 9999px; font-size: .625rem; font-weight: 600; background: rgba(240,96,93,.15); color: #F0605D; white-space: nowrap; }
 .rdash-card, .rdash-panel { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: .875rem; }

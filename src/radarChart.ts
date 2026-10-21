@@ -86,6 +86,27 @@ function render(root: HTMLElement): void {
   plot.prepend(svg)
 
   // Legend (toggles).
+  // Summary cards: each product's average across all heuristics.
+  const summary = root.querySelector<HTMLElement>('[data-radar-summary]')
+  if (summary) {
+    const title = root.querySelector('[data-radar-summary-title]')?.textContent?.trim() || ''
+    const star = '<span class="rdash-star"><svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17l-5.6 3 1.1-6.2L3 9.4l6.2-.9z"/></svg></span>'.repeat(5)
+    summary.innerHTML = series.map((s) => {
+      const avg = s.values.reduce((a, v) => a + v, 0) / s.values.length
+      const value = avg.toFixed(2).replace('.', document.documentElement.lang.toLowerCase().startsWith('pt') ? ',' : '.')
+      const logo = root.querySelector(`[data-logo-for="${s.key}"]`)?.innerHTML.trim() || ''
+      return `<div class="rdash-card rdash-tech-card">
+        <div class="rdash-tech-logo">${logo}</div>
+        <div class="rdash-card-head"><span>${title}</span></div>
+        <div class="rdash-value"><span>${value}</span></div>
+        <div class="rdash-stars-frac" role="img" aria-label="${s.label}: ${value}/5">
+          <span class="rdash-stars-base" aria-hidden="true">${star}</span>
+          <span class="rdash-stars-fill" style="width: ${(Math.min(max, avg) / 5) * 100}%" aria-hidden="true">${star}</span>
+        </div>
+      </div>`
+    }).join('')
+  }
+
   legend.innerHTML = ''
   series.forEach((s, si) => {
     const b = document.createElement('button')
