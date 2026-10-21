@@ -578,6 +578,61 @@
           </p>
         </div>
 
+        <!-- Dashboard de experiência — dados no JSON abaixo (um objeto por produto); src/reviewDashboard.ts.
+             Métricas dos quadros de Análise de Experiência; "total" fica vazio até ser calculado;
+             reviews: source "ai" (No Friction IA, rating = chamas) ou "client" (lojas, rating = estrelas). -->
+        <div class="rdash reveal mb-12" data-rdash data-product="pf">
+          <script type="application/json" data-rdash-data>[{"key": "pe", "label": "Pernambucanas", "stars": 3.0, "rating": {"value": "3.0", "trend": {"dir": "down", "pct": "-9.09%", "tone": "good"}}, "insights": {"value": "1", "trend": {"dir": "down", "pct": "-85.71%", "tone": "good"}}, "nps": {"value": "33"}, "total": {"value": ""}, "reviews": []}, {"key": "pp", "label": "Palmeiras Pay", "stars": 3.0, "rating": {"value": "3.0", "trend": {"dir": "up", "pct": "50%", "tone": "good"}}, "insights": {"value": "57", "trend": {"dir": "up", "pct": "2750%", "tone": "good"}}, "nps": {"value": "-13", "trend": {"dir": "up", "pct": "87%", "tone": "bad"}}, "total": {"value": ""}, "reviews": []}, {"key": "lm", "label": "Leroy Merlin", "stars": 3.3, "rating": {"value": "3.3", "trend": {"dir": "up", "pct": "10%", "tone": "good"}}, "insights": {"value": "4", "trend": {"dir": "flat", "tone": "good"}}, "nps": {"value": "-8", "trend": {"dir": "up", "pct": "52.94%", "tone": "bad"}}, "total": {"value": ""}, "reviews": []}, {"key": "pf", "label": "Pefisa", "stars": 2.7, "rating": {"value": "2.7", "trend": {"dir": "down", "pct": "-10%", "tone": "good"}}, "insights": {"value": "4", "trend": {"dir": "down", "pct": "-42.86%", "tone": "good"}}, "nps": {"value": "-67", "trend": {"dir": "down", "pct": "-26.42%", "tone": "bad"}}, "total": {"value": ""}, "reviews": [{"source": "ai", "theme": "contas", "rating": 5, "text": "Melhorar o processo de criação de conta e reset de senha"}, {"source": "client", "theme": "contas", "name": "Allana S.", "rating": 1, "date": "14 de mar. de 2024", "text": "Não consigo fazer uma conta e preciso pois a empresa onde trabalho, falou para mim abrir aqui"}, {"source": "ai", "theme": "contas", "rating": 5, "text": "Realizar testes de usabilidade e corrigir falhas de acesso"}, {"source": "ai", "theme": "financeiro", "rating": 5, "text": "Resolver problemas de carregamento do portal de negociação"}, {"source": "client", "theme": "financeiro", "name": "Sueli T.", "rating": 1, "date": "14 de mar. de 2024", "text": "Péssimo app, não abre portal de negociação, só fica em recarregar página. Acho que com tanta reclamação está na hora de fazer alguma coisa né Pefisa!!!!"}, {"source": "ai", "theme": "canais", "rating": 5, "text": "Melhorar a assistente virtual"}, {"source": "client", "theme": "canais", "name": "Valdecy C.", "rating": 1, "date": "14 de mar. de 2024", "text": "a pior experiência possível que estou tendo com vc,s com a assistente virtual"}]}]</script>
+          <header class="rdash-header">
+            <span class="rdash-logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            <div class="min-w-0">
+              <p class="rdash-crumb"><span data-i18n="case.pefisa.dash.crumb">Dashboard</span> / <span data-rdash-crumb>Pefisa</span></p>
+              <div class="rdash-title">
+                <strong data-i18n="case.pefisa.dash.title">Análise</strong>
+                <span class="rdash-chips" role="group" aria-label="Produto"><button type="button" class="rdash-chip" data-rdash-product="pe">Pernambucanas</button><button type="button" class="rdash-chip" data-rdash-product="pp">Palmeiras Pay</button><button type="button" class="rdash-chip" data-rdash-product="lm">Leroy Merlin</button><button type="button" class="rdash-chip" data-rdash-product="pf">Pefisa</button></span>
+              </div>
+            </div>
+          </header>
+          <div class="rdash-body">
+            <div class="rdash-metrics">
+              <div class="rdash-card" data-rdash-metric="rating">
+                <div class="rdash-card-head"><span data-i18n="case.pefisa.dash.rating">Avaliação média</span><span class="rdash-help" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M6.3 6.2a1.8 1.8 0 1 1 2.6 1.6c-.6.3-.9.7-.9 1.3M8 11.2v.1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span></div>
+                <div class="rdash-value" data-rdash-value></div>
+                <div data-rdash-foot></div>
+              </div>
+              <div class="rdash-card" data-rdash-metric="insights">
+                <div class="rdash-card-head"><span data-i18n="case.pefisa.dash.insights">Novos insights</span><span class="rdash-help" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M6.3 6.2a1.8 1.8 0 1 1 2.6 1.6c-.6.3-.9.7-.9 1.3M8 11.2v.1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span></div>
+                <div class="rdash-value" data-rdash-value></div>
+                <div data-rdash-foot></div>
+              </div>
+              <div class="rdash-card" data-rdash-metric="nps">
+                <div class="rdash-card-head"><span data-i18n="case.pefisa.dash.nps">AI NPS</span><span class="rdash-help" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M6.3 6.2a1.8 1.8 0 1 1 2.6 1.6c-.6.3-.9.7-.9 1.3M8 11.2v.1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span></div>
+                <div class="rdash-value" data-rdash-value></div>
+                <div data-rdash-foot></div>
+              </div>
+              <div class="rdash-card" data-rdash-metric="total">
+                <div class="rdash-card-head"><span data-i18n="case.pefisa.dash.total">Total de avaliações</span><span class="rdash-help" aria-hidden="true"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M6.3 6.2a1.8 1.8 0 1 1 2.6 1.6c-.6.3-.9.7-.9 1.3M8 11.2v.1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span></div>
+                <div class="rdash-value" data-rdash-value></div>
+                <div data-rdash-foot></div>
+              </div>
+            </div>
+            <div class="rdash-panel">
+              <div class="rdash-panel-head">
+                <div>
+                  <h3 data-i18n="case.pefisa.dash.reviews">Avaliações</h3>
+                  <p data-i18n="case.pefisa.dash.reviews.sub">Clientes e síntese No Friction IA</p>
+                </div>
+                <div class="rdash-seg" role="group" aria-label="Origem">
+                  <button type="button" data-rdash-filter="all" data-i18n="case.pefisa.dash.f.all">Todas</button>
+                  <button type="button" data-rdash-filter="ai" data-i18n="case.pefisa.dash.f.ai">No Friction IA</button>
+                  <button type="button" data-rdash-filter="client" data-i18n="case.pefisa.dash.f.client">Clientes</button>
+                </div>
+              </div>
+              <div class="rdash-reviews" data-rdash-reviews></div>
+            </div>
+          </div>
+        </div>
+
         <div class="space-y-12 reveal">
           <div class="case-gallery-item-wrapper">
             <h4 class="case-item-title" data-i18n="case.pefisa.experience.title1">Pernambucanas</h4>
