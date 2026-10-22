@@ -26,6 +26,9 @@ function applyTranslations(lang: Lang): void {
   // Update <html lang>
   document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en'
 
+  // Let pages that render text from script (e.g. /designsystem) re-render.
+  window.dispatchEvent(new CustomEvent('langchange', { detail: lang }))
+
   // Update active state on toggle buttons
   document.querySelectorAll<HTMLElement>('[data-lang-btn]').forEach((btn) => {
     const btnLang = btn.getAttribute('data-lang-btn')
@@ -37,6 +40,11 @@ function applyTranslations(lang: Lang): void {
       btn.classList.add('text-text-muted-dark')
     }
   })
+}
+
+/** Current language (same default as the toggle). */
+export function getLang(): Lang {
+  return getSavedLang()
 }
 
 /** Set language, persist, and apply */
