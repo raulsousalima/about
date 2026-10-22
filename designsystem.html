@@ -107,6 +107,7 @@
                 <tr><td data-i18n="ds.introducao.td41">Toggle App/Web, <code>.rdash-seg</code></td><td data-i18n="ds.introducao.td42">Galerias, dashboard</td><td><code>.ui-segmented</code></td></tr>
                 <tr><td data-i18n="ds.introducao.td44">Inputs de login</td><td>Profile</td><td><code>.ui-field</code> + <code>.ui-input</code></td></tr>
                 <tr><td><code>.lead-card</code>, <code>.case-card</code>, <code>.metric-card</code></td><td>Home, cases</td><td><code>.ui-card--lead | case | metric</code></td></tr>
+                <tr><td data-i18n="ds.introducao.td_exp">Itens de experiência, certificações</td><td>Home</td><td><code>.ui-card--item</code> + <code>.ui-popover</code></td></tr>
                 <tr><td><code>.heur-item</code></td><td>Pefisa</td><td><code>.ui-accordion</code></td></tr>
                 <tr><td><code>.scorecard-tooltip</code>, <code>.radar-tooltip</code></td><td data-i18n="ds.introducao.td54">Gráficos</td><td><code>.ui-tooltip</code></td></tr>
                 <tr><td><code>header.glass-nav</code></td><td data-i18n="ds.introducao.td57">Todas as páginas</td><td><code>.ui-navbar</code></td></tr>
@@ -138,7 +139,7 @@
           <div data-ds-swatches="text"></div>
 
           <h2 class="ds-h2" data-i18n="ds.cores.h28">Marca</h2>
-          <p class="ds-p" data-i18n="ds.cores.p9">O lime é reservado para ação e destaque: CTA primário, foco, estado ativo e marcadores. Texto sobre o accent usa sempre <code>--color-on-accent</code>.</p>
+          <p class="ds-p" data-i18n="ds.cores.p9">O lime é reservado para ação e destaque: CTA primário, foco, estado ativo e marcadores. Texto sobre o accent usa sempre <code>--color-on-accent</code>. Quando o próprio lime é <strong>texto, ícone ou anel de foco</strong>, use <code>--color-accent-text</code>: igual ao accent no escuro e verde-oliva no claro, para manter o contraste AA.</p>
           <div data-ds-swatches="brand"></div>
 
           <h2 class="ds-h2" data-i18n="ds.cores.h210">Semânticas</h2>
@@ -149,6 +150,8 @@
           <p class="ds-p" data-i18n="ds.cores.p13">Escala de transparência sobre o tema (branco no escuro, preto no claro) para bordas, hovers e superfícies sutis.</p>
           <div data-ds-swatches="alpha"></div>
 
+          <h2 class="ds-h2" data-i18n="ds.cores.h_band">Faixa clara</h2>
+          <p class="ds-p" data-i18n="ds.cores.p_band">A home alterna faixas escuras e claras. A classe <code>.section-light</code> fica clara nos dois temas e redefine os tokens dentro dela (superfície branca, texto escuro, bordas e overlays em preto, <code>--color-accent-text</code> em oliva). Qualquer componente <code>ui-*</code> colocado ali se ajusta sozinho, sem classes extras.</p>
           <h2 class="ds-h2" data-i18n="ds.cores.h214">Uso</h2>
           <div class="ds-dodont">
             <div class="is-do"><h4 data-i18n="ds.cores.h415"><i class="ti ti-circle-check" aria-hidden="true"></i>Faça</h4><ul class="ds-list"><li data-i18n="ds.cores.li16">Use um único elemento accent por área de foco.</li><li data-i18n="ds.cores.li17">Combine cor semântica com ícone e texto.</li><li data-i18n="ds.cores.li18">Referencie tokens, nunca hex no HTML.</li></ul></div>
@@ -231,7 +234,8 @@
           <h2 class="ds-h2" data-i18n="ds.espacamento.h215">Ritmo vertical</h2>
           <ul class="ds-list">
             <li data-i18n="ds.espacamento.li16">Seções: <code>--space-24</code> no mobile, <code>--space-32</code> no desktop (<code>py-24 md:py-32</code>).</li>
-            <li data-i18n="ds.espacamento.li17">Rótulo de seção → título: <code>--space-16</code>.</li>
+            <li data-i18n="ds.espacamento.li17">Rótulo de seção → título: <code>--space-4</code>. Título → conteúdo: <code>--space-16</code>. Rótulo seguido direto de conteúdo: <code>--space-16</code>.</li>
+            <li data-i18n="ds.espacamento.li_accent">Todo título de seção leva o traço lime (<code>.heading-accent</code>, 48 × 3px, <code>--color-accent</code>).</li>
             <li data-i18n="ds.espacamento.li18">Elementos relacionados dentro de um card: <code>--space-2</code> a <code>--space-4</code>.</li>
           </ul>
         </article>
@@ -279,13 +283,13 @@
         <article class="ds-page" data-page="iconografia" hidden>
           <p class="ds-crumb" data-i18n="ds.iconografia.p1">Fundação</p>
           <h1 class="ds-title" tabindex="-1" data-i18n="ds.iconografia.h12">Iconografia</h1>
-          <p class="ds-lead" data-i18n="ds.iconografia.p3"><a href="https://tabler.io/icons" target="_blank" rel="noopener" class="text-accent hover:underline">Tabler Icons</a> (webfont), traço de 2px, coerente com o peso da Inter. Ícones herdam cor e tamanho do texto.</p>
+          <p class="ds-lead" data-i18n="ds.iconografia.p3"><a href="https://tabler.io/icons" target="_blank" rel="noopener" class="text-accent-text hover:underline">Tabler Icons</a> (webfont), traço de 2px, coerente com o peso da Inter. Ícones herdam cor e tamanho do texto.</p>
           <h2 class="ds-h2" data-i18n="ds.iconografia.h24">Tamanhos</h2>
           <div class="ds-icon-sizes">
             <div><i class="ti ti-arrow-right" style="font-size:1rem" aria-hidden="true"></i><span>16 · chip, input</span></div>
             <div><i class="ti ti-arrow-right" style="font-size:1.125rem" aria-hidden="true"></i><span data-i18n="ds.iconografia.span6">18 · botão md</span></div>
             <div><i class="ti ti-arrow-right" style="font-size:1.5rem" aria-hidden="true"></i><span>24 · header</span></div>
-            <div><i class="ti ti-arrow-right" style="font-size:1.875rem;color:var(--color-accent)" aria-hidden="true"></i><span>30 · card</span></div>
+            <div><i class="ti ti-arrow-right" style="font-size:1.875rem;color:var(--color-accent-text)" aria-hidden="true"></i><span>30 · card</span></div>
           </div>
           <h2 class="ds-h2" data-i18n="ds.iconografia.h29">Ícones do site</h2>
           <p class="ds-p" data-i18n="ds.iconografia.p10">Clique para copiar o HTML. Ícones decorativos levam <code>aria-hidden="true"</code>; ícones sozinhos em botões exigem <code>aria-label</code> no botão.</p>
@@ -351,7 +355,7 @@
           <h2 class="ds-h2" data-i18n="ds.badge.h214">Uso</h2>
           <div class="ds-dodont">
             <div class="is-do"><h4 data-i18n="ds.badge.h415"><i class="ti ti-circle-check" aria-hidden="true"></i>Faça</h4><ul class="ds-list"><li data-i18n="ds.badge.li16">Até 2 palavras.</li><li data-i18n="ds.badge.li17">Status com ícone para não depender da cor.</li></ul></div>
-            <div class="is-dont"><h4 data-i18n="ds.badge.h418"><i class="ti ti-circle-x" aria-hidden="true"></i>Evite</h4><ul class="ds-list"><li data-i18n="ds.badge.li19">Usar badge como botão; para filtrar, use <a href="#/chip" class="text-accent">Chip</a>.</li><li data-i18n="ds.badge.li20">Misturar variantes num mesmo grupo.</li></ul></div>
+            <div class="is-dont"><h4 data-i18n="ds.badge.h418"><i class="ti ti-circle-x" aria-hidden="true"></i>Evite</h4><ul class="ds-list"><li data-i18n="ds.badge.li19">Usar badge como botão; para filtrar, use <a href="#/chip" class="text-accent-text">Chip</a>.</li><li data-i18n="ds.badge.li20">Misturar variantes num mesmo grupo.</li></ul></div>
           </div>
         </article>
 
@@ -369,7 +373,7 @@
           <ul class="ds-list">
             <li data-i18n="ds.chip.li7">Chip é um <code>&lt;button&gt;</code> com <code>aria-pressed</code>; leitores de tela anunciam “pressionado”.</li>
             <li data-i18n="ds.chip.li8">Agrupe chips em um container com <code>role="group"</code> e <code>aria-label</code> (“Filtrar por plataforma”).</li>
-            <li data-i18n="ds.chip.li9">Para escolha única entre opções, prefira o <a href="#/segmented" class="text-accent">Segmented Control</a>.</li>
+            <li data-i18n="ds.chip.li9">Para escolha única entre opções, prefira o <a href="#/segmented" class="text-accent-text">Segmented Control</a>.</li>
           </ul>
         </article>
 
@@ -412,7 +416,7 @@
         <article class="ds-page" data-page="card" hidden>
           <p class="ds-crumb" data-i18n="ds.card.p1">Componentes</p>
           <h1 class="ds-title" tabindex="-1">Card</h1>
-          <p class="ds-lead" data-i18n="ds.card.p3">Agrupa conteúdo relacionado. Três variantes vindas da home e dos cases: <strong class="text-text-primary-dark">Lead</strong> (competências), <strong class="text-text-primary-dark">Case</strong> (vitrine de projeto) e <strong class="text-text-primary-dark">Métrica</strong> (resultados).</p>
+          <p class="ds-lead" data-i18n="ds.card.p3">Agrupa conteúdo relacionado. Quatro variantes vindas da home e dos cases: <strong class="text-text-primary-dark">Lead</strong> (competências), <strong class="text-text-primary-dark">Case</strong> (vitrine de projeto), <strong class="text-text-primary-dark">Métrica</strong> (resultados) e <strong class="text-text-primary-dark">Item</strong> (experiências e certificações).</p>
           <div data-ds-playground="card"></div>
           <h2 class="ds-h2" data-i18n="ds.card.h24">Anatomia</h2>
           <ol data-ds-anatomy="card"></ol>
@@ -458,6 +462,24 @@
             <div class="is-do"><h4 data-i18n="ds.tooltip.h47"><i class="ti ti-circle-check" aria-hidden="true"></i>Faça</h4><ul class="ds-list"><li data-i18n="ds.tooltip.li8">Conteúdo curto, sem ações.</li><li data-i18n="ds.tooltip.li9">Abrir também no foco do teclado.</li></ul></div>
             <div class="is-dont"><h4 data-i18n="ds.tooltip.h410"><i class="ti ti-circle-x" aria-hidden="true"></i>Evite</h4><ul class="ds-list"><li data-i18n="ds.tooltip.li11">Esconder informação essencial só no tooltip.</li><li data-i18n="ds.tooltip.li12">Links ou botões dentro do balão.</li></ul></div>
           </div>
+        </article>
+
+        <!-- ========== POPOVER ========== -->
+        <article class="ds-page" data-page="popover" hidden>
+          <p class="ds-crumb" data-i18n="ds.popover.p1">Componentes</p>
+          <h1 class="ds-title" tabindex="-1">Popover</h1>
+          <p class="ds-lead" data-i18n="ds.popover.lead">Painel flutuante com detalhes que abre ao clicar em um gatilho. Na home, mostra a descrição de cada experiência profissional. Clique no item do preview para abrir e fechar.</p>
+          <div data-ds-playground="popover"></div>
+          <h2 class="ds-h2" data-i18n="ds.popover.h2a">Anatomia</h2>
+          <ol data-ds-anatomy="popover"></ol>
+          <h2 class="ds-h2" data-i18n="ds.popover.h2b">Tokens aplicados</h2>
+          <div data-ds-tokens="popover"></div>
+          <h2 class="ds-h2" data-i18n="ds.popover.h2c">Acessibilidade</h2>
+          <ul class="ds-list">
+            <li data-i18n="ds.popover.li1">O gatilho é um <code>&lt;button&gt;</code> com <code>aria-expanded</code> e <code>aria-controls</code> apontando para o painel.</li>
+            <li data-i18n="ds.popover.li2">Um painel aberto por vez. Esc fecha e devolve o foco ao gatilho; clique fora também fecha.</li>
+            <li data-i18n="ds.popover.li3">Diferente do <a href="#/tooltip" class="text-accent-text">Tooltip</a>, abre por clique e pode ter texto longo.</li>
+          </ul>
         </article>
 
         <!-- ========== NAVBAR ========== -->

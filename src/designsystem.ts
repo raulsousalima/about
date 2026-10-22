@@ -128,9 +128,10 @@ const PAGES: PageDef[] = [
   { id: 'chip', title: ['Chip', 'Chip'], icon: 'filter', group: 'components', desc: ['Filtros com estado ligado/desligado.', 'Filters with an on/off state.'] },
   { id: 'segmented', title: ['Segmented Control', 'Segmented Control'], icon: 'toggle-left', group: 'components', desc: ['Alternância entre visões exclusivas.', 'Switch between exclusive views.'] },
   { id: 'input', title: ['Input', 'Input'], icon: 'forms', group: 'components', desc: ['Campo de texto com label e feedback.', 'Text field with label and feedback.'] },
-  { id: 'card', title: ['Card', 'Card'], icon: 'cards', group: 'components', desc: ['Lead, case e métrica.', 'Lead, case and metric.'] },
+  { id: 'card', title: ['Card', 'Card'], icon: 'cards', group: 'components', desc: ['Lead, case, métrica e item.', 'Lead, case, metric and item.'] },
   { id: 'accordion', title: ['Accordion', 'Accordion'], icon: 'layout-list', group: 'components', desc: ['Conteúdo expansível em lista.', 'Expandable list content.'] },
   { id: 'tooltip', title: ['Tooltip', 'Tooltip'], icon: 'message-2', group: 'components', desc: ['Rótulos e valores sob demanda.', 'Labels and values on demand.'] },
+  { id: 'popover', title: ['Popover', 'Popover'], icon: 'layout-bottombar-expand', group: 'components', desc: ['Painel com detalhes ao clicar.', 'Detail panel on click.'] },
   { id: 'navbar', title: ['Navbar', 'Navbar'], icon: 'layout-navbar', group: 'components', desc: ['Cabeçalho fixo com vidro fosco.', 'Fixed frosted-glass header.'] },
 ]
 
@@ -144,6 +145,7 @@ const SWATCHES: Record<string, Swatch[]> = {
     { token: '--color-bg-light', name: 'Background alt', tw: 'bg-bg-light' },
     { token: '--color-surface', name: 'Surface', tw: 'bg-surface' },
     { token: '--color-surface-hover', name: 'Surface hover', tw: 'bg-surface-hover' },
+    { token: '--color-surface-light', name: 'Surface (faixa clara)', tw: 'bg-surface-light' },
     { token: '--glass-bg', name: 'Glass' },
     { token: '--color-border', name: 'Border', tw: 'border' },
   ],
@@ -156,6 +158,7 @@ const SWATCHES: Record<string, Swatch[]> = {
   brand: [
     { token: '--color-accent', name: 'Accent', tw: 'bg-accent', on: '--color-bg-dark' },
     { token: '--color-accent-hover', name: 'Accent hover', tw: 'bg-accent-hover', on: '--color-bg-dark' },
+    { token: '--color-accent-text', name: 'Accent text', tw: 'text-accent-text', on: '--color-bg-dark' },
     { token: '--color-accent-muted', name: 'Accent muted', tw: 'bg-accent-muted' },
     { token: '--color-on-accent', name: 'On accent', tw: 'text-on-accent', on: '--color-accent' },
   ],
@@ -209,7 +212,8 @@ const TYPE_SCALE: { role: string; cls: string; style: string; token: string; sam
   { role: 'Heading XL', cls: 'font-serif', style: 'font-size:var(--text-7xl);font-weight:700;line-height:0.95', token: '--text-7xl', sample: ['Obrigado por <em>assistir.</em>', 'Thanks for <em>watching.</em>'], use: ['CTA do footer', 'Footer CTA'] },
   { role: 'Heading L', cls: 'font-serif', style: 'font-size:var(--text-5xl);font-weight:700;line-height:1.1', token: '--text-5xl', sample: ['Design como ponte', 'Design as a bridge'], use: ['Títulos de seção e de case', 'Section and case titles'] },
   { role: 'Heading M', cls: 'font-serif', style: 'font-size:var(--text-4xl);font-weight:700;line-height:1.1', token: '--text-4xl', sample: ['Impacto do projeto', 'Project impact'], use: ['Números de métricas, subtítulos', 'Metric numbers, subheads'] },
-  { role: 'Heading S', cls: 'font-serif', style: 'font-size:var(--text-xl);font-weight:700;line-height:var(--leading-tight)', token: '--text-xl', sample: ['Título do projeto', 'Project title'], use: ['Título de card', 'Card title'] },
+  { role: 'Heading S', cls: 'font-serif', style: 'font-size:var(--text-2xl);font-weight:700;line-height:var(--leading-tight)', token: '--text-2xl', sample: ['Experiência', 'Experience'], use: ['Título de coluna', 'Column title'] },
+  { role: 'Heading XS', cls: 'font-serif', style: 'font-size:var(--text-xl);font-weight:700;line-height:var(--leading-tight)', token: '--text-xl', sample: ['Título do projeto', 'Project title'], use: ['Título de card', 'Card title'] },
   { role: 'Body L', cls: '', style: 'font-size:var(--text-lg);line-height:1.8', token: '--text-lg', sample: ['Texto estratégico e overview dos cases.', 'Strategy copy and case overviews.'], use: ['Parágrafos de destaque', 'Lead paragraphs'] },
   { role: 'Body', cls: '', style: 'font-size:var(--text-base);line-height:var(--leading-relaxed)', token: '--text-base', sample: ['15 anos criando produtos digitais que conectam pessoas.', '15 years building digital products that connect people.'], use: ['Texto corrido', 'Running text'] },
   { role: 'Body S', cls: '', style: 'font-size:var(--text-sm);line-height:var(--leading-relaxed)', token: '--text-sm', sample: ['Descrição de card, botões e navegação.', 'Card descriptions, buttons and navigation.'], use: ['UI, botões, cards', 'UI, buttons, cards'] },
@@ -394,7 +398,7 @@ const SPECS: Record<string, Spec> = {
       return [
         { part: C, prop: 'background', token: v === 'primary' ? '--color-accent' : v === 'ghost' && p.state === 'hover' ? '--alpha-5' : 'transparent' },
         { part: C, prop: 'border-color', token: v === 'secondary' ? (p.state === 'hover' ? '--alpha-40' : '--alpha-15') : v === 'outline' ? (p.state === 'hover' ? '--color-accent' : '--alpha-15') : 'transparent' },
-        { part: Lb, prop: 'color', token: v === 'primary' ? '--color-on-accent' : v === 'secondary' ? '--color-text-primary-dark' : p.state === 'hover' ? (v === 'ghost' ? '--color-text-primary-dark' : '--color-accent') : '--color-text-muted-dark' },
+        { part: Lb, prop: 'color', token: v === 'primary' ? '--color-on-accent' : v === 'secondary' ? '--color-text-primary-dark' : p.state === 'hover' ? (v === 'ghost' ? '--color-text-primary-dark' : '--color-accent-text') : '--color-text-muted-dark' },
         { part: C, prop: 'height', token: v === 'link' ? 'auto' : `--control-${size}` },
         { part: C, prop: 'padding-inline', token: v === 'link' || p.icon === 'only' ? '0' : size === 'sm' ? '--space-4' : size === 'lg' ? '--space-8' : '--space-6' },
         { part: C, prop: 'gap', token: '--space-2' },
@@ -403,7 +407,7 @@ const SPECS: Record<string, Spec> = {
         { part: Lb, prop: 'font-family', token: '--font-sans' },
         { part: Lb, prop: 'font-size', token: size === 'lg' ? '--text-base' : '--text-sm' },
         { part: Lb, prop: 'font-weight', token: v === 'primary' ? '--weight-semibold' : v === 'link' ? '--weight-regular' : '--weight-medium' },
-        { part: P.focus(), prop: 'outline', token: '--color-accent' },
+        { part: P.focus(), prop: 'outline', token: '--color-accent-text' },
         { part: P.motion(), prop: 'transition', token: '--duration-base' },
       ]
     },
@@ -441,7 +445,7 @@ const SPECS: Record<string, Spec> = {
       const v = p.variant
       const tone = String(p.tone)
       const C = P.container(), Lb = P.label()
-      const fg = v === 'status' ? `--color-${tone}` : v === 'label' ? '--color-accent' : v === 'dot' ? '--color-text-muted-dark' : p.state === 'hover' ? '--color-accent' : '--color-text-primary-dark'
+      const fg = v === 'status' ? `--color-${tone}` : v === 'label' ? '--color-accent-text' : v === 'dot' ? '--color-text-muted-dark' : p.state === 'hover' ? '--color-accent-text' : '--color-text-primary-dark'
       const bg = v === 'status' ? `--color-${tone}-bg` : v === 'label' || (v === 'tag' && p.state === 'hover') ? '--color-accent-muted' : '--alpha-5'
       const border = v === 'status' ? `--color-${tone} · 20%` : v === 'label' ? '--color-accent · 25%' : v === 'dot' ? '--alpha-10' : p.state === 'hover' ? '--color-accent' : '--alpha-15'
       const rows: TokenRow[] = [
@@ -590,7 +594,7 @@ const SPECS: Record<string, Spec> = {
       return [
         { part: P.label(), prop: 'color', token: '--color-text-muted-dark' },
         { part: P.label(), prop: 'letter-spacing', token: '--tracking-widest' },
-        { part: F, prop: 'border-color', token: err ? '--color-error' : p.state === 'focus' ? '--color-accent' : p.state === 'hover' ? '--alpha-40' : '--color-border' },
+        { part: F, prop: 'border-color', token: err ? '--color-error' : p.state === 'focus' ? '--color-accent-text' : p.state === 'hover' ? '--alpha-40' : '--color-border' },
         { part: F, prop: L('box-shadow (foco)', 'box-shadow (focus)'), token: err ? '--color-error-bg' : '--color-accent-muted' },
         { part: F, prop: 'border-radius', token: '--radius-sm' },
         { part: F, prop: 'height', token: p.size === 'sm' ? '--control-sm' : '3rem' },
@@ -605,16 +609,24 @@ const SPECS: Record<string, Spec> = {
 
   card: {
     controls: [
-      { type: 'radio', key: 'variant', label: ['Variante', 'Variant'], options: [['lead', 'Lead'], ['case', 'Case'], ['metric', ['Métrica', 'Metric']]] },
+      { type: 'radio', key: 'variant', label: ['Variante', 'Variant'], options: [['lead', 'Lead'], ['case', 'Case'], ['metric', ['Métrica', 'Metric']], ['item', 'Item']] },
+      { type: 'switch', key: 'interactive', label: ['Clicável (botão)', 'Clickable (button)'], when: p => p.variant === 'item' },
+      { type: 'switch', key: 'expanded', label: ['Expandido', 'Expanded'], when: p => p.variant === 'item' && !!p.interactive },
       { type: 'switch', key: 'icon', label: ['Ícone', 'Icon'], when: p => p.variant === 'lead' },
       { type: 'switch', key: 'accent', label: ['Valor em accent', 'Accent value'], when: p => p.variant === 'metric' },
       { type: 'radio', key: 'state', label: ['Estado', 'State'], options: [['default', 'Default'], ['hover', 'Hover'], ['focus', 'Focus']], when: p => p.variant !== 'metric' },
     ],
-    defaults: { variant: 'case', icon: true, accent: true, state: 'default' },
+    defaults: { variant: 'case', icon: true, accent: true, state: 'default', interactive: true, expanded: false },
     render: p => {
       const st = p.variant === 'metric' ? '' : stateClass(p.state)
       if (p.variant === 'lead') {
         return `<div class="ui-card ui-card--lead${st}" data-ds-root>${p.icon ? `<i class="ti ti-users ui-card__icon" aria-hidden="true"></i>` : ''}<h3 class="ui-card__title">Leadership &amp; Culture</h3><p class="ui-card__text">${L('Liderança de times multidisciplinares, rituais de design e desenvolvimento de pessoas.', 'Leading multidisciplinary teams, design rituals and people development.')}</p></div>`
+      }
+      if (p.variant === 'item') {
+        const inner = `<span class="ui-card__dot" aria-hidden="true"></span><span><span class="ui-card__name">Daycoval</span><span class="ui-card__meta">${L('2025 – Atual · Banking', '2025 – Present · Banking')}</span></span>`
+        return p.interactive
+          ? `<button type="button" class="ui-card ui-card--item${st}" aria-expanded="${!!p.expanded}" data-ds-root>${inner}</button>`
+          : `<div class="ui-card ui-card--item" data-ds-root>${inner}</div>`
       }
       if (p.variant === 'metric') {
         return `<div class="ui-card ui-card--metric" data-ds-root><p class="ui-card__metric${p.accent ? ' is-accent' : ''}">230K</p><p class="ui-card__text">${L('usuários ativos na plataforma em 2023', 'active users on the platform in 2023')}</p></div>`
@@ -627,6 +639,12 @@ const SPECS: Record<string, Spec> = {
         ...(p.icon ? [{ label: P.icon(), selector: '.ui-card__icon', note: L('30px, accent', '30px, accent') }] : []),
         { label: P.title(), selector: '.ui-card__title', note: 'Inter semibold' },
         { label: P.desc(), selector: '.ui-card__text', note: L('Texto muted, leading relaxed', 'Muted text, relaxed leading') },
+      ]
+      if (p.variant === 'item') return [
+        { label: P.container(), selector: '.ui-card', note: L('Item de lista; como <button> abre um Popover', 'List entry; as a <button> it opens a Popover') },
+        { label: L('Indicador', 'Indicator'), selector: '.ui-card__dot', note: L('Accent quando expandido', 'Accent when expanded') },
+        { label: L('Nome', 'Name'), selector: '.ui-card__name', note: 'Inter semibold' },
+        { label: 'Meta', selector: '.ui-card__meta', note: L('Período, segmento', 'Period, industry') },
       ]
       if (p.variant === 'metric') return [
         { label: P.container(), selector: '.ui-card', note: L('Centralizado, padding generoso', 'Centered, generous padding') },
@@ -648,10 +666,19 @@ const SPECS: Record<string, Spec> = {
         { part: C, prop: 'border-color', token: p.state === 'hover' ? '--color-accent' : '--alpha-10' },
         { part: C, prop: 'border-radius', token: '--radius-md' },
         { part: C, prop: 'padding', token: '--space-6 --space-8' },
-        { part: P.icon(), prop: 'color', token: '--color-accent' },
+        { part: P.icon(), prop: 'color', token: '--color-accent-text' },
         { part: T, prop: 'font-size', token: '--text-base' },
         { part: D, prop: 'color', token: '--color-text-muted-dark' },
         { part: D, prop: 'font-size', token: '--text-sm' },
+      ]
+      if (p.variant === 'item') return [
+        { part: C, prop: 'background', token: '--color-surface' },
+        { part: C, prop: 'border-color', token: p.interactive && p.expanded ? '--color-accent-text' : p.interactive && p.state === 'hover' ? '--alpha-40' : '--color-border' },
+        { part: C, prop: 'border-radius', token: '--radius-base' },
+        { part: C, prop: 'padding', token: '--space-4' },
+        { part: C, prop: 'gap', token: '--space-4' },
+        { part: L('Indicador', 'Indicator'), prop: 'background', token: p.interactive && p.expanded ? '--color-accent' : '--alpha-20' },
+        { part: 'Meta', prop: 'color', token: '--color-text-muted-dark' },
       ]
       if (p.variant === 'metric') return [
         { part: C, prop: 'background', token: '--alpha-5' },
@@ -659,7 +686,7 @@ const SPECS: Record<string, Spec> = {
         { part: C, prop: 'border-radius', token: '--radius-md' },
         { part: C, prop: 'padding', token: '--space-10 --space-6' },
         { part: L('Valor', 'Value'), prop: 'font-family', token: '--font-serif' },
-        { part: L('Valor', 'Value'), prop: 'color', token: p.accent ? '--color-accent' : '--color-text-primary-dark' },
+        { part: L('Valor', 'Value'), prop: 'color', token: p.accent ? '--color-accent-text' : '--color-text-primary-dark' },
         { part: D, prop: 'color', token: '--color-text-muted-dark' },
       ]
       return [
@@ -709,7 +736,7 @@ const SPECS: Record<string, Spec> = {
         { part: L('Índice', 'Index'), prop: 'font-size', token: '--text-xs' },
         { part: Ct, prop: 'color', token: '--color-text-muted-dark' },
         { part: Ct, prop: 'font-size', token: '--text-sm' },
-        { part: P.focus(), prop: 'outline', token: '--color-accent' },
+        { part: P.focus(), prop: 'outline', token: '--color-accent-text' },
       ]
     },
     bind: (stage, p, set) => {
@@ -754,6 +781,41 @@ const SPECS: Record<string, Spec> = {
         { part: 'Swatch', prop: 'background', token: '--color-accent' },
         { part: P.motion(), prop: 'transition', token: '--duration-fast' },
       ]
+    },
+  },
+
+  popover: {
+    controls: [
+      { type: 'switch', key: 'open', label: ['Aberto', 'Open'] },
+      { type: 'switch', key: 'title', label: ['Título', 'Title'] },
+      { type: 'radio', key: 'state', label: ['Estado do gatilho', 'Trigger state'], options: [['default', 'Default'], ['hover', 'Hover'], ['focus', 'Focus']] },
+    ],
+    defaults: { open: true, title: true, state: 'default' },
+    measure: '.ui-popover',
+    render: p => `<div class="ui-popover-wrap" data-ds-root>
+        <button type="button" class="ui-card ui-card--item${stateClass(p.state)}" aria-expanded="${!!p.open}" aria-controls="ds-pop"><span class="ui-card__dot" aria-hidden="true"></span><span><span class="ui-card__name">Decathlon</span><span class="ui-card__meta">2025 · Retail</span></span></button>
+        <div class="ui-popover" id="ds-pop"${p.open ? '' : ' hidden'}>${p.title ? `<p class="ui-popover__title">Consulting Product Designer</p>` : ''}<p class="ui-popover__text">${L('Redesenho do programa de benefícios, gerando novas oportunidades de negócio.', 'Redesign of the benefits program, opening new business opportunities.')}</p></div>
+      </div>`,
+    anatomy: p => [
+      { label: L('Gatilho', 'Trigger'), selector: '.ui-card--item', note: L('<button> com aria-expanded e aria-controls', '<button> with aria-expanded and aria-controls') },
+      ...(p.open ? [{ label: L('Painel', 'Panel'), selector: '.ui-popover', note: L('Flutua sob o gatilho; Esc e clique fora fecham', 'Floats under the trigger; Esc and outside click close it') }] : []),
+      ...(p.open && p.title ? [{ label: P.title(), selector: '.ui-popover__title', note: 'Inter semibold' }] : []),
+    ],
+    tokens: () => {
+      const Pn = L('Painel', 'Panel')
+      return [
+        { part: Pn, prop: 'background', token: '--color-surface' },
+        { part: Pn, prop: 'border-color', token: '--alpha-15' },
+        { part: Pn, prop: 'box-shadow', token: '--shadow-md' },
+        { part: Pn, prop: 'border-radius', token: '--radius-base' },
+        { part: Pn, prop: 'padding', token: '--space-5' },
+        { part: Pn, prop: L('distância do gatilho', 'offset from trigger'), token: '--space-2' },
+        { part: P.title(), prop: 'font-size', token: '--text-sm' },
+        { part: P.desc(), prop: 'color', token: '--color-text-muted-dark' },
+      ]
+    },
+    bind: (stage, p, set) => {
+      stage.querySelector('.ui-card--item')?.addEventListener('click', () => set({ open: !p.open }, true))
     },
   },
 

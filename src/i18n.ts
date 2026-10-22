@@ -33,10 +33,11 @@ function applyTranslations(lang: Lang): void {
   document.querySelectorAll<HTMLElement>('[data-lang-btn]').forEach((btn) => {
     const btnLang = btn.getAttribute('data-lang-btn')
     if (btnLang === lang) {
-      btn.classList.add('text-accent', 'font-bold')
-      btn.classList.remove('text-text-muted-dark')
+      // 'text-accent' may still be in older page markup; lime as text uses accent-text.
+      btn.classList.remove('text-accent', 'text-text-muted-dark')
+      btn.classList.add('text-accent-text', 'font-bold')
     } else {
-      btn.classList.remove('text-accent', 'font-bold')
+      btn.classList.remove('text-accent', 'text-accent-text', 'font-bold')
       btn.classList.add('text-text-muted-dark')
     }
   })

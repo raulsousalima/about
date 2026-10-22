@@ -19,6 +19,8 @@ export default {
         'accent-hover':         'var(--color-accent-hover)',
         'accent-muted':         'var(--color-accent-muted)',
         'on-accent':            'var(--color-on-accent)',
+        'accent-text':          'var(--color-accent-text)',
+        'surface-light':        'var(--color-surface-light)',
         'success':              'var(--color-success)',
         'success-bg':           'var(--color-success-bg)',
         'warning':              'var(--color-warning)',

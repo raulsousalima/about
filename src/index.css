@@ -25,6 +25,9 @@
   --color-accent-hover:#D4F475;
   --color-accent-muted:rgba(200,240,78,0.15);
   --color-accent-2:    #E8E8E8;
+  /* Lime as text, focus ring or thin line: needs 4.5:1 on light grounds */
+  --color-accent-text: #C8F04E;
+  --color-surface-light: #FFFFFF;
 
   --particle-rgb: 255,255,255;
 
@@ -76,6 +79,8 @@
   --color-accent: #A7D226;
   --color-accent-hover: #A0C530;
   --color-accent-muted: rgba(167,210,38,0.30);
+  --color-accent-text: #4F6B00;
+  --color-surface-light: #FFFFFF;
 
   --particle-rgb: 17,17,17;
 
@@ -117,6 +122,8 @@
    token and its utility class always resolve to the same value. */
 :root {
   --color-on-accent: #111111;
+  --overlay-scrim: rgba(0,0,0,0.2);
+  --overlay-scrim-hover: rgba(0,0,0,0.1);
 
   /* Spacing — 4px base */
   --space-0:  0;
@@ -212,6 +219,9 @@
   --color-accent-hover:#D4F475;
   --color-accent-muted:rgba(200,240,78,0.15);
   --color-accent-2:    #E8E8E8;
+  /* Lime as text, focus ring or thin line: needs 4.5:1 on light grounds */
+  --color-accent-text: #C8F04E;
+  --color-surface-light: #FFFFFF;
 
   --alpha-5:  rgba(255,255,255,0.05);
   --alpha-10: rgba(255,255,255,0.10);
@@ -227,6 +237,12 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
+
+/* Keyboard focus for anything not drawn by a ui-* component (they set their own). */
+:where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
+  outline: var(--border-2) solid var(--color-accent-text);
+  outline-offset: 2px;
+}
 
 body {
   font-family: var(--font-sans);
@@ -267,7 +283,21 @@ html.pa-locked body { visibility: hidden; }
 }
 
 /* Light section */
+/* Light band: stays light in both themes, so it remaps the theme tokens
+   locally (like #hero-sequence does for dark) and ui-* components inside it
+   pick up light surfaces, text and borders without extra classes. */
 .section-light {
+  --color-surface:            var(--color-surface-light);
+  --color-surface-hover:      #F8F8F8;
+  --color-border:             rgba(0,0,0,0.08);
+  --color-text-primary-dark:  var(--color-text-primary-light);
+  --color-text-muted-dark:    var(--color-text-muted-light);
+  --color-accent-text:        #4F6B00;
+  --alpha-5:  rgba(0,0,0,0.03);
+  --alpha-10: rgba(0,0,0,0.06);
+  --alpha-15: rgba(0,0,0,0.12);
+  --alpha-20: rgba(0,0,0,0.20);
+  --alpha-40: rgba(0,0,0,0.35);
   background: var(--color-bg-light);
   color: var(--color-text-primary-light);
 }
@@ -285,7 +315,7 @@ html.pa-locked body { visibility: hidden; }
   background: var(--alpha-5);
   transition: background 0.2s, border-color 0.2s;
 }
-.tag:hover { background: rgba(200,240,78,0.12); border-color: var(--color-accent); color: var(--color-accent); }
+.tag:hover { background: var(--color-accent-muted); border-color: var(--color-accent); color: var(--color-accent-text); }
 
 /* Case card */
 .case-card {
@@ -298,6 +328,13 @@ html.pa-locked body { visibility: hidden; }
 /* Reveal animation */
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
+/* ui-card sets its own transition; keep the reveal fade on cards that use both. */
+.ui-card.reveal {
+  transition: opacity var(--duration-reveal) var(--ease-standard), transform var(--duration-reveal) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard), background-color var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-slow) var(--ease-standard);
+}
+.ui-card.reveal.visible { transition-duration: var(--duration-reveal), var(--duration-slow), var(--duration-base), var(--duration-base), var(--duration-slow); }
 
 /* Accent underline for headings */
 .heading-accent::after {
@@ -318,7 +355,7 @@ html.pa-locked body { visibility: hidden; }
   padding: 1.5rem 2rem;
   transition: border-color 0.2s, background 0.2s;
 }
-.lead-card:hover { border-color: var(--color-accent); background: rgba(200,240,78,0.04); }
+.lead-card:hover { border-color: var(--color-accent); background: color-mix(in srgb, var(--color-accent) 4%, transparent); }
 
 /* Typewriter cursor effect */
 .typewriter-cursor {
@@ -339,7 +376,7 @@ html.pa-locked body { visibility: hidden; }
 /* Scrollbar (optional polish) */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--color-bg-dark); }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--alpha-20); border-radius: 3px; }
 
 
 /* ==================== Case Study Page =================== */
@@ -373,8 +410,8 @@ html.pa-locked body { visibility: hidden; }
   letter-spacing: 0.04em;
   text-transform: uppercase;
   background: var(--color-accent-muted);
-  color: var(--color-accent);
-  border: 1px solid rgba(200,240,78,0.25);
+  color: var(--color-accent-text);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 25%, transparent);
 }
 
 /* Process timeline */
