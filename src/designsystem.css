@@ -83,6 +83,10 @@
 .ds-page[hidden] { display: none; }
 .ds-page > * + * { margin-top: var(--space-6); }
 
+/* Overview banner: media container pattern (1px border, --radius-lg). */
+.ds-banner { display: block; width: 100%; height: auto; border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-bg-dark); }
+.ds-page > .ds-banner + .ds-crumb { margin-top: var(--space-8); }
+@media (max-width: 640px) { .ds-banner { border-radius: var(--radius-md); } .ds-page > .ds-banner + .ds-crumb { margin-top: var(--space-6); } }
 .ds-crumb { font-size: var(--text-xs); color: var(--color-text-muted-dark); letter-spacing: var(--tracking-widest); text-transform: uppercase; }
 .ds-title { font-family: var(--font-serif); font-size: clamp(2.25rem, 5vw, 3rem); font-weight: var(--weight-bold); line-height: 1.1; margin-top: var(--space-3) !important; }
 .ds-lead { font-size: var(--text-lg); line-height: var(--leading-relaxed); color: var(--color-text-muted-dark); max-width: 44rem; }
