@@ -339,7 +339,7 @@ const ACCENTS: [string, string, string][] = [
   ['#C8F04E', 'Lime', 'Lime'], ['#2DD4BF', 'Turquesa', 'Teal'], ['#60A5FA', 'Azul', 'Blue'],
   ['#FB923C', 'Laranja', 'Orange'], ['#F472B6', 'Rosa', 'Pink'], ['#A78BFA', 'Violeta', 'Violet'],
 ]
-// 'padrao' is the DS pairing: Playfair on titles and figures (--sim-font-title), Inter on body.
+// 'padrao' is the DS pairing: Playfair on titles (--sim-font-title), Inter on body and figures.
 // Any other choice sets one family for both.
 const FONTS: Record<Exclude<Tokens['font'], 'padrao'>, [string, string]> = {
   inter: ['Inter', "'Inter', sans-serif"],

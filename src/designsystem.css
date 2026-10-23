@@ -400,6 +400,11 @@
 }
 .sim-device {
   --sim-device-radius: 3rem;
+  /* Card art keeps the library curve whatever the panel's Raio says: custom
+     properties resolve here, outside the .sim-app overrides, and inherit fixed. */
+  --sim-card-radius: var(--radius-md);
+  --sim-card-chip-radius: var(--radius-xs);
+  --sim-card-slot-radius: var(--radius-sm);
   width: 23rem; flex-shrink: 0; border: var(--border-frame) solid var(--color-device-frame); border-radius: var(--sim-device-radius);
   background: var(--color-device-frame); box-shadow: 0 0 0 1px var(--alpha-15), var(--shadow-xl);
 }
@@ -408,7 +413,7 @@
   border-radius: calc(var(--sim-device-radius) - var(--border-frame));
   background: var(--color-bg-dark); color: var(--color-text-primary-dark);
   font-family: var(--font-sans); font-size: var(--text-sm); line-height: var(--leading-normal);
-  /* DS pairing: Playfair for titles and key figures, Inter for everything else. */
+  /* DS pairing: Playfair for titles, Inter for everything else (balances included). */
   --sim-font-title: var(--font-serif);
 }
 .sim-app button { font-family: inherit; }
@@ -440,7 +445,7 @@
 .sim-brand--lg .sim-brand__name { font-size: var(--text-3xl); }
 
 /* Type */
-.sim-h1, .sim-h2, .sim-h3, .sim-balance, .sim-empty strong { font-family: var(--sim-font-title); }
+.sim-h1, .sim-h2, .sim-h3, .sim-empty strong { font-family: var(--sim-font-title); }
 .sim-h1 { font-size: var(--text-2xl); font-weight: var(--weight-semibold); line-height: var(--leading-tight); }
 .sim-h2 { font-size: var(--text-xl); font-weight: var(--weight-semibold); line-height: var(--leading-tight); }
 .sim-h3 { font-size: var(--text-base); font-weight: var(--weight-semibold); margin-top: var(--space-2); }
@@ -456,14 +461,14 @@
 /* Card art */
 .sim-card {
   display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 1fr auto; gap: var(--space-2);
-  width: 13rem; aspect-ratio: 1.586; padding: var(--space-4); border-radius: var(--radius-md);
+  width: 13rem; aspect-ratio: 1.586; padding: var(--space-4); border-radius: var(--sim-card-radius);
   background: linear-gradient(135deg, var(--color-surface-hover), var(--color-bg-dark));
   border: var(--border-1) solid var(--alpha-15); box-shadow: var(--shadow-xl); color: var(--color-text-primary-dark);
   font-size: var(--text-xs);
 }
 .sim-card__top { grid-column: 1 / -1; display: inline-flex; align-items: center; gap: var(--space-1); font-weight: var(--weight-semibold); }
 .sim-card__top .sim-icon { width: 1.25rem; height: 1.25rem; }
-.sim-card__chip { align-self: center; width: 2rem; height: 1.5rem; border-radius: var(--radius-xs); background: var(--alpha-20); }
+.sim-card__chip { align-self: center; width: 2rem; height: 1.5rem; border-radius: var(--sim-card-chip-radius); background: var(--alpha-20); }
 .sim-card__num { grid-column: 1; letter-spacing: var(--tracking-wide); }
 .sim-card__tier { grid-column: 2; color: var(--color-text-muted-dark); }
 .sim-card--float { transform: rotate(-8deg); animation: sim-float 6s var(--ease-standard) infinite; }
@@ -578,7 +583,7 @@
 }
 .sim-cards__item > strong { margin-top: var(--space-1); font-weight: var(--weight-semibold); }
 .sim-cards__add, .sim-cards__more { display: grid; place-items: center; height: 3.8rem; font-size: 1.25rem; }
-.sim-cards__add { width: 6rem; border: var(--border-1) dashed var(--alpha-40); border-radius: var(--radius-sm); }
+.sim-cards__add { width: 6rem; border: var(--border-1) dashed var(--alpha-40); border-radius: var(--sim-card-slot-radius); }
 .sim-cards__more { width: 3.8rem; border-radius: var(--radius-pill); background: var(--alpha-10); }
 
 .sim-empty { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); padding-top: var(--space-16); text-align: center; }
