@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" class="pa-locked">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalion: From Code to System, a Design System Built with AI | Raul Lima</title>
+  <meta name="description"
+    content="Case study: a working design system built and maintained with AI, validated on a real site and used as the MVP for Kalion. 20 issues mapped and fixed." />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>R</text></svg>" />
+  <!-- Tabler Icons Standard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+
+<body>
+
+  <!-- ======================================
+       NAVIGATION (same as index.html)
+  ======================================= -->
+  <header id="home" class="fixed top-0 inset-x-0 z-50 glass-nav">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
+      <a href="../index.html"
+        class="flex items-center justify-center w-9 h-9 rounded-full bg-accent font-bold text-sm text-on-accent leading-none select-none transition-transform hover:scale-105">R</a>
+
+      <!-- Nav links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-text-muted-dark">
+        <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+        <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+          data-i18n="nav.experience">Experiência</a>
+        <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.skills">Competências</a>
+        <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+      </nav>
+
+      <!-- Social + CTA + Lang Toggle -->
+      <div class="flex items-center gap-4">
+        <!-- Language Toggle -->
+        <div class="flex items-center gap-1 text-xs font-medium">
+          <button data-lang-btn="en"
+            class="px-2 py-1 rounded-full transition-all text-accent-text font-bold cursor-pointer hover:opacity-80">EN</button>
+          <span class="text-text-muted-dark opacity-50">|</span>
+          <button data-lang-btn="pt"
+            class="px-2 py-1 rounded-full transition-all text-text-muted-dark cursor-pointer hover:opacity-80">PT</button>
+        </div>
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="text-text-muted-dark hover:text-text-primary-dark transition-colors mx-1" aria-label="Toggle Theme">
+          <i class="ti ti-moon text-2xl" aria-hidden="true" id="theme-icon"></i>
+        </button>
+        <!-- LinkedIn -->
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-linkedin text-2xl" aria-hidden="true"></i>
+        </a>
+        <!-- Behance -->
+        <a href="https://www.behance.net/raulsousa" target="_blank" rel="noopener" aria-label="Behance"
+          class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
+          <i class="ti ti-brand-behance text-2xl" aria-hidden="true"></i>
+        </a>
+        <span class="hidden md:inline-flex">
+          <a href="mailto:raul.sousa.work@gmail.com" class="ui-btn ui-btn--outline ui-btn--sm">
+            <i class="ti ti-mail" aria-hidden="true"></i><span data-i18n="nav.contact">Contato</span>
+          </a>
+        </span>
+      </div>
+    </div>
+  </header>
+
+
+  <main class="pt-[72px]">
+
+    <!-- ======================================
+         CASE HERO
+    ======================================= -->
+    <section class="pt-[60px] pb-16">
+      <div class="max-w-7xl mx-auto px-6">
+        <!-- Back button -->
+        <a href="../index.html#cases" class="ui-btn ui-btn--link mb-6">
+          <i class="ti ti-arrow-left" aria-hidden="true"></i><span data-i18n="case.back">Voltar</span>
+        </a>
+
+        <!-- Case title -->
+        <h1 class="font-serif text-4xl md:text-5xl font-bold mb-[60px] heading-accent reveal"
+          data-i18n="case.kalion.title">Do Código ao Sistema: um Design System Construído com IA</h1>
+      </div>
+
+      <!-- Hero banner: FULL WIDTH -->
+      <div class="case-hero-banner reveal" style="background-image: url('../img/cases/kalion/bannerhero.jpg'); border-radius: 0;">
+        <div class="absolute inset-0 bg-black/40 z-0"></div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         OVERVIEW
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-[280px_1fr] gap-12 items-start reveal">
+          <!-- Logo Kalion (Dinâmico Dark/Light) -->
+          <div class="case-img-placeholder p-8">
+            <img src="../img/cases/kalion/logo_dark.svg" alt="Kalion" class="show-in-dark" style="max-width: 220px; height: auto;" />
+            <img src="../img/cases/kalion/logo_light.svg" alt="Kalion" class="show-in-light" style="max-width: 220px; height: auto;" />
+          </div>
+          <div class="flex flex-col gap-4">
+            <span class="ui-badge ui-badge--tag self-start" data-i18n="case.kalion.overview.role">Design System · Design AI Engineer</span>
+            <p class="text-lg md:text-xl leading-relaxed text-text-muted-dark" data-i18n="case.kalion.overview.company">A Kalion é uma plataforma digital para pequenas empresas criarem e gerenciarem a presença online sem montar um site completo nem contratar várias ferramentas separadas.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         CONTEXT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-4xl reveal">
+          <h2 class="font-serif text-4xl md:text-5xl font-bold mb-8 heading-accent" data-i18n="case.kalion.context.title">Contexto</h2>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.kalion.context.p1">O projeto nasceu da necessidade de uma <strong class="text-text-primary-dark">base de design system reutilizável</strong> para produtos como a Kalion. Em vez de começar em um protótipo isolado, usei um ambiente real como laboratório: o meu próprio portfólio.</p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mb-6" data-i18n="case.kalion.context.p2">O design system tinha dois objetivos: <strong class="text-text-primary-dark">manter a consistência visual do site Raul Lima</strong> e servir como <strong class="text-text-primary-dark">MVP para a Kalion</strong>, já validado em produção, com tokens, componentes documentados e regras de uso.</p>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark" data-i18n="case.kalion.context.p3">Todo o trabalho foi feito em parceria com IA: a auditoria, o código dos componentes, a documentação interativa e as rotinas que verificam se o sistema continua sendo usado do jeito certo.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         CHALLENGE
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
+          <div class="reveal">
+            <div class="case-img-placeholder aspect-square" style="max-width: 480px;">
+              <img src="../img/cases/kalion/auditoria.jpg" alt="Trecho da auditoria visual: popover da experiência sem borda, com a correção pelo design system" />
+            </div>
+          </div>
+
+          <div class="reveal">
+            <span class="ui-badge ui-badge--label mb-6" data-i18n="case.kalion.challenge.label">Desafio</span>
+            <p class="text-lg md:text-xl leading-relaxed mt-6 mb-6" data-i18n="case.kalion.challenge.intro">O desafio era <strong>transformar um site que cresceu página a página em um sistema</strong>, sem tirar o site do ar e sem perder o que já funcionava.</p>
+            <p class="text-base leading-relaxed text-text-muted-dark mb-6" data-i18n="case.kalion.challenge.research">Para isso foi preciso resolver frentes técnicas e de processo ao mesmo tempo:</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start gap-3 text-text-muted-dark"><span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0" aria-hidden="true"></span><span data-i18n="case.kalion.challenge.list.1">Identificar as inconsistências visuais e de acessibilidade espalhadas pelas páginas</span></li>
+              <li class="flex items-start gap-3 text-text-muted-dark"><span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0" aria-hidden="true"></span><span data-i18n="case.kalion.challenge.list.2">Migrar a aplicação atual para o design system, página por página</span></li>
+              <li class="flex items-start gap-3 text-text-muted-dark"><span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0" aria-hidden="true"></span><span data-i18n="case.kalion.challenge.list.3">Entender a linguagem e o ambiente (HTML, Tailwind, Vite) e as limitações de cada um</span></li>
+              <li class="flex items-start gap-3 text-text-muted-dark"><span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0" aria-hidden="true"></span><span data-i18n="case.kalion.challenge.list.4">Decidir a estratégia de construção: tokens, componentes e como documentá-los</span></li>
+              <li class="flex items-start gap-3 text-text-muted-dark"><span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0" aria-hidden="true"></span><span data-i18n="case.kalion.challenge.list.5">Criar skills que validam o uso dos componentes reutilizáveis</span></li>
+              <li class="flex items-start gap-3 text-text-muted-dark"><span class="w-1.5 h-1.5 rounded-full bg-accent mt-2.5 flex-shrink-0" aria-hidden="true"></span><span data-i18n="case.kalion.challenge.list.6">Definir uma manutenção eficiente, com verificação antes de qualquer componente novo chegar ao site</span></li>
+            </ul>
+            <p class="text-base leading-relaxed text-text-muted-dark" data-i18n="case.kalion.challenge.conclusion">Mais do que desenhar componentes, era preciso <strong class="text-text-primary-dark">garantir que eles continuassem sendo usados</strong> depois da entrega.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         GALLERY: before / after
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal flex flex-col items-start md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <span class="ui-badge ui-badge--label mb-4" data-i18n="case.kalion.gallery.label">Galeria</span>
+            <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.kalion.gallery.intro">A home antes e depois do design system. Mesmo conteúdo, agora com componentes, tokens e estados consistentes nos dois temas.</p>
+          </div>
+          <div class="ui-segmented" role="radiogroup" aria-label="Comparar versões da home" data-segmented-panels>
+            <button type="button" role="radio" class="ui-segmented__item" aria-checked="true" tabindex="0" aria-controls="kalion-before"><span data-i18n="case.kalion.gallery.before">Antes</span></button>
+            <button type="button" role="radio" class="ui-segmented__item" aria-checked="false" tabindex="-1" aria-controls="kalion-after"><span data-i18n="case.kalion.gallery.after">Depois</span></button>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div id="kalion-before" class="case-board-frame case-board-scroll" tabindex="0" aria-label="Home antes do design system">
+            <img src="../img/cases/kalion/site-antes.jpg" alt="Home do site antes da migração para o design system" loading="lazy" />
+          </div>
+          <div id="kalion-after" class="case-board-frame case-board-scroll" tabindex="0" aria-label="Home depois do design system" hidden>
+            <img src="../img/cases/kalion/site-depois.jpg" alt="Home do site depois da migração para o design system" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         PROCESS
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="ui-badge ui-badge--label mb-4" data-i18n="case.kalion.process.label">Processo</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.kalion.process.intro">O trabalho seguiu cinco etapas, da auditoria à rotina de manutenção.</p>
+        </div>
+
+        <div class="process-timeline rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--alpha-5)] overflow-hidden reveal">
+          <div class="process-step">
+            <div class="step-number">01</div>
+            <h3 class="step-title" data-i18n="case.kalion.process.step1.title">Auditoria</h3>
+            <p class="step-desc" data-i18n="case.kalion.process.step1.desc">Levantamento da aplicação atual: 20 inconsistências mapeadas, cada uma com evidência, severidade e o componente que a resolveria.</p>
+          </div>
+          <div class="process-step">
+            <div class="step-number">02</div>
+            <h3 class="step-title" data-i18n="case.kalion.process.step2.title">Estratégia</h3>
+            <p class="step-desc" data-i18n="case.kalion.process.step2.desc">Ordem da migração, decisões de token (como o lime usado em texto no tema claro) e o modelo do shadcn/ui: uma classe base com variantes.</p>
+          </div>
+          <div class="process-step">
+            <div class="step-number">03</div>
+            <h3 class="step-title" data-i18n="case.kalion.process.step3.title">Base do DS</h3>
+            <p class="step-desc" data-i18n="case.kalion.process.step3.desc">Ambiente e regras: código no GitHub, versões e previews na Vercel e um playbook interativo para ver componentes, tokens e regras de uso.</p>
+          </div>
+          <div class="process-step">
+            <div class="step-number">04</div>
+            <h3 class="step-title" data-i18n="case.kalion.process.step4.title">Implementação</h3>
+            <p class="step-desc" data-i18n="case.kalion.process.step4.desc">Migração da home, dos cases, do styleguide e da área privada para os componentes, com verificação nos dois temas, nos dois idiomas e no teclado.</p>
+          </div>
+          <div class="process-step">
+            <div class="step-number">05</div>
+            <h3 class="step-title" data-i18n="case.kalion.process.step5.title">Manutenção</h3>
+            <p class="step-desc" data-i18n="case.kalion.process.step5.desc">Uma skill de design system e um verificador automático que barram cores soltas, classes legadas e botões fora do padrão antes do deploy.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         PROJECT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="ui-badge ui-badge--label mb-4" data-i18n="case.kalion.project.label">Projeto</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.kalion.project.intro">O design system foi criado para validar uma aplicação real. Primeiro mapeei as inconsistências do site; depois medi se o sistema, aplicado, resolvia cada uma delas.</p>
+        </div>
+
+        <!-- Audit -->
+        <div class="reveal mb-16">
+          <h3 class="font-serif text-2xl font-bold mb-2" data-i18n="case.kalion.audit.title">Auditoria da aplicação</h3>
+          <p class="text-sm leading-relaxed text-text-muted-dark mb-6 max-w-3xl" data-i18n="case.kalion.audit.intro">Cada problema foi classificado por categoria e severidade, com a correção apontando para um componente ou token.</p>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="ui-card ui-card--lead">
+              <div class="flex flex-wrap gap-2 mb-4"><span class="ui-badge ui-badge--status ui-badge--error ui-badge--sm"><i class="ti ti-alert-circle" aria-hidden="true"></i><span data-i18n="case.kalion.audit.high">Alta</span></span><span class="ui-badge ui-badge--tag ui-badge--sm" data-i18n="case.kalion.audit.a1.count">6 itens</span></div>
+              <h4 class="ui-card__title" data-i18n="case.kalion.audit.a1.title">Bugs visíveis</h4>
+              <p class="ui-card__text" data-i18n="case.kalion.audit.a1.desc">Classes que não geravam CSS, texto ilegível sobre o lime no tema claro e popovers sem borda.</p>
+            </div>
+            <div class="ui-card ui-card--lead">
+              <div class="flex flex-wrap gap-2 mb-4"><span class="ui-badge ui-badge--status ui-badge--warning ui-badge--sm"><i class="ti ti-alert-triangle" aria-hidden="true"></i><span data-i18n="case.kalion.audit.mid">Média</span></span><span class="ui-badge ui-badge--tag ui-badge--sm" data-i18n="case.kalion.audit.a2.count">6 itens</span></div>
+              <h4 class="ui-card__title" data-i18n="case.kalion.audit.a2.title">Componentes divergentes</h4>
+              <p class="ui-card__text" data-i18n="case.kalion.audit.a2.desc">Quatro CTAs com quatro alturas, setas misturadas no texto e cards de mesmo papel com raios diferentes.</p>
+            </div>
+            <div class="ui-card ui-card--lead">
+              <div class="flex flex-wrap gap-2 mb-4"><span class="ui-badge ui-badge--status ui-badge--warning ui-badge--sm"><i class="ti ti-alert-triangle" aria-hidden="true"></i><span data-i18n="case.kalion.audit.mid2">Média</span></span><span class="ui-badge ui-badge--tag ui-badge--sm" data-i18n="case.kalion.audit.a3.count">5 itens</span></div>
+              <h4 class="ui-card__title" data-i18n="case.kalion.audit.a3.title">Cores e tipografia</h4>
+              <p class="ui-card__text" data-i18n="case.kalion.audit.a3.desc">44 cores escritas direto no HTML, oito receitas de borda e cinco combinações de título de seção.</p>
+            </div>
+            <div class="ui-card ui-card--lead">
+              <div class="flex flex-wrap gap-2 mb-4"><span class="ui-badge ui-badge--status ui-badge--error ui-badge--sm"><i class="ti ti-alert-circle" aria-hidden="true"></i><span data-i18n="case.kalion.audit.high2">Alta</span></span><span class="ui-badge ui-badge--tag ui-badge--sm" data-i18n="case.kalion.audit.a4.count">3 itens</span></div>
+              <h4 class="ui-card__title" data-i18n="case.kalion.audit.a4.title">Acessibilidade</h4>
+              <p class="ui-card__text" data-i18n="case.kalion.audit.a4.desc">Nenhum estado de foco desenhado e itens clicáveis que não funcionavam pelo teclado.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Macro numbers -->
+        <div class="reveal mb-16">
+          <h3 class="font-serif text-2xl font-bold mb-6" data-i18n="case.kalion.numbers.title">Números do mapeamento</h3>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">20</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n1">inconsistências mapeadas na auditoria</p></div>
+            <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">44 → 0</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n2">cores escritas direto no HTML</p></div>
+            <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">8 → 3</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n3">receitas de borda que viraram tokens</p></div>
+            <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">4 → 3</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n4">alturas de botão, agora fixas em 36, 44 e 56px</p></div>
+            <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">32</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n5">regras de CSS legado removidas</p></div>
+            <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">10</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n6">componentes documentados com playground</p></div>
+            <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">9</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n7">regras verificadas automaticamente</p></div>
+            <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">2 × 2</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n8">temas e idiomas em cada componente</p></div>
+          </div>
+        </div>
+
+        <!-- Live design system -->
+        <div class="reveal mb-16">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-6">
+            <div class="max-w-3xl">
+              <h3 class="font-serif text-2xl font-bold mb-2" data-i18n="case.kalion.live.title">Design System ao vivo</h3>
+              <p class="text-sm leading-relaxed text-text-muted-dark" data-i18n="case.kalion.live.desc">O playbook roda dentro do próprio site: tokens, componentes interativos, anatomia, medidas e tokens aplicados, nos dois temas e nos dois idiomas. Navegue abaixo ou abra em uma nova aba.</p>
+            </div>
+            <a href="../designsystem.html" target="_blank" rel="noopener" class="ui-btn ui-btn--outline shrink-0">
+              <span data-i18n="case.kalion.live.cta">Abrir o Design System</span><i class="ti ti-external-link" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="case-board-frame">
+            <iframe src="../designsystem.html#/button" title="Design System do site Raul Lima" loading="lazy" class="block w-full h-[560px] md:h-[680px] border-0"></iframe>
+          </div>
+        </div>
+
+        <!-- Maintenance -->
+        <div class="reveal">
+          <h3 class="font-serif text-2xl font-bold mb-6" data-i18n="case.kalion.maint.title">Manutenção com skills</h3>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="ui-card ui-card--lead">
+              <i class="ti ti-sparkles ui-card__icon" aria-hidden="true"></i>
+              <h4 class="ui-card__title" data-i18n="case.kalion.maint.m1.title">Skill de design system</h4>
+              <p class="ui-card__text" data-i18n="case.kalion.maint.m1.desc">Antes de qualquer mudança de interface, a IA mapeia o pedido para os componentes existentes. Se nenhum serve, o componente nasce primeiro no design system, documentado, e só depois chega à página.</p>
+            </div>
+            <div class="ui-card ui-card--lead">
+              <i class="ti ti-shield-check ui-card__icon" aria-hidden="true"></i>
+              <h4 class="ui-card__title" data-i18n="case.kalion.maint.m2.title">Verificação automática</h4>
+              <p class="ui-card__text" data-i18n="case.kalion.maint.m2.desc">O comando <code>npm run ds:check</code> analisa o HTML e as traduções e barra cor inline, hex em classe, classes legadas, lime como texto, botões montados à mão e ícones sem <code>aria-hidden</code>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         IMPACT
+    ======================================= -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-12 reveal">
+          <span class="ui-badge ui-badge--label mb-4" data-i18n="case.kalion.impact.label">Impacto estimado</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-4xl" data-i18n="case.kalion.impact.intro">Números medidos no código antes e depois da migração. O esforço é estimado pela quantidade de classes necessária para escrever cada componente.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 reveal">
+          <div class="ui-card ui-card--metric">
+            <p class="ui-card__metric" data-i18n="case.kalion.impact.metric1.value">100%</p>
+            <p class="ui-card__text" data-i18n="case.kalion.impact.metric1.desc"><strong>das 20 inconsistências mapeadas resolvidas</strong>, 85% delas só aplicando componentes que já existiam no design system</p>
+          </div>
+          <div class="ui-card ui-card--metric">
+            <p class="ui-card__metric" data-i18n="case.kalion.impact.metric2.value">-75%</p>
+            <p class="ui-card__text" data-i18n="case.kalion.impact.metric2.desc"><strong>de código por componente</strong>: um CTA caiu de 10 classes para 2 e o toggle App/Web de 24 para 3, acelerando novas funcionalidades</p>
+          </div>
+          <div class="ui-card ui-card--metric">
+            <p class="ui-card__metric" data-i18n="case.kalion.impact.metric3.value">5,9:1</p>
+            <p class="ui-card__text" data-i18n="case.kalion.impact.metric3.desc"><strong>de contraste do lime como texto</strong> no tema claro, antes 1,7:1, agora dentro do padrão AA de acessibilidade</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================
+         BACK TO HOME
+    ======================================= -->
+    <section class="py-12">
+      <div class="max-w-7xl mx-auto px-6">
+        <hr class="border-[var(--color-border)] mb-10" />
+        <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-6" data-i18n="case.more">Outros cases</p>
+        <div id="more-cases" class="ui-case-strip mb-12"></div>
+        <div class="text-center">
+          <a href="../index.html#cases" class="ui-btn ui-btn--link ui-btn--lg">
+            <i class="ti ti-arrow-left" aria-hidden="true"></i><span data-i18n="case.kalion.back_home">voltar para home</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ======================================
+       FOOTER (same as index.html)
+  ======================================= -->
+  <footer id="contact" class="py-24 md:py-32">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="mb-16 reveal text-center">
+        <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-4" data-i18n="footer.cta.label">
+          Vamos conversar?</p>
+        <h2 class="font-serif text-5xl md:text-7xl font-bold leading-[0.95] mb-10 heading-accent heading-accent--center" data-i18n="footer.cta.heading">
+          Thank's for<br /><em>Watching.</em>
+        </h2>
+        <a href="mailto:raul.sousa.work@gmail.com" class="ui-btn ui-btn--primary ui-btn--lg">
+          <span>raul.sousa.work@gmail.com</span><i class="ti ti-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <hr class="border-[var(--color-border)] mb-10" />
+
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <p class="text-xs text-text-muted-dark" data-i18n="footer.copyright">© 2026 Raul Lima. Todos os direitos
+          reservados.</p>
+        <nav class="flex flex-wrap gap-6 text-xs text-text-muted-dark">
+          <a href="../index.html#about" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.about">Sobre</a>
+          <a href="../index.html#experience" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.experience">Experiência</a>
+          <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors"
+            data-i18n="nav.skills">Competências</a>
+          <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
+          <a href="../designsystem.html" target="_blank" rel="noopener" class="text-accent-text hover:underline transition-colors">Design System</a>
+          <a href="https://calendly.com" target="_blank" rel="noopener" class="hover:text-accent-text transition-colors"
+            data-i18n="footer.schedule">Minha Agenda</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+
+  <div class="gallery-lightbox" id="gallery-lightbox">
+    <button class="gallery-lightbox-close" id="gallery-lightbox-close" aria-label="Fechar"><i class="ti ti-x" aria-hidden="true"></i></button>
+    <img class="gallery-lightbox-img" id="gallery-lightbox-img" src="" alt="" />
+  </div>
+
+  <script type="module" src="../src/main.ts"></script>
+
+
+</body>
+
+</html>

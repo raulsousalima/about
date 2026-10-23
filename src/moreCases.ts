@@ -5,6 +5,7 @@
 // Vite bundles them (a plain string path would 404 after the build).
 
 const CASES = [
+  { slug: 'kalion', title: 'Kalion', overline: 'Design System · Design AI Engineer', cover: new URL('../img/cases/kalion/bannerhero.jpg', import.meta.url).href },
   { slug: 'pernambucanas', title: 'Pernambucanas', overline: 'Retail · Design Leadership', cover: new URL('../img/cases/pernambucanas/bannerhero.png', import.meta.url).href },
   { slug: 'decathlon', title: 'Decathlon', overline: 'Retail · Loyalty UX', cover: new URL('../img/cases/decathlon/bannerhero.png', import.meta.url).href },
   { slug: 'nofrictionai', title: 'No Friction AI', overline: 'AI · Zero-to-One', cover: new URL('../img/cases/nofrictionai/bannerhero.png', import.meta.url).href },

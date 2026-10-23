@@ -19,6 +19,7 @@ const CASE_NAMES: Record<string, string> = {
   daycoval: 'Banco Daycoval',
   starbem: 'Starbem',
   pefisa: 'Pefisa',
+  kalion: 'Kalion',
 }
 
 export function initCaseAdmin(): void {
