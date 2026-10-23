@@ -1,9 +1,9 @@
 ---
-name: design-system
-description: Use before creating or changing any UI in this repo (pages, cases, sections, buttons, cards, badges, toggles, colors, spacing). Maps the request to the existing ui-* components and tokens, adds a new component to the design system first when none fits, and validates the result with npm run ds:check before it ships.
+name: ds-layout
+description: Use before creating or changing any UI in this repo (pages, cases, sections, buttons, cards, badges, toggles, colors, spacing). Builds the layout from the existing ui-* components and tokens; when none fits, hands off to ds-scale so the component is implemented and validated in the design system first. Finishes with ds-check.
 ---
 
-# Design system do site
+# DS Layout: montar interface com a biblioteca
 
 A referência viva é `/designsystem.html` (código em `src/designsystem.ts`). Tokens ficam em
 `src/index.css`; componentes `ui-*` em `src/components.css`. Regras de case em `rulecase.md`.
@@ -23,6 +23,7 @@ Para cada elemento da tarefa, escolha o componente existente:
 | Conteúdo expansível | `ui-accordion` (`<details>`) |
 | Detalhe ao passar o mouse / foco | `ui-tooltip` |
 | Detalhe ao clicar | `ui-popover` + gatilho `<button aria-expanded aria-controls>` |
+| Comparar duas imagens (antes/depois) | `ui-compare` (+ `--scroll` para capturas altas) |
 | Cabeçalho | `ui-navbar` |
 
 Tokens, nunca valores soltos:
@@ -33,15 +34,10 @@ Tokens, nunca valores soltos:
 
 ## 2. Quando nenhum componente serve
 
-Não invente estilo no HTML. Primeiro estenda o design system:
-1. Adicione a variante ou componente em `src/components.css`, só com tokens, com estados
-   `:hover/.is-hover`, `:focus-visible/.is-focus` e desabilitado.
-2. Documente em `/designsystem.html`: entrada em `PAGES` e uma spec em `SPECS`
-   (`src/designsystem.ts`) com controles, anatomia e tokens; página em `designsystem.html` com as
-   chaves `ds.*` em PT e EN no `src/translations.json`.
-3. Só então use o componente na página.
+Não invente estilo no HTML. Siga a skill **ds-scale**: o componente é implementado, documentado
+no playbook e validado no design system antes de ser usado na página.
 
-## 3. Validar
+## 3. Validar (skill ds-check)
 
 ```bash
 npm run ds:check        # 0 erros para seguir
