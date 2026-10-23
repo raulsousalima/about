@@ -518,6 +518,93 @@
           </ul>
         </article>
 
+        <!-- ========== SIMULADOR ========== -->
+        <article class="ds-page" data-page="simulador" hidden>
+          <p class="ds-crumb" data-i18n="ds.simulador.p1">Suporte</p>
+          <h1 class="ds-title" tabindex="-1" data-i18n="ds.simulador.h12">Simulador</h1>
+          <p class="ds-lead" data-i18n="ds.simulador.p3">Um espaço para montar telas com os componentes do DS e testá-las em tema, idioma e largura diferentes.</p>
+          <div class="ds-empty">
+            <i class="ti ti-device-desktop" aria-hidden="true"></i>
+            <strong data-i18n="ds.simulador.strong4">Em breve</strong>
+            <p data-i18n="ds.simulador.p5">O simulador está em construção.</p>
+          </div>
+        </article>
+
+        <!-- ========== DOCUMENTAÇÃO ========== -->
+        <article class="ds-page" data-page="documentacao" hidden>
+          <p class="ds-crumb" data-i18n="ds.documentacao.p1">Suporte</p>
+          <h1 class="ds-title" tabindex="-1" data-i18n="ds.documentacao.h12">Documentação</h1>
+          <p class="ds-lead" data-i18n="ds.documentacao.p3">A linguagem em que o DS Kalion é escrito, como aplicá-lo no dia a dia e onde ficam os arquivos de referência.</p>
+
+          <h2 class="ds-h2" data-i18n="ds.documentacao.h24">Linguagem</h2>
+          <p class="ds-p" data-i18n="ds.documentacao.p5">O DS é escrito na própria linguagem da web, sem framework de componentes: o que está documentado aqui é o mesmo HTML e CSS que roda no site.</p>
+          <div class="ds-table-wrap">
+            <table class="ds-table">
+              <thead><tr><th scope="col" data-i18n="ds.documentacao.th6">Camada</th><th scope="col" data-i18n="ds.documentacao.th7">Tecnologia</th><th scope="col" data-i18n="ds.documentacao.th8">Papel</th></tr></thead>
+              <tbody>
+                <tr><td data-i18n="ds.documentacao.stack0a">Estrutura</td><td data-i18n="ds.documentacao.stack0b">HTML semântico</td><td data-i18n="ds.documentacao.stack0c">Marcação dos componentes; estados em atributos <code>aria-*</code>.</td></tr>
+                <tr><td data-i18n="ds.documentacao.stack1a">Estilo</td><td data-i18n="ds.documentacao.stack1b">CSS custom properties + Tailwind 3</td><td data-i18n="ds.documentacao.stack1c">Tokens em variáveis CSS; utilitários do Tailwind apontam para os mesmos tokens.</td></tr>
+                <tr><td data-i18n="ds.documentacao.stack2a">Comportamento</td><td data-i18n="ds.documentacao.stack2b">TypeScript (vanilla)</td><td data-i18n="ds.documentacao.stack2c">Interações como compare, popover e segmented, sem framework.</td></tr>
+                <tr><td data-i18n="ds.documentacao.stack3a">Ícones</td><td data-i18n="ds.documentacao.stack3b">Tabler Icons</td><td data-i18n="ds.documentacao.stack3c">Webfont com traço de 2px; herda cor e tamanho do texto.</td></tr>
+                <tr><td data-i18n="ds.documentacao.stack4a">Idiomas</td><td data-i18n="ds.documentacao.stack4b"><code>translations.json</code></td><td data-i18n="ds.documentacao.stack4c">PT e EN por chaves <code>data-i18n</code>.</td></tr>
+                <tr><td data-i18n="ds.documentacao.stack5a">Build</td><td data-i18n="ds.documentacao.stack5b">Vite</td><td data-i18n="ds.documentacao.stack5c">Empacota o site, os cases e esta página.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h3 class="ds-h3" data-i18n="ds.documentacao.h39">Nomenclatura</h3>
+          <p class="ds-p" data-i18n="ds.documentacao.p10">A API segue o shadcn/ui com nomes no padrão BEM: uma classe raiz, modificadores para variante e tamanho e elementos para as partes.</p>
+          <div class="ds-table-wrap">
+            <table class="ds-table">
+              <thead><tr><th scope="col" data-i18n="ds.documentacao.th11">Padrão</th><th scope="col" data-i18n="ds.documentacao.th12">Exemplo</th><th scope="col" data-i18n="ds.documentacao.th13">Uso</th></tr></thead>
+              <tbody>
+                <tr><td data-i18n="ds.documentacao.name0a"><code>ui-{componente}</code></td><td><code>ui-btn</code></td><td data-i18n="ds.documentacao.name0c">Classe raiz do componente.</td></tr>
+                <tr><td data-i18n="ds.documentacao.name1a"><code>ui-{componente}--{variante}</code></td><td><code>ui-btn--primary</code>, <code>ui-btn--sm</code></td><td data-i18n="ds.documentacao.name1c">Variante ou tamanho (modificador).</td></tr>
+                <tr><td data-i18n="ds.documentacao.name2a"><code>ui-{componente}__{parte}</code></td><td><code>ui-btn__label</code></td><td data-i18n="ds.documentacao.name2c">Parte interna, a mesma da anatomia.</td></tr>
+                <tr><td data-i18n="ds.documentacao.name3a"><code>aria-*</code></td><td><code>aria-pressed</code>, <code>aria-checked</code></td><td data-i18n="ds.documentacao.name3c">Estado do componente, lido também por leitores de tela.</td></tr>
+                <tr><td data-i18n="ds.documentacao.name4a"><code>--{categoria}-{nome}</code></td><td><code>--color-accent-text</code>, <code>--space-4</code></td><td data-i18n="ds.documentacao.name4c">Token CSS.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="ds-h2" data-i18n="ds.documentacao.h214">Guia de uso</h2>
+          <ol class="ds-list ds-steps">
+            <li data-i18n="ds.documentacao.step0"><strong>Mapeie.</strong> Para cada elemento da tela, escolha um componente <code>ui-*</code> existente. A tabela “Da página ao componente” em Visão geral ajuda.</li>
+            <li data-i18n="ds.documentacao.step1"><strong>Use tokens.</strong> Cor, medida e duração vêm de variáveis. Lime como fundo: <code>bg-accent</code>; como texto ou ícone: <code>text-accent-text</code>; texto sobre lime: <code>text-on-accent</code>.</li>
+            <li data-i18n="ds.documentacao.step2"><strong>Copie do playground.</strong> A aba Código de cada componente traz o HTML pronto, com as classes e atributos certos.</li>
+            <li data-i18n="ds.documentacao.step3"><strong>Estenda antes de improvisar.</strong> Se nenhum componente serve, crie a variante em <code>src/components.css</code> com seus estados, documente aqui e só então use na página.</li>
+            <li data-i18n="ds.documentacao.step4"><strong>Valide.</strong> Rode <code>npm run ds:check</code> (0 erros) e <code>npm run build</code>. Confira tema claro e escuro, PT e EN, 390px e foco com Tab.</li>
+          </ol>
+          <h3 class="ds-h3" data-i18n="ds.documentacao.h315">Regras do ds:check</h3>
+          <div class="ds-table-wrap">
+            <table class="ds-table">
+              <thead><tr><th scope="col" data-i18n="ds.documentacao.th16">Regra</th><th scope="col" data-i18n="ds.documentacao.th17">O que acusa</th></tr></thead>
+              <tbody>
+                <tr><td><code>inline-color</code></td><td data-i18n="ds.documentacao.rule0">Cor escrita direto no atributo <code>style</code>.</td></tr>
+                <tr><td><code>hex-in-class</code></td><td data-i18n="ds.documentacao.rule1">Hex dentro de classe do Tailwind, em vez de token.</td></tr>
+                <tr><td><code>broken-opacity</code></td><td data-i18n="ds.documentacao.rule2">Opacidade que não gera CSS, como <code>/05</code> ou <code>/08</code>.</td></tr>
+                <tr><td><code>legacy-class</code></td><td data-i18n="ds.documentacao.rule3">Classes antigas já substituídas por componentes.</td></tr>
+                <tr><td><code>accent-as-text</code></td><td data-i18n="ds.documentacao.rule4">Lime usado como cor de texto (contraste baixo).</td></tr>
+                <tr><td><code>adhoc-button</code></td><td data-i18n="ds.documentacao.rule5">Botão montado com utilitários em vez de <code>ui-btn</code>.</td></tr>
+                <tr><td><code>arrow-glyph</code></td><td data-i18n="ds.documentacao.rule6">Seta digitada no texto do botão em vez de ícone.</td></tr>
+                <tr><td><code>raw-radius</code></td><td data-i18n="ds.documentacao.rule7">Raio fora dos tokens.</td></tr>
+                <tr><td><code>icon-aria</code></td><td data-i18n="ds.documentacao.rule8">Ícone decorativo sem <code>aria-hidden</code> (aviso).</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 class="ds-h2" data-i18n="ds.documentacao.h218">Docs do repositório</h2>
+          <p class="ds-p" data-i18n="ds.documentacao.p19">Os arquivos que definem e explicam o DS, abertos no GitHub em nova aba.</p>
+          <div class="ds-grid ds-docs">
+            <a class="ds-tile" href="https://github.com/raulsousalima/about/blob/main/src/index.css" target="_blank" rel="noopener"><i class="ti ti-palette" aria-hidden="true"></i><strong>src/index.css</strong><span data-i18n="ds.documentacao.doc0">Tokens: cores, espaço, tipografia, raios, sombras e temas.</span></a>
+            <a class="ds-tile" href="https://github.com/raulsousalima/about/blob/main/src/components.css" target="_blank" rel="noopener"><i class="ti ti-components" aria-hidden="true"></i><strong>src/components.css</strong><span data-i18n="ds.documentacao.doc1">Componentes <code>ui-*</code> com variantes e estados.</span></a>
+            <a class="ds-tile" href="https://github.com/raulsousalima/about/blob/main/docs/design-system-migration.md" target="_blank" rel="noopener"><i class="ti ti-route" aria-hidden="true"></i><strong>docs/design-system-migration.md</strong><span data-i18n="ds.documentacao.doc2">Plano de migração do site, status e decisões.</span></a>
+            <a class="ds-tile" href="https://github.com/raulsousalima/about/blob/main/rulecase.md" target="_blank" rel="noopener"><i class="ti ti-file-text" aria-hidden="true"></i><strong>rulecase.md</strong><span data-i18n="ds.documentacao.doc3">Regras para montar as páginas de case.</span></a>
+            <a class="ds-tile" href="https://github.com/raulsousalima/about/blob/main/new_case_prompt_template.md" target="_blank" rel="noopener"><i class="ti ti-template" aria-hidden="true"></i><strong>new_case_prompt_template.md</strong><span data-i18n="ds.documentacao.doc4">Template de prompt para criar um case novo.</span></a>
+            <a class="ds-tile" href="https://github.com/raulsousalima/about/blob/main/.claude/skills/design-system/SKILL.md" target="_blank" rel="noopener"><i class="ti ti-sparkles" aria-hidden="true"></i><strong>.claude/skills/design-system/SKILL.md</strong><span data-i18n="ds.documentacao.doc5">Skill que orienta o Claude a usar o DS.</span></a>
+            <a class="ds-tile" href="https://github.com/raulsousalima/about/blob/main/scripts/ds-check.mjs" target="_blank" rel="noopener"><i class="ti ti-checklist" aria-hidden="true"></i><strong>scripts/ds-check.mjs</strong><span data-i18n="ds.documentacao.doc6">Verificador de consistência do <code>ds:check</code>.</span></a>
+          </div>
+        </article>
+
       </div>
     </main>
   </div>

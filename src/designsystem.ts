@@ -110,10 +110,10 @@ const isColorish = (v: string) => /^(#|rgb|hsl|color\()/.test(v)
 
 /* ---------------- Navigation model ---------------- */
 
-type Group = 'foundation' | 'components'
+type Group = 'foundation' | 'components' | 'support'
 interface PageDef { id: string; title: Text; icon: string; group: Group; desc: Text }
 
-const GROUPS: Record<Group, Text> = { foundation: ['Fundação', 'Foundation'], components: ['Componentes', 'Components'] }
+const GROUPS: Record<Group, Text> = { foundation: ['Fundação', 'Foundation'], components: ['Componentes', 'Components'], support: ['Suporte', 'Support'] }
 
 const PAGES: PageDef[] = [
   { id: 'introducao', title: ['Visão geral', 'Overview'], icon: 'layout-dashboard', group: 'foundation', desc: ['Princípios, origem e como usar.', 'Principles, origin and how to use.'] },
@@ -135,6 +135,8 @@ const PAGES: PageDef[] = [
   { id: 'popover', title: ['Popover', 'Popover'], icon: 'layout-bottombar-expand', group: 'components', desc: ['Painel com detalhes ao clicar.', 'Detail panel on click.'] },
   { id: 'compare', title: ['Compare', 'Compare'], icon: 'columns-2', group: 'components', desc: ['Antes e depois com linha arrastável.', 'Before and after with a draggable line.'] },
   { id: 'navbar', title: ['Navbar', 'Navbar'], icon: 'layout-navbar', group: 'components', desc: ['Cabeçalho fixo com vidro fosco.', 'Fixed frosted-glass header.'] },
+  { id: 'simulador', title: ['Simulador', 'Simulator'], icon: 'device-desktop', group: 'support', desc: ['Monte e teste composições com os componentes.', 'Build and test compositions with the components.'] },
+  { id: 'documentacao', title: ['Documentação', 'Documentation'], icon: 'book', group: 'support', desc: ['Linguagem, guia de uso e docs do repositório.', 'Language, usage guide and repository docs.'] },
 ]
 
 /* ---------------- Foundations ---------------- */

@@ -100,6 +100,20 @@
 }
 .ds-list { display: grid; gap: var(--space-2); padding-left: var(--space-5); font-size: 0.9375rem; line-height: var(--leading-relaxed); color: var(--color-text-muted-dark); list-style: disc; }
 .ds-list li::marker { color: var(--color-accent); }
+.ds-steps { list-style: decimal; gap: var(--space-3); }
+.ds-steps li::marker { color: var(--color-accent-text); font-weight: var(--weight-semibold); }
+.ds-steps strong { color: var(--color-text-primary-dark); }
+
+/* Empty state for pages still being built */
+.ds-empty {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-2); margin-top: var(--space-10);
+  padding: var(--space-16) var(--space-6); border: 1px dashed var(--alpha-15); border-radius: var(--radius-lg);
+  background: var(--alpha-5); text-align: center;
+}
+.ds-empty i { font-size: 2rem; color: var(--color-accent-text); }
+.ds-empty strong { font-size: var(--text-base); font-weight: var(--weight-semibold); }
+.ds-empty p { font-size: var(--text-sm); color: var(--color-text-muted-dark); }
+.ds-docs .ds-tile strong { overflow-wrap: anywhere; }
 
 .ds-pager { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-top: var(--space-24) !important; padding-top: var(--space-8); border-top: 1px solid var(--color-border); }
 .ds-pager a { display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-4) var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-md); text-decoration: none; transition: border-color var(--duration-base); }
