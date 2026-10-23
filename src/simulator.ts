@@ -17,7 +17,7 @@ type Tab = 'inicio' | 'extrato' | 'pagamentos' | 'pravoce' | 'menu'
 
 interface Tokens {
   accent: string | null
-  font: 'padrao' | 'inter' | 'playfair' | 'system' | 'mono'
+  font: 'padrao' | 'playfair' | 'system' | 'mono'
   text: string
   space: string
   radius: string
@@ -81,7 +81,7 @@ function splash() {
   return `<section class="sim-screen sim-splash" aria-labelledby="sim-title">
     <h2 id="sim-title" class="sr-only" tabindex="-1" data-sim-focus>Kalion Bank</h2>
     ${brand('lg')}
-    <span class="sim-splash__loader" role="status"><span class="ui-spinner" aria-hidden="true"></span><span class="sr-only">${L('Carregando', 'Loading')}</span></span>
+    <span class="sr-only" role="status">${L('Carregando', 'Loading')}</span>
   </section>`
 }
 
@@ -101,7 +101,7 @@ function acesso(behind = false) {
         ${quick.map(([id, icon, label]) => `<button type="button" class="sim-quick__item" data-sim="quick" data-intent="${id}">${ti(icon)}<span>${label}</span></button>`).join('')}
       </div>
       <button type="button" class="ui-btn ui-btn--primary ui-btn--lg sim-block" data-sim="login">${L('Acessar conta', 'Sign in')}</button>
-      <button type="button" class="ui-btn ui-btn--secondary ui-btn--lg sim-block" data-sim="soon">${L('Abrir nova conta PF ou PJ', 'Open a new account')}</button>
+      <button type="button" class="ui-btn ui-btn--link sim-tap sim-center" data-sim="soon">${L('Abrir nova conta PF ou PJ', 'Open a new account')}</button>
     </div>
   </section>`
 }
@@ -130,7 +130,7 @@ function login() {
         <button type="button" class="sim-key" data-sim="digit" data-digit="0">0</button>
         <button type="button" class="sim-key sim-key--icon" data-sim="erase" aria-label="${L('Apagar dígito', 'Delete digit')}" ${state.pin ? '' : 'disabled'}>${ti('backspace')}</button>
       </div>
-      <button type="button" class="ui-btn ui-btn--link sim-center" data-sim="soon">${L('Esqueci minha senha', 'Forgot passcode')}</button>
+      <button type="button" class="ui-btn ui-btn--ghost sim-center sim-login__forgot" data-sim="soon">${L('Esqueci minha senha', 'Forgot passcode')}</button>
     </section>`
 }
 
@@ -342,7 +342,6 @@ const ACCENTS: [string, string, string][] = [
 // 'padrao' is the DS pairing: Playfair on titles (--sim-font-title), Inter on body and figures.
 // Any other choice sets one family for both.
 const FONTS: Record<Exclude<Tokens['font'], 'padrao'>, [string, string]> = {
-  inter: ['Inter', "'Inter', sans-serif"],
   playfair: ['Playfair', "'Playfair Display', serif"],
   system: ['System', "system-ui, -apple-system, 'Segoe UI', sans-serif"],
   mono: ['Mono', "ui-monospace, 'SF Mono', Menlo, monospace"],
