@@ -1,7 +1,8 @@
 # Prompt — Criar Novo Case Study
 
 > Copie este arquivo, preencha todos os campos marcados com `[...]` e envie de volta para que eu crie automaticamente a página, as traduções e os tokens de CSS.
-
+>
+> A página é montada com o design system (`/designsystem.html`) seguindo `rulecase.md` v2: componentes `ui-*` e tokens, sem cores ou botões soltos no HTML.
 ---
 
 ## 📋 IDENTIFICAÇÃO DO CASE

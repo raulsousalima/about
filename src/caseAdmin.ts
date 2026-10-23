@@ -29,25 +29,27 @@ export function initCaseAdmin(): void {
   const panel = document.getElementById('cases-admin')
   if (!tabs || !tabProjetos || !tabGerenciar || !grid || !panel) return
 
+  // Tabs are a ui-segmented radiogroup: state lives in aria-checked + roving tabindex.
   function setActiveTab(which: 'projetos' | 'gerenciar') {
-    const active = 'bg-black text-white'
-    const idle = 'text-text-muted-light'
-    if (which === 'gerenciar') {
-      grid!.classList.add('hidden')
-      panel!.classList.remove('hidden')
-      tabGerenciar!.className = tabBtnClass(active)
-      tabProjetos!.className = tabBtnClass(idle)
-      renderPanel()
-    } else {
-      panel!.classList.add('hidden')
-      grid!.classList.remove('hidden')
-      tabProjetos!.className = tabBtnClass(active)
-      tabGerenciar!.className = tabBtnClass(idle)
+    const manage = which === 'gerenciar'
+    grid!.classList.toggle('hidden', manage)
+    panel!.classList.toggle('hidden', !manage)
+    for (const [tab, on] of [[tabProjetos!, !manage], [tabGerenciar!, manage]] as const) {
+      tab.setAttribute('aria-checked', String(on))
+      tab.tabIndex = on ? 0 : -1
     }
+    if (manage) renderPanel()
   }
 
   tabProjetos.addEventListener('click', () => setActiveTab('projetos'))
   tabGerenciar.addEventListener('click', () => setActiveTab('gerenciar'))
+  tabs.addEventListener('keydown', (e) => {
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return
+    e.preventDefault()
+    const next = tabProjetos.getAttribute('aria-checked') === 'true' ? tabGerenciar : tabProjetos
+    setActiveTab(next === tabGerenciar ? 'gerenciar' : 'projetos')
+    next.focus()
+  })
 
   function refreshTabsVisibility() {
     tabs!.classList.toggle('hidden', !canManageView())
@@ -109,10 +111,6 @@ export function initCaseAdmin(): void {
 
   onAccessChange(refreshTabsVisibility)
   refreshTabsVisibility()
-}
-
-function tabBtnClass(state: string): string {
-  return `px-4 py-2 rounded-full text-sm font-medium transition-all ${state}`
 }
 
 function loginMarkup(): string {

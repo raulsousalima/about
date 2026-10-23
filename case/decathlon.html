@@ -23,7 +23,7 @@
 
       <!-- Logo -->
       <a href="../index.html"
-        class="flex items-center justify-center w-9 h-9 rounded-full bg-accent font-bold text-sm text-black leading-none select-none transition-transform hover:scale-105">R</a>
+        class="flex items-center justify-center w-9 h-9 rounded-full bg-accent font-bold text-sm text-on-accent leading-none select-none transition-transform hover:scale-105">R</a>
 
       <!-- Nav links -->
       <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-text-muted-dark">
@@ -39,29 +39,30 @@
         <!-- Language Toggle -->
         <div class="flex items-center gap-1 text-xs font-medium">
           <button data-lang-btn="en"
-            class="px-2 py-1 rounded-full transition-all text-accent font-bold cursor-pointer hover:opacity-80">EN</button>
+            class="px-2 py-1 rounded-full transition-all text-accent-text font-bold cursor-pointer hover:opacity-80">EN</button>
           <span class="text-text-muted-dark opacity-50">|</span>
           <button data-lang-btn="pt"
             class="px-2 py-1 rounded-full transition-all text-text-muted-dark cursor-pointer hover:opacity-80">PT</button>
         </div>
         <!-- Theme Toggle -->
         <button id="theme-toggle" class="text-text-muted-dark hover:text-text-primary-dark transition-colors mx-1" aria-label="Toggle Theme">
-          <i class="ti ti-moon text-2xl" id="theme-icon"></i>
+          <i class="ti ti-moon text-2xl" aria-hidden="true" id="theme-icon"></i>
         </button>
         <!-- LinkedIn -->
         <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"
           class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
-          <i class="ti ti-brand-linkedin text-2xl"></i>
+          <i class="ti ti-brand-linkedin text-2xl" aria-hidden="true"></i>
         </a>
         <!-- Behance -->
         <a href="https://www.behance.net/raulsousa" target="_blank" rel="noopener" aria-label="Behance"
           class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
-          <i class="ti ti-brand-behance text-2xl"></i>
+          <i class="ti ti-brand-behance text-2xl" aria-hidden="true"></i>
         </a>
-        <a href="mailto:raul.sousa.work@gmail.com"
-          class="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--alpha-15)] text-sm font-medium text-text-muted-dark hover:border-accent hover:text-accent transition-all">
-          <i class="ti ti-mail text-lg"></i> <span data-i18n="nav.contact">Contato</span>
-        </a>
+        <span class="hidden md:inline-flex">
+          <a href="mailto:raul.sousa.work@gmail.com" class="ui-btn ui-btn--outline ui-btn--sm">
+            <i class="ti ti-mail" aria-hidden="true"></i><span data-i18n="nav.contact">Contato</span>
+          </a>
+        </span>
       </div>
     </div>
   </header>
@@ -75,10 +76,8 @@
     <section class="pt-[60px] pb-16">
       <div class="max-w-7xl mx-auto px-6">
         <!-- Back button -->
-        <a href="../index.html#cases"
-          class="inline-flex items-center gap-2 text-sm text-text-muted-dark hover:text-accent transition-colors mb-6 group">
-          <i class="ti ti-arrow-left text-lg transition-transform group-hover:-translate-x-1"></i>
-          <span data-i18n="case.back">Voltar</span>
+        <a href="../index.html#cases" class="ui-btn ui-btn--link mb-6">
+          <i class="ti ti-arrow-left" aria-hidden="true"></i><span data-i18n="case.back">Voltar</span>
         </a>
 
         <!-- Case title -->
@@ -167,7 +166,7 @@
 
           <!-- Challenge text -->
           <div class="reveal">
-            <span class="case-label mb-6" data-i18n="case.decathlon.challenge.label">Desafio</span>
+            <span class="ui-badge ui-badge--label mb-6" data-i18n="case.decathlon.challenge.label">Desafio</span>
 
             <p class="text-lg md:text-xl leading-relaxed mt-6 mb-6" data-i18n="case.decathlon.challenge.intro">
               O principal desafio foi <strong>transformar conhecimento em engajamento real</strong>.
@@ -211,7 +210,7 @@
     <section class="py-16 md:py-24 overflow-hidden gallery-section">
       <canvas class="gallery-particles-canvas" aria-hidden="true"></canvas>
       <div class="max-w-7xl mx-auto px-6 mb-12 reveal relative z-10">
-        <span class="case-label mb-4" data-i18n="case.decathlon.gallerymosaic.label">Galeria</span>
+        <span class="ui-badge ui-badge--label mb-4" data-i18n="case.decathlon.gallerymosaic.label">Galeria</span>
         <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.decathlon.gallerymosaic.intro">Um mosaico com telas e momentos do projeto.</p>
       </div>
 
@@ -256,7 +255,7 @@
     <section class="py-16 md:py-24">
       <div class="max-w-7xl mx-auto px-6">
         <div class="mb-12 reveal">
-          <span class="case-label mb-4" data-i18n="case.decathlon.process.label">Processo</span>
+          <span class="ui-badge ui-badge--label mb-4" data-i18n="case.decathlon.process.label">Processo</span>
           <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.decathlon.process.intro">
             O projeto seguiu um <strong class="text-text-primary-dark">fluxo estruturado baseado em sprints</strong>,
             combinando descoberta, validação e entrega.
@@ -264,7 +263,7 @@
         </div>
 
         <!-- Timeline -->
-        <div class="process-timeline rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)] overflow-hidden reveal">
+        <div class="process-timeline rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--alpha-5)] overflow-hidden reveal">
           <!-- Step 1 -->
           <div class="process-step">
             <div class="step-number">01</div>
@@ -317,7 +316,7 @@
     <section class="py-16 md:py-24">
       <div class="max-w-7xl mx-auto px-6">
         <div class="mb-12 reveal">
-          <span class="case-label mb-4" data-i18n="case.decathlon.decisions.label">Decisões</span>
+          <span class="ui-badge ui-badge--label mb-4" data-i18n="case.decathlon.decisions.label">Decisões</span>
           <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.decathlon.decisions.intro">
             Uma das decisões mais importantes deste projeto foi questionar a premissa inicial de que aumentar a
             retenção seria o caminho mais rápido para gerar mais receita através do Decathlon Club.
@@ -387,7 +386,7 @@
     <section class="py-16 md:py-24">
       <div class="max-w-7xl mx-auto px-6">
         <div class="mb-12 reveal">
-          <span class="case-label" data-i18n="case.decathlon.gallery.label">Projeto</span>
+          <span class="ui-badge ui-badge--label" data-i18n="case.decathlon.gallery.label">Projeto</span>
         </div>
 
         <!-- App screens -->
@@ -496,7 +495,7 @@
     <section class="py-16 md:py-24">
       <div class="max-w-7xl mx-auto px-6">
         <div class="mb-12 reveal">
-          <span class="case-label mb-4" data-i18n="case.decathlon.impact.label">Impacto</span>
+          <span class="ui-badge ui-badge--label mb-4" data-i18n="case.decathlon.impact.label">Impacto</span>
           <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-4xl" data-i18n="case.decathlon.impact.intro">
             O Proof of Concept validou a viabilidade técnica da solução e demonstrou forte potencial de escala. O projeto
             mostrou um ganho estimado de <strong class="text-text-primary-dark">30% a 40% de eficiência operacional</strong>
@@ -506,22 +505,22 @@
 
         <!-- Metrics grid -->
         <div class="grid md:grid-cols-3 gap-6 reveal">
-          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
-            <p class="metric-value" data-i18n="case.decathlon.impact.metric1.value">+35%</p>
-            <p class="metric-desc" data-i18n="case.decathlon.impact.metric1.desc">
+          <div class="ui-card ui-card--metric">
+            <p class="ui-card__metric" data-i18n="case.decathlon.impact.metric1.value">+35%</p>
+            <p class="ui-card__text" data-i18n="case.decathlon.impact.metric1.desc">
               <strong>aumento na ativação de novos membros</strong>, impulsionado por comunicação de benefícios mais
               clara e jornada simplificada
             </p>
           </div>
-          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
-            <p class="metric-value" data-i18n="case.decathlon.impact.metric2.value">25%</p>
-            <p class="metric-desc" data-i18n="case.decathlon.impact.metric2.desc">
+          <div class="ui-card ui-card--metric">
+            <p class="ui-card__metric" data-i18n="case.decathlon.impact.metric2.value">25%</p>
+            <p class="ui-card__text" data-i18n="case.decathlon.impact.metric2.desc">
               <strong>redução em consultas recorrentes ao suporte</strong> relacionadas ao programa de fidelidade
             </p>
           </div>
-          <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
-            <p class="metric-value" data-i18n="case.decathlon.impact.metric3.value">+10%</p>
-            <p class="metric-desc" data-i18n="case.decathlon.impact.metric3.desc">
+          <div class="ui-card ui-card--metric">
+            <p class="ui-card__metric" data-i18n="case.decathlon.impact.metric3.value">+10%</p>
+            <p class="ui-card__text" data-i18n="case.decathlon.impact.metric3.desc">
               <strong>meta de aumento no Ticket Médio</strong>, de R$150 para R$200, impulsionado pelo engajamento via
               Decathlon Club
             </p>
@@ -538,10 +537,8 @@
       <div class="max-w-7xl mx-auto px-6">
         <hr class="border-[var(--color-border)] mb-10" />
         <div class="text-center">
-          <a href="../index.html#cases"
-            class="inline-flex items-center gap-2 text-base font-medium hover:text-accent transition-colors underline underline-offset-4"
-            data-i18n="case.decathlon.back_home">
-            voltar para home
+          <a href="../index.html#cases" class="ui-btn ui-btn--link ui-btn--lg">
+            <i class="ti ti-arrow-left" aria-hidden="true"></i><span data-i18n="case.decathlon.back_home">voltar para home</span>
           </a>
         </div>
       </div>
@@ -556,14 +553,13 @@
   <footer id="contact" class="py-24 md:py-32">
     <div class="max-w-7xl mx-auto px-6">
       <div class="mb-16 reveal text-center">
-        <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-8" data-i18n="footer.cta.label">
+        <p class="text-xs uppercase tracking-widest text-text-muted-dark font-medium mb-4" data-i18n="footer.cta.label">
           Vamos conversar?</p>
-        <h2 class="font-serif text-5xl md:text-7xl font-bold leading-[0.95] mb-10" data-i18n="footer.cta.heading">
+        <h2 class="font-serif text-5xl md:text-7xl font-bold leading-[0.95] mb-10 heading-accent heading-accent--center" data-i18n="footer.cta.heading">
           Thank's for<br /><em>Watching.</em>
         </h2>
-        <a href="mailto:raul.sousa.work@gmail.com"
-          class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-accent text-bg-dark font-semibold text-base hover:opacity-90 transition-all active:scale-95">
-          raul.sousa.work@gmail.com →
+        <a href="mailto:raul.sousa.work@gmail.com" class="ui-btn ui-btn--primary ui-btn--lg">
+          <span>raul.sousa.work@gmail.com</span><i class="ti ti-arrow-right" aria-hidden="true"></i>
         </a>
       </div>
 
@@ -579,8 +575,8 @@
           <a href="../index.html#skills" class="hover:text-text-primary-dark transition-colors"
             data-i18n="nav.skills">Competências</a>
           <a href="../index.html#cases" class="hover:text-text-primary-dark transition-colors" data-i18n="nav.cases">Cases</a>
-          <a href="../styleguide.html" class="text-accent hover:underline transition-colors">Styleguide</a>
-          <a href="https://calendly.com" target="_blank" rel="noopener" class="hover:text-accent transition-colors"
+          <a href="../designsystem.html" class="text-accent-text hover:underline transition-colors">Design System</a>
+          <a href="https://calendly.com" target="_blank" rel="noopener" class="hover:text-accent-text transition-colors"
             data-i18n="footer.schedule">Minha Agenda</a>
         </nav>
       </div>
@@ -589,7 +585,7 @@
 
 
   <div class="gallery-lightbox" id="gallery-lightbox">
-    <button class="gallery-lightbox-close" id="gallery-lightbox-close" aria-label="Fechar"><i class="ti ti-x"></i></button>
+    <button class="gallery-lightbox-close" id="gallery-lightbox-close" aria-label="Fechar"><i class="ti ti-x" aria-hidden="true"></i></button>
     <img class="gallery-lightbox-img" id="gallery-lightbox-img" src="" alt="" />
   </div>
 
