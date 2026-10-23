@@ -1,7 +1,7 @@
 # [rulecase] — Regra para Criação de Novas Páginas Case Study
 
 > Baseado no template: `case/decathlon.html`
-> Versão: 1.0 · Última revisão: Abril 2026
+> Versão: 2.0 · Última revisão: Outubro 2026 (migração para o design system — ver `/designsystem.html` e `docs/design-system-migration.md`)
 
 ---
 
@@ -41,7 +41,7 @@ A página deve seguir **exatamente** a sequência de seções abaixo. Não remov
   §5 PROCESS     → Timeline horizontal de 5 etapas (process-timeline)
   §6 GALLERY     → Toggle App/Web + grid de screenshots (case-gallery)
   §6.5 STRATEGY  → Texto estratégico aprofundado (OBRIGATÓRIO)
-  §7 IMPACT      → 3 metric-cards com números e descrições
+  §7 IMPACT      → 3 cards de métrica (ui-card--metric) com números e descrições
   §8 BACK HOME   → Divider + link de retorno centrado
 <footer>         → Footer idêntico ao template (FROZEN — não modificar)
 <script>         → src="/src/main.ts" (único script, sempre ao final do body)
@@ -76,11 +76,13 @@ Sempre use **CSS variables** definidas em `src/index.css`. Nunca use valores hex
 |------------------------|---------------------------------------|-----------------------------------------------|
 | **Texto primário**     | `text-text-primary-dark`              | Títulos e conteúdo em destaque                |
 | **Texto secundário**   | `text-text-muted-dark`                | Corpo de texto, descrições                    |
-| **Accent**             | `text-accent`, `bg-accent`            | CTAs, destaques, bullet points                |
+| **Accent (fundo)**     | `bg-accent`                           | Fundos de CTA, bullets, traços decorativos    |
+| **Accent (texto)**     | `text-accent-text`                    | Lime como texto, ícone ou foco (AA no tema claro) |
+| **Texto sobre accent** | `text-on-accent`                      | Texto dentro de qualquer fundo lime            |
 | **Borders**            | `border-[var(--color-border)]`        | Bordas de cards e containers                  |
 | **Backgrounds sutis**  | `bg-[var(--alpha-5)]`                 | Cards e painéis internos                      |
 | **Border radius MD**   | `var(--radius-md)` (16px)             | Containers de mídia `.case-img-placeholder`   |
-| **Border radius 2xl**  | `rounded-2xl`                         | Metric cards, process timeline                |
+| **Border radius MD**   | `rounded-[var(--radius-md)]`          | Process timeline, containers de conteúdo      |
 | **Tipografia serif**   | `font-serif font-bold`                | H1, H2 (títulos de seção)                     |
 | **Espaçamento seções** | `py-16 md:py-24`                      | Padding vertical padrão de cada seção         |
 | **Container**          | `max-w-7xl mx-auto px-6`              | Wrapper de conteúdo em todas as seções        |
@@ -89,14 +91,26 @@ Sempre use **CSS variables** definidas em `src/index.css`. Nunca use valores hex
 
 ## 5. CSS Classes do Design System — Obrigatórias
 
-Definidas em `src/index.css`. **Não recriar inline**.
+Componentes `ui-*` em `src/components.css` (documentados em `/designsystem.html`) e classes de layout
+de case em `src/index.css`. **Não recriar inline.**
 
+| Componente                   | Onde usar                                                      |
+|------------------------------|----------------------------------------------------------------|
+| `.ui-btn` + `--primary` / `--outline` / `--link`, `--sm` / `--lg` | Todo botão ou link de ação. Ícone em `<i>` próprio, nunca “→” no texto |
+| `.ui-badge.ui-badge--label`  | Pills de label: "Desafio", "Processo", "Impacto", "Projeto"   |
+| `.ui-card.ui-card--metric`   | Cards de impacto/métricas (§7)                                 |
+| `.ui-card.ui-card--lead`     | Cards de destaque com título + texto                           |
+| `.ui-segmented`              | Toggle App/Web (§6) e qualquer escolha exclusiva               |
+| `.ui-chip`                   | Filtros liga/desliga (`aria-pressed`)                          |
+| `.ui-accordion`              | Conteúdo expansível (`<details>`)                              |
+
+| Classe de layout             | Onde usar                                                      |
+|------------------------------|----------------------------------------------------------------|
 | Classe                       | Onde usar                                                      |
 |------------------------------|----------------------------------------------------------------|
 | `.glass-nav`                 | No `<header>` (FROZEN)                                        |
 | `.case-hero-banner`          | Div do hero banner (§1)                                        |
 | `.case-img-placeholder`      | Container do logo (§2) e da imagem do challenge (§4)           |
-| `.case-label`                | Pills de label: "Desafio", "Processo", "Impacto", "Projeto"   |
 | `.heading-accent`            | `<h1>` e `<h2>` — gera o underline accent automático           |
 | `.reveal`                    | Todos os elementos com animação de entrada (scroll)            |
 | `.process-timeline`          | Container da timeline de process (§5)                          |
@@ -111,7 +125,6 @@ Definidas em `src/index.css`. **Não recriar inline**.
 | `.web-mobile-format`         | Variante de frame para mobile web (aspect-ratio 393/850)       |
 | `.case-strategy-section`     | Container da seção Strategy (§6.5)                             |
 | `.case-strategy-content`     | Wrapper do texto estratégico — tipografia e espaçamento        |
-| `.metric-card`               | Cards de impacto/métricas (§7)                                 |
 
 ---
 
@@ -215,10 +228,8 @@ Em `src/translations.json`, adicionar dentro dos blocos `"pt"` **e** `"en"`:
 <section class="pt-[60px] pb-16">
   <div class="max-w-7xl mx-auto px-6">
     <!-- Back button — FROZEN -->
-    <a href="/index.html#cases"
-      class="inline-flex items-center gap-2 text-sm text-text-muted-dark hover:text-accent transition-colors mb-6 group">
-      <i class="ti ti-arrow-left text-lg transition-transform group-hover:-translate-x-1"></i>
-      <span data-i18n="case.back">Voltar</span>
+    <a href="../index.html#cases" class="ui-btn ui-btn--link mb-6">
+      <i class="ti ti-arrow-left" aria-hidden="true"></i><span data-i18n="case.back">Voltar</span>
     </a>
 
     <!-- H1 — único da página -->
@@ -266,7 +277,7 @@ Para logos que precisam mudar de cor entre temas (Dark/Light Mode), o padrão at
 A timeline tem sempre **exatamente 5 etapas** (condensar ou expandir descritivamente conforme necessário):
 
 ```html
-<div class="process-timeline rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)] overflow-hidden reveal">
+<div class="process-timeline rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--alpha-5)] overflow-hidden reveal">
   <div class="process-step">
     <div class="step-number">01</div>
     <h3 class="step-title" data-i18n="case.[slug].process.step1.title">Nome</h3>
@@ -289,10 +300,10 @@ A galeria sempre tem toggle **App / Web**. O padrão App mostra 4 telas em grid;
   <div class="max-w-7xl mx-auto px-6">
     <!-- Header da seção com toggle -->
     <div class="mb-12 reveal flex flex-col md:flex-row md:items-end justify-between gap-6">
-      <span class="case-label mb-4 md:mb-0" data-i18n="case.[slug].gallery.label">Projeto</span>
-      <div class="flex items-center bg-[var(--alpha-5)] rounded-full p-1 border border-[var(--alpha-10)]" id="gallery-view-toggle">
-        <button id="view-mode-app-btn" class="px-5 py-2 rounded-full text-sm font-medium bg-surface text-[var(--color-text-primary-dark)] shadow-sm transition-all">App</button>
-        <button id="view-mode-web-btn" class="px-5 py-2 rounded-full text-sm font-medium text-[var(--color-text-muted-dark)] hover:text-[var(--color-text-primary-dark)] transition-all">Web</button>
+      <span class="ui-badge ui-badge--label mb-4 md:mb-0" data-i18n="case.[slug].gallery.label">Projeto</span>
+      <div class="ui-segmented" role="radiogroup" aria-label="Visualização da galeria" id="gallery-view-toggle">
+        <button type="button" role="radio" id="view-mode-app-btn" class="ui-segmented__item" aria-checked="true" tabindex="0" aria-controls="gallery-app-view">App</button>
+        <button type="button" role="radio" id="view-mode-web-btn" class="ui-segmented__item" aria-checked="false" tabindex="-1" aria-controls="gallery-web-view">Web</button>
       </div>
     </div>
 
@@ -338,7 +349,7 @@ A galeria sempre tem toggle **App / Web**. O padrão App mostra 4 telas em grid;
 </section>
 ```
 
-> A lógica JS de toggle (`view-mode-app-btn` / `view-mode-web-btn`) já está em `src/main.ts` — os IDs devem ser **exatamente** esses.
+> A lógica JS de toggle (`view-mode-app-btn` / `view-mode-web-btn`) está em `src/caseToggle.ts` (estado em `aria-checked`, setas do teclado) — os IDs devem ser **exatamente** esses.
 
 ---
 
@@ -380,9 +391,9 @@ Vem imediatamente após o gallery, dentro da mesma `<section>` do Gallery ou com
 
 ```html
 <div class="grid md:grid-cols-3 gap-6 reveal">
-  <div class="metric-card rounded-2xl border border-[var(--color-border)] bg-[var(--alpha-5)]">
-    <p class="metric-value" data-i18n="case.[slug].impact.metric1.value">+35%</p>
-    <p class="metric-desc" data-i18n="case.[slug].impact.metric1.desc">
+  <div class="ui-card ui-card--metric">
+    <p class="ui-card__metric" data-i18n="case.[slug].impact.metric1.value">+35%</p>
+    <p class="ui-card__text" data-i18n="case.[slug].impact.metric1.desc">
       <strong>descrição</strong>, contexto adicional
     </p>
   </div>
@@ -390,31 +401,28 @@ Vem imediatamente após o gallery, dentro da mesma `<section>` do Gallery ou com
 </div>
 ```
 
-> A cor de `metric-value` é heredada do design system, sem necessidade de classe de cor específica.
+> Valores numéricos animam sozinhos (`src/counter.ts` lê `.ui-card__metric`). Para textos longos (“Tempo real”) use `ui-card__metric ui-card__metric--sm`.
 
 ## 14. ATUALIZAÇÃO DA HOME (index.html)
 
 Sempre que criar um novo case, é **obrigatório** atualizar ou adicionar o card correspondente na seção de Cases na Home (`index.html`).
 
 O card do case na `index.html` deve usar:
-- A mesma imagem do Hero Banner do case como background (com `bg-black/20` para contraste).
-- Ser um link (`<a>`) referenciando a nova página.
-- Manter o efeito de `zoom` no hover.
+- O componente **Card case** (`ui-card ui-card--case`): link inteiro, mídia 16:9 com scrim e zoom no hover.
+- A mesma imagem do Hero Banner do case.
+- Sem cores inline: a faixa `.section-light` já ajusta texto, superfície e borda.
 
 **Exemplo de estrutura a usar na `index.html`:**
 ```html
-<a href="/case/[slug].html" class="case-card reveal group bg-white border border-black/06 block">
-  <div class="aspect-video w-full overflow-hidden bg-gray-100 relative">
-    <div class="absolute inset-0 bg-black/20 z-10 group-hover:bg-black/10 transition-colors duration-500"></div>
-    <img src="[URL_UNSPLASH_DO_HERO_BANNER]" alt="[Alt ou nome do case]" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 z-0" />
+<a href="case/[slug].html" data-case-slug="[slug]" class="ui-card ui-card--case reveal">
+  <div class="ui-card__media">
+    <img src="img/cases/[slug]/bannerhero.png" alt="[Nome do case] cover" />
   </div>
-  <div class="p-6">
-    <p class="text-xs font-medium text-text-muted-light uppercase tracking-widest mb-2">[TAGS SETOR]</p>
-    <h3 class="font-serif text-xl font-bold mb-2" style="color:#111">[NOME DA EMPRESA]</h3>
-    <p class="text-sm text-text-muted-light leading-relaxed" data-i18n="cases.[slug].desc">[Descrição breve]</p>
-    <div class="mt-4 inline-flex items-center gap-1 text-sm font-medium group-hover:gap-2 transition-all" style="color:#111">
-      <span data-i18n="cases.[slug].link">Ver case</span> <span>→</span>
-    </div>
+  <div class="ui-card__body">
+    <p class="ui-card__overline">[TAGS SETOR]</p>
+    <h3 class="ui-card__heading">[NOME DA EMPRESA]</h3>
+    <p class="ui-card__text" data-i18n="cases.[slug].desc">[Descrição breve]</p>
+    <span class="ui-card__cta"><span data-i18n="cases.[slug].link">Ver case</span><i class="ti ti-arrow-right" aria-hidden="true"></i></span>
   </div>
 </a>
 ```
@@ -431,7 +439,9 @@ O card do case na `index.html` deve usar:
 
 ### ✅ Design System
 - [ ] Nenhuma cor hexadecimal hardcoded no HTML
-- [ ] Todos os cards usam `border-[var(--color-border)]` e `bg-[var(--alpha-5)]`
+- [ ] Labels, métricas, botões e toggles usam os componentes `ui-*` (nenhum botão com classes Tailwind soltas)
+- [ ] Lime como texto ou ícone usa `text-accent-text`; texto sobre lime usa `text-on-accent`
+- [ ] Nenhum “→” dentro de texto traduzido (seta é ícone `ti-arrow-right`)
 - [ ] Logo dinâmico da empresa usa duas tags `<img>` e as classes `.show-in-dark` e `.show-in-light`
 
 ### ✅ i18n
@@ -444,7 +454,8 @@ O card do case na `index.html` deve usar:
 - [ ] Dark/Light mode testado — todos os elementos mudam corretamente
 - [ ] Troca de idioma EN/PT testada — todos os textos mudam
 - [ ] Animações `.reveal` funcionando ao fazer scroll
-- [ ] Back button direciona para `/index.html#cases`
+- [ ] Back button direciona para `../index.html#cases`
+- [ ] Navegação só por teclado: foco visível em todos os controles, toggle App/Web com setas
 
 ### ✅ SEO
 - [ ] `<title>` único e descritivo
@@ -467,7 +478,8 @@ O card do case na `index.html` deve usar:
 | `<style>` inline na `<head>`                      | Classes do design system em `index.css`               |
 | Adicionar novos `<script>` além do `main.ts`      | Toda lógica passa por `main.ts`                       |
 | Modificar Header ou Footer                        | Copiar frozen e não tocar                             |
-| Criar nova classe CSS no HTML do case             | Reutilizar classes existentes em `index.css`          |
+| Criar nova classe CSS no HTML do case             | Reutilizar `ui-*` (`components.css`) e classes de `index.css` |
+| Montar botão/badge com utilitários Tailwind       | `ui-btn`, `ui-badge`, `ui-chip`, `ui-segmented`        |
 | Ícones de outras bibliotecas                      | Usar exclusivamente `<i class="ti ti-[nome]">`        |
 | `.reveal` no pai e no filho simultaneamente       | `.reveal` apenas no container externo                 |
 | Omitir texto fallback em PT dentro da tag         | Sempre incluir fallback mesmo com `data-i18n`         |

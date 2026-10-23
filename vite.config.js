@@ -19,6 +19,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         styleguide: resolve(__dirname, 'styleguide.html'),
+        designsystem: resolve(__dirname, 'designsystem.html'),
         decathlon: resolve(__dirname, 'case/decathlon.html'),
         daycoval: resolve(__dirname, 'case/daycoval.html'),
         nofrictionai: resolve(__dirname, 'case/nofrictionai.html'),

@@ -11,34 +11,35 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/src/index.css" />
+  <link rel="stylesheet" href="/src/components.css" />
+  <!-- Tabler Icons Standard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
 </head>
 
-<body class="bg-bg-primary-dark text-text-primary-dark min-h-screen font-sans">
+<body class="bg-bg-dark text-text-primary-dark min-h-screen font-sans">
 
   <!-- ── Login screen ──────────────────────────────────────────────────── -->
   <section id="auth-screen" class="hidden min-h-screen flex items-center justify-center px-6">
     <div class="w-full max-w-sm">
-      <a href="/" class="text-xs uppercase tracking-widest text-text-muted-dark hover:text-accent">← Voltar</a>
+      <a href="/" class="ui-btn ui-btn--link ui-btn--sm"><i class="ti ti-arrow-left" aria-hidden="true"></i><span>Voltar</span></a>
       <h1 class="font-serif text-4xl font-bold mt-6 mb-2">Profile</h1>
       <p class="text-sm text-text-muted-dark mb-8">Área privada. Faça login para continuar.</p>
       <form id="auth-form" class="space-y-4">
         <div>
-          <label class="text-xs uppercase tracking-widest text-text-muted-dark">Email</label>
-          <input id="auth-email" type="email" required autocomplete="email"
-            class="mt-2 w-full bg-transparent border border-[var(--color-border)] rounded-lg px-4 py-3 focus:outline-none focus:border-accent" />
+          <label class="ui-field__label" for="auth-email">Email</label>
+          <input id="auth-email" type="email" required autocomplete="email" class="ui-input mt-2" />
         </div>
         <div>
-          <label class="text-xs uppercase tracking-widest text-text-muted-dark">Senha</label>
-          <input id="auth-password" type="password" autocomplete="current-password"
-            class="mt-2 w-full bg-transparent border border-[var(--color-border)] rounded-lg px-4 py-3 focus:outline-none focus:border-accent" />
+          <label class="ui-field__label" for="auth-password">Senha</label>
+          <input id="auth-password" type="password" autocomplete="current-password" class="ui-input mt-2" />
         </div>
         <div class="flex gap-2">
           <button type="submit" data-action="signin"
-            class="flex-1 bg-accent text-black font-semibold py-3 rounded-lg hover:opacity-90 transition">Entrar</button>
+            class="ui-btn ui-btn--primary flex-1">Entrar</button>
           <button type="button" data-action="magic"
-            class="flex-1 border border-[var(--color-border)] py-3 rounded-lg hover:border-accent transition">Magic link</button>
+            class="ui-btn ui-btn--secondary flex-1">Magic link</button>
         </div>
-        <p id="auth-msg" class="text-xs text-text-muted-dark min-h-[1em]"></p>
+        <p id="auth-msg" class="ui-field__hint min-h-[1em]" role="status" aria-live="polite"></p>
       </form>
     </div>
   </section>
@@ -47,73 +48,73 @@
   <section id="editor-screen" class="hidden min-h-screen flex flex-col">
 
     <!-- Top bar -->
-    <header class="border-b border-[var(--color-border)] px-4 sm:px-5 py-3 flex flex-wrap items-center gap-2 sm:gap-3 sticky top-0 bg-bg-primary-dark z-40 no-print">
-      <a href="/" class="text-xs uppercase tracking-widest text-text-muted-dark hover:text-accent shrink-0">← Site</a>
+    <header class="border-b border-[var(--color-border)] px-4 sm:px-5 py-3 flex flex-wrap items-center gap-2 sm:gap-3 sticky top-0 bg-bg-dark z-40 no-print">
+      <a href="/" class="ui-btn ui-btn--link ui-btn--sm shrink-0"><i class="ti ti-arrow-left" aria-hidden="true"></i><span>Site</span></a>
 
       <!-- Tabs -->
-      <nav class="flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs shrink-0">
-        <button data-tab="profile" class="tab-btn px-3 sm:px-4 py-2">Curriculum</button>
-        <button data-tab="carta"   class="tab-btn px-3 sm:px-4 py-2">Carta</button>
-        <button data-tab="links"   class="tab-btn px-3 sm:px-4 py-2">Links</button>
-        <button data-tab="interview" class="tab-btn px-3 sm:px-4 py-2">Interview</button>
+      <nav class="ui-segmented ui-segmented--sm shrink-0" aria-label="Seções">
+        <button type="button" data-tab="profile" class="tab-btn ui-segmented__item" aria-pressed="false">Curriculum</button>
+        <button type="button" data-tab="carta" class="tab-btn ui-segmented__item" aria-pressed="false">Carta</button>
+        <button type="button" data-tab="links" class="tab-btn ui-segmented__item" aria-pressed="false">Links</button>
+        <button type="button" data-tab="interview" class="tab-btn ui-segmented__item" aria-pressed="false">Interview</button>
       </nav>
 
       <!-- Profile-tab controls: horizontally-scrolling toolbar on mobile, wraps normally on desktop -->
       <div id="ctrl-profile" class="flex flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar basis-full lg:basis-auto lg:flex-wrap lg:overflow-visible lg:ml-auto">
-        <select id="profile-select" class="shrink-0 bg-transparent border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm"></select>
-        <button id="profile-new"    class="shrink-0 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">+ Novo</button>
-        <button id="profile-rename" title="Renomear" class="shrink-0 flex items-center gap-1.5 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">
+        <select id="profile-select" class="ui-input ui-input--select shrink-0" aria-label="Perfil"></select>
+        <button type="button" id="profile-new" class="ui-btn ui-btn--secondary ui-btn--sm shrink-0">+ Novo</button>
+        <button type="button" id="profile-rename" title="Renomear" class="ui-btn ui-btn--secondary ui-btn--sm shrink-0">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
           <span class="hidden lg:inline">Renomear</span>
         </button>
-        <button id="profile-delete" title="Excluir" class="shrink-0 flex items-center gap-1.5 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-red-500 hover:text-red-500">
+        <button type="button" id="profile-delete" title="Excluir" class="ui-btn ui-btn--secondary ui-btn--sm ui-btn--danger shrink-0">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
           <span class="hidden lg:inline">Excluir</span>
         </button>
         <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
-        <button class="edit-btn shrink-0 flex items-center gap-1.5 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">
+        <button type="button" class="edit-btn ui-chip ui-chip--accent shrink-0" aria-pressed="false">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M4 7h16"/><path d="M4 12h10"/><path d="M4 17h7"/></svg>
           <span class="edit-btn__label">Editar</span>
         </button>
         <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
-        <div class="shrink-0 inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
-          <button data-lang="pt" class="lang-btn px-3 py-2">PT</button>
-          <button data-lang="en" class="lang-btn px-3 py-2">EN</button>
+        <div class="ui-segmented ui-segmented--sm shrink-0" role="group" aria-label="Idioma">
+          <button type="button" data-lang="pt" class="lang-btn ui-segmented__item" aria-pressed="false">PT</button>
+          <button type="button" data-lang="en" class="lang-btn ui-segmented__item" aria-pressed="false">EN</button>
         </div>
-        <div class="shrink-0 inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
-          <button data-style="linkedin" class="style-btn px-3 py-2">LinkedIn</button>
-          <button data-style="ats"      class="style-btn px-3 py-2">ATS</button>
+        <div class="ui-segmented ui-segmented--sm shrink-0" role="group" aria-label="Estilo">
+          <button type="button" data-style="linkedin" class="style-btn ui-segmented__item" aria-pressed="false">LinkedIn</button>
+          <button type="button" data-style="ats" class="style-btn ui-segmented__item" aria-pressed="false">ATS</button>
         </div>
         <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
-        <button id="save-btn"   class="shrink-0 text-xs px-4 py-2 bg-accent text-black font-semibold rounded-lg hover:opacity-90">Salvar</button>
-        <button id="export-btn" class="shrink-0 text-xs px-4 py-2 border border-accent text-accent rounded-lg hover:bg-accent hover:text-black transition">Exportar PDF</button>
+        <button type="button" id="save-btn" class="ui-btn ui-btn--primary ui-btn--sm shrink-0">Salvar</button>
+        <button type="button" id="export-btn" class="ui-btn ui-btn--outline ui-btn--sm shrink-0">Exportar PDF</button>
       </div>
 
       <!-- Carta-tab controls -->
       <div id="ctrl-carta" class="hidden flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar basis-full lg:basis-auto lg:flex-wrap lg:overflow-visible lg:ml-auto">
-        <select id="letter-select" class="shrink-0 bg-transparent border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm"></select>
-        <button id="letter-new"    class="shrink-0 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">+ Nova</button>
-        <button id="letter-rename" title="Renomear" class="shrink-0 flex items-center gap-1.5 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">
+        <select id="letter-select" class="ui-input ui-input--select shrink-0" aria-label="Carta"></select>
+        <button type="button" id="letter-new" class="ui-btn ui-btn--secondary ui-btn--sm shrink-0">+ Nova</button>
+        <button type="button" id="letter-rename" title="Renomear" class="ui-btn ui-btn--secondary ui-btn--sm shrink-0">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
           <span class="hidden lg:inline">Renomear</span>
         </button>
-        <button id="letter-delete" title="Excluir" class="shrink-0 flex items-center gap-1.5 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-red-500 hover:text-red-500">
+        <button type="button" id="letter-delete" title="Excluir" class="ui-btn ui-btn--secondary ui-btn--sm ui-btn--danger shrink-0">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
           <span class="hidden lg:inline">Excluir</span>
         </button>
         <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
-        <button class="edit-btn shrink-0 flex items-center gap-1.5 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">
+        <button type="button" class="edit-btn ui-chip ui-chip--accent shrink-0" aria-pressed="false">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M4 7h16"/><path d="M4 12h10"/><path d="M4 17h7"/></svg>
           <span class="edit-btn__label">Editar</span>
         </button>
         <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
-        <div class="shrink-0 inline-flex rounded-lg border border-[var(--color-border)] overflow-hidden text-xs">
-          <button data-lang="pt" class="lang-btn px-3 py-2">PT</button>
-          <button data-lang="en" class="lang-btn px-3 py-2">EN</button>
+        <div class="ui-segmented ui-segmented--sm shrink-0" role="group" aria-label="Idioma">
+          <button type="button" data-lang="pt" class="lang-btn ui-segmented__item" aria-pressed="false">PT</button>
+          <button type="button" data-lang="en" class="lang-btn ui-segmented__item" aria-pressed="false">EN</button>
         </div>
         <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
-        <button id="letter-save-btn"   class="shrink-0 text-xs px-4 py-2 bg-accent text-black font-semibold rounded-lg hover:opacity-90">Salvar</button>
-        <button id="letter-export-btn" class="shrink-0 text-xs px-4 py-2 border border-accent text-accent rounded-lg hover:bg-accent hover:text-black transition">Exportar PDF</button>
+        <button type="button" id="letter-save-btn" class="ui-btn ui-btn--primary ui-btn--sm shrink-0">Salvar</button>
+        <button type="button" id="letter-export-btn" class="ui-btn ui-btn--outline ui-btn--sm shrink-0">Exportar PDF</button>
       </div>
 
       <!-- Links-tab controls (empty — actions are inline) -->
@@ -121,21 +122,21 @@
 
       <!-- Interview-tab controls -->
       <div id="ctrl-interview" class="hidden flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar basis-full lg:basis-auto lg:flex-wrap lg:overflow-visible lg:ml-auto">
-        <select id="interview-select" class="shrink-0 bg-transparent border border-[var(--color-border)] rounded-lg px-3 py-2 text-sm"></select>
-        <button id="interview-new"    class="shrink-0 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">+ Novo</button>
-        <button id="interview-rename" title="Renomear" class="shrink-0 flex items-center gap-1.5 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-accent">
+        <select id="interview-select" class="ui-input ui-input--select shrink-0" aria-label="Interview"></select>
+        <button type="button" id="interview-new" class="ui-btn ui-btn--secondary ui-btn--sm shrink-0">+ Novo</button>
+        <button type="button" id="interview-rename" title="Renomear" class="ui-btn ui-btn--secondary ui-btn--sm shrink-0">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
           <span class="hidden lg:inline">Renomear</span>
         </button>
-        <button id="interview-delete" title="Excluir" class="shrink-0 flex items-center gap-1.5 text-xs px-3 py-2 border border-[var(--color-border)] rounded-lg hover:border-red-500 hover:text-red-500">
+        <button type="button" id="interview-delete" title="Excluir" class="ui-btn ui-btn--secondary ui-btn--sm ui-btn--danger shrink-0">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
           <span class="hidden lg:inline">Excluir</span>
         </button>
         <span class="shrink-0 h-6 w-px bg-[var(--color-border)]"></span>
-        <button id="interview-save-btn" class="shrink-0 text-xs px-4 py-2 bg-accent text-black font-semibold rounded-lg hover:opacity-90">Salvar</button>
+        <button type="button" id="interview-save-btn" class="ui-btn ui-btn--primary ui-btn--sm shrink-0">Salvar</button>
       </div>
 
-      <button id="signout-btn" class="text-xs px-3 py-2 text-text-muted-dark hover:text-red-500 shrink-0 ml-auto lg:ml-0">Sair</button>
+      <button type="button" id="signout-btn" class="ui-btn ui-btn--ghost ui-btn--sm ui-btn--danger shrink-0 ml-auto lg:ml-0">Sair</button>
       <p id="save-status" class="basis-full text-xs text-text-muted-dark -mt-1"></p>
     </header>
 

@@ -1,4 +1,5 @@
 import './index.css'
+import './components.css'
 import { initCaseAccess } from './caseAccess'
 import { initCaseAdmin } from './caseAdmin'
 import { initI18n } from './i18n'
@@ -36,33 +37,41 @@ const observer = new IntersectionObserver(
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el))
 
-// Stagger reveal for sibling elements (case cards, lead cards)
-document.querySelectorAll('.case-card.reveal, .lead-card.reveal').forEach((el, i) => {
-  ;(el as HTMLElement).style.transitionDelay = `${i * 80}ms`
+// Stagger reveal for sibling cards; drop the delay once shown so hover isn't delayed.
+document.querySelectorAll<HTMLElement>('.ui-card.reveal').forEach((el, i) => {
+  el.style.transitionDelay = `${i * 80}ms`
+  const clear = (e: TransitionEvent) => {
+    if (e.target !== el || e.propertyName !== 'opacity') return
+    el.style.transitionDelay = ''
+    el.removeEventListener('transitionend', clear)
+  }
+  el.addEventListener('transitionend', clear)
 })
 
-// Experience item toggle cards
-document.querySelectorAll<HTMLElement>('.exp-item').forEach(item => {
-  item.addEventListener('click', (e) => {
-    e.stopPropagation()
-    const card = item.querySelector<HTMLElement>('.exp-card')!
-    const dot = item.querySelector<HTMLElement>('.exp-dot')!
-    const isOpen = !card.classList.contains('hidden')
-
-    // Close all cards and reset dots
-    document.querySelectorAll<HTMLElement>('.exp-card').forEach(c => c.classList.add('hidden'))
-    document.querySelectorAll<HTMLElement>('.exp-dot').forEach(d => { d.style.backgroundColor = '' })
-
-    if (!isOpen) {
-      card.classList.remove('hidden')
-      dot.style.backgroundColor = 'var(--color-accent)'
-    }
+// Experience items: button + popover (one open at a time; Esc / outside click close)
+const expTriggers = [...document.querySelectorAll<HTMLButtonElement>('.exp-item > [aria-controls]')]
+const closeExp = (except?: HTMLButtonElement) => expTriggers.forEach(t => {
+  if (t === except) return
+  t.setAttribute('aria-expanded', 'false')
+  document.getElementById(t.getAttribute('aria-controls')!)!.hidden = true
+})
+expTriggers.forEach(trigger => {
+  trigger.addEventListener('click', () => {
+    const open = trigger.getAttribute('aria-expanded') !== 'true'
+    closeExp(trigger)
+    trigger.setAttribute('aria-expanded', String(open))
+    document.getElementById(trigger.getAttribute('aria-controls')!)!.hidden = !open
   })
 })
-
-document.addEventListener('click', () => {
-  document.querySelectorAll<HTMLElement>('.exp-card').forEach(c => c.classList.add('hidden'))
-  document.querySelectorAll<HTMLElement>('.exp-dot').forEach(d => { d.style.backgroundColor = '' })
+document.addEventListener('click', e => {
+  if (!(e.target as HTMLElement).closest('.exp-item')) closeExp()
+})
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return
+  const open = expTriggers.find(t => t.getAttribute('aria-expanded') === 'true')
+  if (!open) return
+  closeExp()
+  open.focus()
 })
 
 // Logo click always scrolls to top
