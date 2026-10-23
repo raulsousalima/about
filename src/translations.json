@@ -860,7 +860,7 @@
     "ds.popover.li3": "Diferente do <a href=\"#/tooltip\" class=\"text-accent-text\">Tooltip</a>, abre por clique e pode ter texto longo.",
     "case.kalion.title": "Do Código ao Sistema: um Design System Construído com IA",
     "case.kalion.overview.role": "Design System · Design AI Engineer",
-    "case.kalion.overview.company": "A Kalion é uma plataforma digital para pequenas empresas criarem e gerenciarem a presença online sem montar um site completo nem contratar várias ferramentas separadas.",
+    "case.kalion.overview.company": "O DS Kalion é um Design System desenvolvido para garantir consistência visual e funcional no site do portfólio Raul Lima, servindo também como base para a evolução e futura migração do projeto Kalion.",
     "case.kalion.context.title": "Contexto",
     "case.kalion.context.p1": "O projeto nasceu da necessidade de uma <strong class=\"text-text-primary-dark\">base de design system reutilizável</strong> para produtos como a Kalion. Em vez de começar em um protótipo isolado, usei um ambiente real como laboratório: o meu próprio portfólio.",
     "case.kalion.context.p2": "O design system tinha dois objetivos: <strong class=\"text-text-primary-dark\">manter a consistência visual do site Raul Lima</strong> e servir como <strong class=\"text-text-primary-dark\">MVP para a Kalion</strong>, já validado em produção, com tokens, componentes documentados e regras de uso.",
@@ -938,7 +938,8 @@
     "case.kalion.impact.metric3.desc": "<strong>de contraste do lime como texto</strong> no tema claro, antes 1,7:1, agora dentro do padrão AA de acessibilidade",
     "case.kalion.back_home": "voltar para home",
     "cases.kalion.desc": "Um design system funcional, construído e mantido com IA.",
-    "cases.kalion.link": "Ver case"
+    "cases.kalion.link": "Ver case",
+    "case.kalion.overview.platform": "O Kalion é uma plataforma digital voltada a pequenas empresas, que permite criar e gerenciar sua presença online de forma simples e integrada, sem a necessidade de desenvolver um site completo ou contratar múltiplas ferramentas."
   },
   "en": {
     "nav.about": "About",
@@ -1801,7 +1802,7 @@
     "ds.popover.li3": "Unlike the <a href=\"#/tooltip\" class=\"text-accent-text\">Tooltip</a>, it opens on click and can hold longer text.",
     "case.kalion.title": "From Code to System: a Design System Built with AI",
     "case.kalion.overview.role": "Design System · Design AI Engineer",
-    "case.kalion.overview.company": "Kalion is a digital platform that helps small businesses create and manage their online presence without building a full website or paying for several separate tools.",
+    "case.kalion.overview.company": "DS Kalion is a design system built to ensure visual and functional consistency on the Raul Lima portfolio site, and also serves as the foundation for the evolution and future migration of the Kalion project.",
     "case.kalion.context.title": "Context",
     "case.kalion.context.p1": "The project started from the need for a <strong class=\"text-text-primary-dark\">reusable design system foundation</strong> for products like Kalion. Instead of starting in an isolated prototype, I used a real environment as the lab: my own portfolio.",
     "case.kalion.context.p2": "The design system had two goals: <strong class=\"text-text-primary-dark\">keep the Raul Lima site visually consistent</strong> and serve as the <strong class=\"text-text-primary-dark\">MVP for Kalion</strong>, already validated in production, with tokens, documented components and usage rules.",
@@ -1879,6 +1880,7 @@
     "case.kalion.impact.metric3.desc": "<strong>contrast for lime used as text</strong> in the light theme, up from 1.7:1 and now within the AA accessibility standard",
     "case.kalion.back_home": "back to home",
     "cases.kalion.desc": "A working design system, built and maintained with AI.",
-    "cases.kalion.link": "View case"
+    "cases.kalion.link": "View case",
+    "case.kalion.overview.platform": "Kalion is a digital platform for small businesses that lets them create and manage their online presence in a simple, integrated way, without building a full website or hiring multiple tools."
   }
 }
