@@ -17,13 +17,13 @@ type Tab = 'inicio' | 'extrato' | 'pagamentos' | 'pravoce' | 'menu'
 
 interface Tokens {
   accent: string | null
-  font: 'inter' | 'playfair' | 'system' | 'mono'
+  font: 'padrao' | 'inter' | 'playfair' | 'system' | 'mono'
   text: string
   space: string
   radius: string
 }
 
-const DEFAULT_TOKENS: Tokens = { accent: null, font: 'inter', text: '1', space: '1', radius: '1' }
+const DEFAULT_TOKENS: Tokens = { accent: null, font: 'padrao', text: '1', space: '1', radius: '1' }
 const DEMO_PIN = '123456'
 const PIN_LENGTH = 6
 
@@ -339,7 +339,9 @@ const ACCENTS: [string, string, string][] = [
   ['#C8F04E', 'Lime', 'Lime'], ['#2DD4BF', 'Turquesa', 'Teal'], ['#60A5FA', 'Azul', 'Blue'],
   ['#FB923C', 'Laranja', 'Orange'], ['#F472B6', 'Rosa', 'Pink'], ['#A78BFA', 'Violeta', 'Violet'],
 ]
-const FONTS: Record<Tokens['font'], [string, string]> = {
+// 'padrao' is the DS pairing: Playfair on titles and figures (--sim-font-title), Inter on body.
+// Any other choice sets one family for both.
+const FONTS: Record<Exclude<Tokens['font'], 'padrao'>, [string, string]> = {
   inter: ['Inter', "'Inter', sans-serif"],
   playfair: ['Playfair', "'Playfair Display', serif"],
   system: ['System', "system-ui, -apple-system, 'Segoe UI', sans-serif"],
@@ -347,7 +349,8 @@ const FONTS: Record<Tokens['font'], [string, string]> = {
 }
 const TEXT_STEPS = ['2xs', 'xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl']
 const SPACE_STEPS = ['1', '2', '3', '4', '5', '6', '8', '10', '12', '16']
-const RADIUS_STEPS = ['xs', 'sm', 'base', 'md', 'lg']
+// pill is included so ui-* buttons, chips and segmented follow 'Reto'; scaled up it stays a pill.
+const RADIUS_STEPS = ['xs', 'sm', 'base', 'md', 'lg', 'pill']
 
 const rootVar = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim()
 
@@ -381,7 +384,7 @@ function tokenOverrides(app: HTMLElement): [string, string][] {
       ['--color-accent-text', accentText(acc, bg)],
       ['--color-on-accent', lum(acc) > 0.18 ? 'var(--color-text-primary-light)' : 'var(--color-surface-light)'])
   }
-  if (t.font !== 'inter') out.push(['--font-sans', FONTS[t.font][1]])
+  if (t.font !== 'padrao') out.push(['--font-sans', FONTS[t.font][1]], ['--font-serif', FONTS[t.font][1]], ['--sim-font-title', 'var(--font-sans)'])
   if (t.text !== '1') TEXT_STEPS.forEach(s => out.push([`--text-${s}`, `calc(${rootVar(`--text-${s}`)} * ${t.text})`]))
   if (t.space !== '1') SPACE_STEPS.forEach(s => out.push([`--space-${s}`, `calc(${rootVar(`--space-${s}`)} * ${t.space})`]))
   if (t.radius !== '1') RADIUS_STEPS.forEach(s => out.push([`--radius-${s}`, `calc(${rootVar(`--radius-${s}`)} * ${t.radius})`]))
@@ -400,8 +403,8 @@ function applyTokens() {
     : L('/* Sem alterações: valores da biblioteca. */', '/* No changes: library values. */')
 }
 
-function seg(key: keyof Tokens, label: string, options: [string, string][]) {
-  return `<div class="sim-ctrl"><span class="ui-field__label" id="sim-l-${key}">${label}</span>
+function seg(key: keyof Tokens, label: string, options: [string, string][], wide = false) {
+  return `<div class="sim-ctrl${wide ? ' sim-ctrl--wide' : ''}"><span class="ui-field__label" id="sim-l-${key}">${label}</span>
     <div class="ui-segmented ui-segmented--sm" role="radiogroup" aria-labelledby="sim-l-${key}">
       ${options.map(([v, l]) => `<button type="button" class="ui-segmented__item" role="radio" aria-checked="${state.tokens[key] === v}" data-tok="${key}" data-val="${v}">${l}</button>`).join('')}
     </div></div>`
@@ -416,7 +419,7 @@ function renderPanel() {
         ${ACCENTS.map(([hex, pt, en], i) => `<button type="button" class="sim-swatch" role="radio" aria-checked="${(t.accent ?? ACCENTS[0][0]) === hex}" data-tok="accent" data-val="${i === 0 ? '' : hex}" style="--sw:${hex}" aria-label="${L(pt, en)}"></button>`).join('')}
         <label class="sim-swatch sim-swatch--custom" title="${L('Outra cor', 'Custom color')}">${ti('color-picker')}<input type="color" value="${t.accent ?? ACCENTS[0][0]}" data-tok-color aria-label="${L('Outra cor', 'Custom color')}" /></label>
       </div></div>
-    ${seg('font', L('Fonte', 'Font'), (Object.keys(FONTS) as Tokens['font'][]).map(k => [k, FONTS[k][0]]))}
+    ${seg('font', L('Fonte', 'Font'), [['padrao', L('Padrão', 'Default')], ...(Object.keys(FONTS) as (keyof typeof FONTS)[]).map(k => [k, FONTS[k][0]] as [string, string])], true)}
     ${seg('text', L('Tamanho do texto', 'Text size'), [['0.9', '90%'], ['1', '100%'], ['1.1', '110%'], ['1.25', '125%']])}
     ${seg('space', L('Espaçamento', 'Spacing'), [['0.75', L('Compacto', 'Compact')], ['1', L('Padrão', 'Default')], ['1.25', L('Amplo', 'Roomy')]])}
     ${seg('radius', L('Raio', 'Radius'), [['0', L('Reto', 'Square')], ['1', L('Padrão', 'Default')], ['1.5', L('Arredondado', 'Rounded')]])}`
@@ -438,6 +441,25 @@ function onPanel(e: Event) {
     const text = host.querySelector<HTMLElement>('[data-sim-css]')!.textContent ?? ''
     navigator.clipboard?.writeText(text).then(() => snack(L('CSS copiado.', 'CSS copied.')), () => {})
   }
+}
+
+/* ---------------- Fit to viewport ---------------- */
+
+/** Scales the whole device (zoom keeps the app's 23rem layout intact) so the phone
+ *  and its toolbar fit the window height on laptops instead of forcing a scroll,
+ *  and the column width on phones. */
+function fit() {
+  const device = host?.querySelector<HTMLElement>('.sim-device')
+  if (!device?.isConnected || !device.offsetParent) return
+  const topbar = parseFloat(getComputedStyle(document.body).getPropertyValue('--ds-topbar')) || 64
+  const toolbar = host.querySelector<HTMLElement>('.sim-toolbar')!.offsetHeight
+  const stage = getComputedStyle(host.querySelector('.sim-stage')!)
+  const chrome = topbar + toolbar + parseFloat(stage.paddingTop) + parseFloat(stage.paddingBottom) + 24
+  device.style.zoom = '1'
+  const { width, height } = device.getBoundingClientRect()
+  const room = host.querySelector<HTMLElement>('.sim-stage')!.clientWidth - parseFloat(stage.paddingLeft) - parseFloat(stage.paddingRight)
+  const scale = Math.min(1, room / width, Math.max(0.6, (window.innerHeight - chrome) / height))
+  device.style.zoom = scale.toFixed(3)
 }
 
 /* ---------------- Mount ---------------- */
@@ -484,8 +506,11 @@ export function mountSimulator(el: HTMLElement, t: T) {
     })
     // The accent-text contrast depends on the background, so recompute when the page theme flips.
     new MutationObserver(() => applyTokens()).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+    window.addEventListener('resize', fit)
+    new ResizeObserver(fit).observe(el)
   }
   renderPanel()
   render()
   applyTokens()
+  fit()
 }
