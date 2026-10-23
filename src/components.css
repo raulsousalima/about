@@ -330,6 +330,49 @@ button.ui-card--item[aria-expanded="true"] .ui-card__dot { background: var(--col
 .ui-popover__title { font-size: var(--text-sm); font-weight: var(--weight-semibold); margin-bottom: var(--space-2); }
 .ui-popover__text { font-size: var(--text-xs); line-height: var(--leading-relaxed); color: var(--color-text-muted-dark); }
 
+/* ---------- Compare (before / after slider) ---------- */
+/* Two aligned images; the "before" one is clipped to the left of --pos. Drag
+   anywhere (pointer) or use the arrow keys on the visually hidden range input
+   (src/compare.ts). With --scroll, tall captures scroll inside the frame and
+   the knob stays vertically centered (sticky). */
+.ui-compare {
+  --pos: 50%;
+  position: relative; overflow: hidden;
+  border: var(--border-1) solid var(--color-border); border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+.ui-compare__viewport { position: relative; }
+.ui-compare--scroll .ui-compare__viewport {
+  max-height: 560px; overflow-y: auto; overscroll-behavior: contain;
+  scrollbar-width: thin; scrollbar-color: var(--alpha-40) transparent;
+}
+.ui-compare__stage { position: relative; touch-action: pan-y; cursor: ew-resize; user-select: none; }
+.ui-compare__stage img { display: block; width: 100%; height: auto; pointer-events: none; -webkit-user-drag: none; }
+.ui-compare__before { position: absolute; inset: 0 0 auto 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.ui-compare__line {
+  position: absolute; top: 0; bottom: 0; left: var(--pos); width: var(--border-2);
+  margin-left: calc(var(--border-2) / -2); background: var(--color-accent); pointer-events: none;
+}
+.ui-compare__knob {
+  position: sticky; top: calc(50% - 1.25rem);
+  display: grid; place-items: center; width: 2.5rem; height: 2.5rem; margin-left: calc(-1.25rem + 1px);
+  border-radius: var(--radius-pill); background: var(--color-accent); color: var(--color-on-accent);
+  box-shadow: var(--shadow-md); font-size: 1.25rem;
+}
+.ui-compare__label {
+  position: absolute; top: var(--space-4); z-index: 2; pointer-events: none;
+  padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill);
+  font-family: var(--font-sans); font-size: var(--text-2xs); font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest); text-transform: uppercase;
+  background: var(--glass-bg); color: var(--color-text-primary-dark); border: var(--border-1) solid var(--alpha-15);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.ui-compare__label.is-before { left: var(--space-4); }
+.ui-compare__label.is-after { right: var(--space-4); }
+/* Keyboard control: hidden range input; focus shows on the knob. */
+.ui-compare__range { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.ui-compare:has(.ui-compare__range:focus-visible) .ui-compare__knob { outline: var(--border-2) solid var(--color-accent-text); outline-offset: 3px; }
+
 /* ---------- Navbar ---------- */
 .ui-navbar {
   display: flex; align-items: center; justify-content: space-between; gap: var(--space-6);

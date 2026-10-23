@@ -7,7 +7,7 @@ import { initI18n } from './i18n'
 import { initTheme } from './theme'
 import { initTypewriter } from './typewriter'
 import { initGalleryToggle } from './caseToggle'
-import { initSegmentedPanels } from './segmentedPanels'
+import { initCompare } from './compare'
 import { animateCounters } from './counter'
 import { initScrollSequence } from './scrollSequence'
 import { initGalleryMosaic } from './gallery'
@@ -92,7 +92,7 @@ initReviewDashboards()
 initTheme()
 initTypewriter()
 initGalleryToggle()
-initSegmentedPanels()
+initCompare()
 initScrollSequence()
 initGalleryMosaic()
 initGalleryParticles()

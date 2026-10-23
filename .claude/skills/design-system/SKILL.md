@@ -23,6 +23,7 @@ Para cada elemento da tarefa, escolha o componente existente:
 | Conteúdo expansível | `ui-accordion` (`<details>`) |
 | Detalhe ao passar o mouse / foco | `ui-tooltip` |
 | Detalhe ao clicar | `ui-popover` + gatilho `<button aria-expanded aria-controls>` |
+| Comparar duas imagens (antes/depois) | `ui-compare` (+ `--scroll` para capturas altas) |
 | Cabeçalho | `ui-navbar` |
 
 Tokens, nunca valores soltos:

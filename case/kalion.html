@@ -136,7 +136,7 @@
         <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
           <div class="reveal">
             <div class="case-img-placeholder aspect-square" style="max-width: 480px;">
-              <img src="../img/cases/kalion/auditoria.jpg" alt="Trecho da auditoria visual: popover da experiência sem borda, com a correção pelo design system" />
+              <img src="../img/cases/kalion/desafio.webp" alt="Hero da home do portfólio Raul Lima, aplicação usada como base para o design system" />
             </div>
           </div>
 
@@ -164,24 +164,22 @@
     ======================================= -->
     <section class="py-16 md:py-24">
       <div class="max-w-7xl mx-auto px-6">
-        <div class="mb-12 reveal flex flex-col items-start md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <span class="ui-badge ui-badge--label mb-4" data-i18n="case.kalion.gallery.label">Galeria</span>
-            <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.kalion.gallery.intro">A home antes e depois do design system. Mesmo conteúdo, agora com componentes, tokens e estados consistentes nos dois temas.</p>
-          </div>
-          <div class="ui-segmented" role="radiogroup" aria-label="Comparar versões da home" data-segmented-panels>
-            <button type="button" role="radio" class="ui-segmented__item" aria-checked="true" tabindex="0" aria-controls="kalion-before"><span data-i18n="case.kalion.gallery.before">Antes</span></button>
-            <button type="button" role="radio" class="ui-segmented__item" aria-checked="false" tabindex="-1" aria-controls="kalion-after"><span data-i18n="case.kalion.gallery.after">Depois</span></button>
-          </div>
+        <div class="mb-12 reveal">
+          <span class="ui-badge ui-badge--label mb-4" data-i18n="case.kalion.gallery.label">Galeria</span>
+          <p class="text-base md:text-lg leading-relaxed text-text-muted-dark mt-4 max-w-3xl" data-i18n="case.kalion.gallery.intro">A home antes e depois do design system. Arraste a linha para comparar: mesmo conteúdo, agora com componentes, tokens e estados consistentes.</p>
         </div>
 
-        <div class="reveal">
-          <div id="kalion-before" class="case-board-frame case-board-scroll" tabindex="0" aria-label="Home antes do design system">
-            <img src="../img/cases/kalion/site-antes.jpg" alt="Home do site antes da migração para o design system" loading="lazy" />
+        <div class="ui-compare ui-compare--scroll reveal" data-compare>
+          <div class="ui-compare__viewport">
+            <div class="ui-compare__stage">
+              <img class="ui-compare__after" src="../img/cases/kalion/site-depois.jpg" alt="Home do site depois da migração para o design system" loading="lazy" />
+              <img class="ui-compare__before" src="../img/cases/kalion/site-antes.jpg" alt="Home do site antes da migração para o design system" loading="lazy" />
+              <div class="ui-compare__line" aria-hidden="true"><span class="ui-compare__knob"><i class="ti ti-arrows-horizontal" aria-hidden="true"></i></span></div>
+            </div>
           </div>
-          <div id="kalion-after" class="case-board-frame case-board-scroll" tabindex="0" aria-label="Home depois do design system" hidden>
-            <img src="../img/cases/kalion/site-depois.jpg" alt="Home do site depois da migração para o design system" loading="lazy" />
-          </div>
+          <span class="ui-compare__label is-before" data-i18n="case.kalion.gallery.before">Antes</span>
+          <span class="ui-compare__label is-after" data-i18n="case.kalion.gallery.after">Depois</span>
+          <input class="ui-compare__range" type="range" min="0" max="100" value="50" aria-label="Comparar a home antes e depois do design system" />
         </div>
       </div>
     </section>
@@ -272,12 +270,8 @@
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">20</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n1">inconsistências mapeadas na auditoria</p></div>
             <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">44 → 0</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n2">cores escritas direto no HTML</p></div>
-            <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">8 → 3</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n3">receitas de borda que viraram tokens</p></div>
-            <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">4 → 3</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n4">alturas de botão, agora fixas em 36, 44 e 56px</p></div>
             <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">32</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n5">regras de CSS legado removidas</p></div>
             <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">10</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n6">componentes documentados com playground</p></div>
-            <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">9</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n7">regras verificadas automaticamente</p></div>
-            <div class="ui-card ui-card--metric"><p class="ui-card__metric ui-card__metric--sm">2 × 2</p><p class="ui-card__text" data-i18n="case.kalion.numbers.n8">temas e idiomas em cada componente</p></div>
           </div>
         </div>
 
@@ -297,19 +291,30 @@
           </div>
         </div>
 
-        <!-- Maintenance -->
+        <!-- Skills -->
         <div class="reveal">
-          <h3 class="font-serif text-2xl font-bold mb-6" data-i18n="case.kalion.maint.title">Manutenção com skills</h3>
+          <h3 class="font-serif text-2xl font-bold mb-2" data-i18n="case.kalion.maint.title">Skills</h3>
+          <p class="text-sm leading-relaxed text-text-muted-dark mb-6 max-w-3xl" data-i18n="case.kalion.maint.intro">Instruções versionadas no repositório que a IA segue a cada tarefa. Elas mantêm o design system como fonte única da interface, do layout à manutenção.</p>
           <div class="grid md:grid-cols-2 gap-4">
             <div class="ui-card ui-card--lead">
-              <i class="ti ti-sparkles ui-card__icon" aria-hidden="true"></i>
-              <h4 class="ui-card__title" data-i18n="case.kalion.maint.m1.title">Skill de design system</h4>
-              <p class="ui-card__text" data-i18n="case.kalion.maint.m1.desc">Antes de qualquer mudança de interface, a IA mapeia o pedido para os componentes existentes. Se nenhum serve, o componente nasce primeiro no design system, documentado, e só depois chega à página.</p>
+              <i class="ti ti-layout-dashboard ui-card__icon" aria-hidden="true"></i>
+              <h4 class="ui-card__title">DS Layout</h4>
+              <p class="ui-card__text" data-i18n="case.kalion.maint.m1.desc">Toda interface começa consultando a biblioteca. O layout é montado com os componentes existentes; quando nenhum serve, o componente é implementado e validado primeiro no design system e só depois chega à página.</p>
+            </div>
+            <div class="ui-card ui-card--lead">
+              <i class="ti ti-stack-2 ui-card__icon" aria-hidden="true"></i>
+              <h4 class="ui-card__title">DS Scale</h4>
+              <p class="ui-card__text" data-i18n="case.kalion.maint.m2.desc">Analisa a consistência da biblioteca antes de criar ou manter um componente. A regra: implementar em código com tokens, atualizar a biblioteca e documentar no playbook, para que a mudança tenha visibilidade.</p>
+            </div>
+            <div class="ui-card ui-card--lead">
+              <i class="ti ti-git-compare ui-card__icon" aria-hidden="true"></i>
+              <h4 class="ui-card__title">DS Update</h4>
+              <p class="ui-card__text" data-i18n="case.kalion.maint.m3.desc">Valida as alterações feitas no design system, mapeia onde cada componente alterado é usado na aplicação e aponta os possíveis impactos antes da publicação.</p>
             </div>
             <div class="ui-card ui-card--lead">
               <i class="ti ti-shield-check ui-card__icon" aria-hidden="true"></i>
-              <h4 class="ui-card__title" data-i18n="case.kalion.maint.m2.title">Verificação automática</h4>
-              <p class="ui-card__text" data-i18n="case.kalion.maint.m2.desc">O comando <code>npm run ds:check</code> analisa o HTML e as traduções e barra cor inline, hex em classe, classes legadas, lime como texto, botões montados à mão e ícones sem <code>aria-hidden</code>.</p>
+              <h4 class="ui-card__title">DS Check</h4>
+              <p class="ui-card__text" data-i18n="case.kalion.maint.m4.desc">Verificação automática antes de cada deploy: o comando <code>npm run ds:check</code> barra cor inline, classes legadas, lime como texto, botões montados à mão e ícones sem <code>aria-hidden</code>.</p>
             </div>
           </div>
         </div>
@@ -337,8 +342,8 @@
             <p class="ui-card__text" data-i18n="case.kalion.impact.metric2.desc"><strong>de código por componente</strong>: um CTA caiu de 10 classes para 2 e o toggle App/Web de 24 para 3, acelerando novas funcionalidades</p>
           </div>
           <div class="ui-card ui-card--metric">
-            <p class="ui-card__metric" data-i18n="case.kalion.impact.metric3.value">5,9:1</p>
-            <p class="ui-card__text" data-i18n="case.kalion.impact.metric3.desc"><strong>de contraste do lime como texto</strong> no tema claro, antes 1,7:1, agora dentro do padrão AA de acessibilidade</p>
+            <p class="ui-card__metric" data-i18n="case.kalion.impact.metric3.value">-35%</p>
+            <p class="ui-card__text" data-i18n="case.kalion.impact.metric3.desc"><strong>de código de estilo na home</strong>: de 1.309 para 845 classes no HTML, uma página mais leve de carregar e mais rápida de evoluir</p>
           </div>
         </div>
       </div>
