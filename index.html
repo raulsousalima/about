@@ -46,17 +46,17 @@
         </div>
         <!-- Theme Toggle -->
         <button id="theme-toggle" class="text-text-muted-dark hover:text-text-primary-dark transition-colors mx-1" aria-label="Toggle Theme">
-          <i class="ti ti-moon text-2xl" id="theme-icon"></i>
+          <i class="ti ti-moon text-2xl" id="theme-icon" aria-hidden="true"></i>
         </button>
         <!-- LinkedIn -->
         <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"
           class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
-          <i class="ti ti-brand-linkedin text-2xl"></i>
+          <i class="ti ti-brand-linkedin text-2xl" aria-hidden="true"></i>
         </a>
         <!-- Behance -->
         <a href="https://www.behance.net/raulsousa" target="_blank" rel="noopener" aria-label="Behance"
           class="text-text-muted-dark hover:text-text-primary-dark transition-colors">
-          <i class="ti ti-brand-behance text-2xl"></i>
+          <i class="ti ti-brand-behance text-2xl" aria-hidden="true"></i>
         </a>
         <span class="hidden md:inline-flex">
           <a href="mailto:raul.sousa.work@gmail.com" class="ui-btn ui-btn--outline ui-btn--sm">
@@ -432,6 +432,19 @@
 
       <div id="cases-grid" class="grid md:grid-cols-3 gap-6">
 
+        <!-- Case Kalion -->
+        <a href="case/kalion.html" data-case-slug="kalion" class="ui-card ui-card--case reveal">
+          <div class="ui-card__media">
+            <img src="img/cases/kalion/bannerhero.jpg" alt="Kalion cover" />
+          </div>
+          <div class="ui-card__body">
+            <p class="ui-card__overline">Design System · Design AI Engineer</p>
+            <h3 class="ui-card__heading">Kalion</h3>
+            <p class="ui-card__text" data-i18n="cases.kalion.desc">Um design system funcional, construído e mantido com IA.</p>
+            <span class="ui-card__cta"><span data-i18n="cases.kalion.link">Ver case</span><i class="ti ti-arrow-right" aria-hidden="true"></i></span>
+          </div>
+        </a>
+
         <!-- Case Pernambucanas -->
         <a href="case/pernambucanas.html" data-case-slug="pernambucanas" class="ui-card ui-card--case reveal">
           <div class="ui-card__media">
@@ -609,7 +622,7 @@
       </div>
 
       <!-- Photo + Form grid -->
-      <div class="reveal grid md:grid-cols-[4fr_5fr] gap-0 rounded-2xl overflow-hidden border border-[var(--color-border)]">
+      <div class="reveal grid md:grid-cols-[4fr_5fr] gap-0 rounded-[var(--radius-md)] overflow-hidden border border-[var(--color-border)]">
 
         <!-- Left: photo -->
         <div class="relative min-h-[400px] md:min-h-0">
