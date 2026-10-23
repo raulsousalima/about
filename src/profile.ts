@@ -275,7 +275,7 @@ function newLetter() {
 }
 
 function newInterview() {
-  const name = prompt('Nome do novo interview (ex: Nubank — Design Lead)')?.trim()
+  const name = prompt('Nome do novo interview (ex: Nubank, Design Lead)')?.trim()
   if (!name) return
   const key = 'interview-' + Date.now().toString(36)
   state.interviews.set(key, { profile_key: key, profile_name: name, data: defaultInterviewData() })
@@ -781,7 +781,7 @@ function interviewTitleField(c: InterviewCase, onTitleChange: () => void): HTMLD
     col.appendChild(el('label', { class: 'text-[11px] uppercase tracking-widest text-text-muted-dark' }, lang.toUpperCase()))
     const ti = el<HTMLInputElement>('input', {
       type: 'text',
-      placeholder: lang === 'pt' ? 'Ex: Onboarding Daycoval — conversão +25%' : 'Ex: Daycoval onboarding — +25% conversion',
+      placeholder: lang === 'pt' ? 'Ex: Onboarding Daycoval: conversão +25%' : 'Ex: Daycoval onboarding: +25% conversion',
       class: 'w-full bg-transparent border border-[var(--color-border)] rounded px-3 py-2 text-sm focus:outline-none focus:border-accent',
     })
     ti.value = c.title[lang] || ''
@@ -996,8 +996,8 @@ function linkedinTemplate(d: ResumeData): string {
         <div class="cv-item__sub">${L(ed.degree)}</div>
       </div>`).join('')}</section>` : ''}
     ${d.skills.length ? `<section class="cv-section"><h2>${l.skills}</h2>${d.skills.map(sk => `<div class="cv-skill"><strong>${L(sk.category)}:</strong> ${sk.items.map(esc).join(' · ')}</div>`).join('')}</section>` : ''}
-    ${d.languages.length ? `<section class="cv-section"><h2>${l.languages}</h2><ul class="cv-inline">${d.languages.map(lg => `<li>${L(lg.name)} — <em>${L(lg.level)}</em></li>`).join('')}</ul></section>` : ''}
-    ${d.certifications.length ? `<section class="cv-section"><h2>${l.certifications}</h2>${d.certifications.map(c => `<div class="cv-item"><strong>${esc(c.name)}</strong> — ${esc(c.issuer)}${c.year ? ' (' + esc(c.year) + ')' : ''}</div>`).join('')}</section>` : ''}
+    ${d.languages.length ? `<section class="cv-section"><h2>${l.languages}</h2><ul class="cv-inline">${d.languages.map(lg => `<li>${L(lg.name)}: <em>${L(lg.level)}</em></li>`).join('')}</ul></section>` : ''}
+    ${d.certifications.length ? `<section class="cv-section"><h2>${l.certifications}</h2>${d.certifications.map(c => `<div class="cv-item"><strong>${esc(c.name)}</strong>, ${esc(c.issuer)}${c.year ? ' (' + esc(c.year) + ')' : ''}</div>`).join('')}</section>` : ''}
   </article>`
 }
 
@@ -1011,13 +1011,13 @@ function atsTemplate(d: ResumeData): string {
     <p class="cv-ats__contacts">${contacts}</p>
     ${L(d.summary) ? `<h2>${l.summary}</h2><p>${L(d.summary).replace(/\n/g, '<br/>')}</p>` : ''}
     ${d.experience.length ? `<h2>${l.experience}</h2>${d.experience.map(x => `
-      <p><strong>${L(x.role)}</strong> — ${esc(x.company)}${L(x.location) ? ', ' + L(x.location) : ''}<br/><em>${fmtDate(x)}</em></p>
+      <p><strong>${L(x.role)}</strong>, ${esc(x.company)}${L(x.location) ? ', ' + L(x.location) : ''}<br/><em>${fmtDate(x)}</em></p>
       ${L(x.summary) ? `<p>${L(x.summary)}</p>` : ''}
       ${x.achievements.length ? `<ul>${x.achievements.map(a => `<li>${L(a)}</li>`).join('')}</ul>` : ''}`).join('')}` : ''}
     ${d.education.length ? `<h2>${l.education}</h2>${d.education.map(ed => `<p><strong>${esc(ed.school)}</strong><br/>${L(ed.degree)}<br/><em>${esc(fmtMonth(ed.start))}${ed.end ? ' - ' + esc(fmtMonth(ed.end)) : ''}</em></p>`).join('')}` : ''}
     ${d.skills.length ? `<h2>${l.skills}</h2>${d.skills.map(sk => `<p><strong>${L(sk.category)}:</strong> ${sk.items.map(esc).join(', ')}</p>`).join('')}` : ''}
     ${d.languages.length ? `<h2>${l.languages}</h2><p>${d.languages.map(lg => `${L(lg.name)} (${L(lg.level)})`).join(', ')}</p>` : ''}
-    ${d.certifications.length ? `<h2>${l.certifications}</h2>${d.certifications.map(c => `<p>${esc(c.name)} — ${esc(c.issuer)}${c.year ? ', ' + esc(c.year) : ''}</p>`).join('')}` : ''}
+    ${d.certifications.length ? `<h2>${l.certifications}</h2>${d.certifications.map(c => `<p>${esc(c.name)}, ${esc(c.issuer)}${c.year ? ', ' + esc(c.year) : ''}</p>`).join('')}` : ''}
   </article>`
 }
 
@@ -1052,7 +1052,7 @@ function renderLetterPreview() {
           </div>
         </header>
         <h2 style="font-size:13pt;text-transform:none;letter-spacing:0;border-bottom:1px solid #d0d0d0;padding-bottom:4px;margin-bottom:14px;color:#111">${titleLabel}</h2>
-        ${d.company ? `<p style="margin-bottom:8px;color:#111"><strong>${esc(d.company)}</strong>${L(d.role) ? ' — ' + L(d.role) : ''}</p>` : ''}
+        ${d.company ? `<p style="margin-bottom:8px;color:#111"><strong>${esc(d.company)}</strong>${L(d.role) ? ', ' + L(d.role) : ''}</p>` : ''}
         <p style="margin-bottom:14px;color:#111">${L(d.salutation)}</p>
         <div style="margin-bottom:20px">${bodyParagraphs}</div>
         <p style="white-space:pre-line;color:#111">${L(d.closing)}</p>
@@ -1061,7 +1061,7 @@ function renderLetterPreview() {
         <h1 class="cv-ats__name" style="color:#111">${esc(header?.name || 'Raul Lima')}</h1>
         <p class="cv-ats__contacts" style="color:#333">${contacts}</p>
         <h2 style="font-size:13pt;text-transform:none;letter-spacing:0;border-bottom:1px solid #999;padding-bottom:4px;margin:14px 0 10px;color:#111">${titleLabel}</h2>
-        ${d.company ? `<p style="margin-bottom:8px;color:#111"><strong>${esc(d.company)}</strong>${L(d.role) ? ' — ' + L(d.role) : ''}</p>` : ''}
+        ${d.company ? `<p style="margin-bottom:8px;color:#111"><strong>${esc(d.company)}</strong>${L(d.role) ? ', ' + L(d.role) : ''}</p>` : ''}
         <p style="margin-bottom:14px;color:#111">${L(d.salutation)}</p>
         <div style="margin-bottom:20px">${bodyParagraphs}</div>
         <p style="white-space:pre-line;color:#111">${L(d.closing)}</p>

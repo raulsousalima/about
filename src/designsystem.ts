@@ -1225,7 +1225,7 @@ function mountPage(page: HTMLElement) {
 
 function setDocTitle(id: string) {
   const def = PAGES.find(p => p.id === id)!
-  document.title = `${tr(def.title)} — Design System | Raul Lima`
+  document.title = `${tr(def.title)}: Design System | Raul Lima`
 }
 
 function show(id: string, focus: boolean) {

@@ -234,6 +234,19 @@ a.ui-badge--tag:hover, .ui-badge--tag.is-hover { background: var(--color-accent-
 .ui-card__cta { display: inline-flex; align-items: center; gap: var(--space-1); margin-top: var(--space-4); font-size: var(--text-sm); font-weight: var(--weight-medium); transition: gap var(--duration-base) var(--ease-standard); }
 .ui-card--case:hover .ui-card__cta, .ui-card--case.is-hover .ui-card__cta { gap: var(--space-2); }
 
+/* Mini case — compact cover + title; used in the "Outros cases" strip */
+.ui-card--mini .ui-card__body { padding: var(--space-4); }
+.ui-card--mini .ui-card__overline { margin-bottom: var(--space-1); }
+.ui-card--mini .ui-card__heading { font-size: var(--text-base); margin-bottom: 0; }
+
+/* Case strip — always one row of fixed fifth-width cards (fits the 5 other
+   cases); scrolls sideways on small screens */
+.ui-case-strip { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 4 * var(--space-4)) / 5); gap: var(--space-4); }
+@media (max-width: 767px) {
+  .ui-case-strip { grid-auto-columns: 45%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: var(--space-2); }
+  .ui-case-strip > * { scroll-snap-align: start; }
+}
+
 /* Item — compact list entry (certifications, experience). As a <button> it
    becomes interactive and pairs with .ui-popover via aria-expanded. */
 .ui-card--item {

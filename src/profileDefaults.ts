@@ -115,8 +115,8 @@ const EXP_GOKK_COORD: Experience = {
 const EXP_GOKK_COORD_DECATHLON: Experience = {
   ...EXP_GOKK_COORD,
   summary: {
-    pt: 'Gerenciamento de time de 14 Designers e entrega de projetos estratégicos para múltiplos clientes. Projeto em destaque: Decathlon — Club / Ready to Play — redesenho estratégico da experiência de uma das principais soluções digitais da empresa.',
-    en: 'Managed a team of 14 Designers and delivered strategic projects for multiple clients. Featured project: Decathlon — Club / Ready to Play — strategic redesign of one of the company\'s key digital solutions.',
+    pt: 'Gerenciamento de time de 14 Designers e entrega de projetos estratégicos para múltiplos clientes. Projeto em destaque: Decathlon (Club / Ready to Play): redesenho estratégico da experiência de uma das principais soluções digitais da empresa.',
+    en: 'Managed a team of 14 Designers and delivered strategic projects for multiple clients. Featured project: Decathlon (Club / Ready to Play): strategic redesign of one of the company\'s key digital solutions.',
   },
   achievements: [
     { pt: 'Liderança, mentoria e desenvolvimento de time de 14 Designers.', en: 'Lead, mentor and develop a team of 14 Designers.' },
@@ -131,8 +131,8 @@ const EXP_GOKK_LEADER: Experience = {
   location: { pt: 'São Paulo, Brazil', en: 'São Paulo, Brazil' },
   start: '01/2017', end: '08/2022', current: false,
   summary: {
-    pt: 'Liderança de um time multidisciplinar de 9 Designers em múltiplos produtos e squads. Projeto em destaque: Grupo RD Saúde — liderou time de quatro Designers no mapeamento de principais pontos de atrito em plataformas digitais, unificando sistemas e apoiando o refatoramento de ecossistemas digitais complexos.',
-    en: 'Led a multidisciplinary team of 9 Designers across multiple products and squads. Featured project: Grupo RD Saúde — led a team of four Designers mapping major friction points across digital platforms, unifying systems and supporting the refactoring of complex digital ecosystems.',
+    pt: 'Liderança de um time multidisciplinar de 9 Designers em múltiplos produtos e squads. Projeto em destaque: Grupo RD Saúde: liderou time de quatro Designers no mapeamento de principais pontos de atrito em plataformas digitais, unificando sistemas e apoiando o refatoramento de ecossistemas digitais complexos.',
+    en: 'Led a multidisciplinary team of 9 Designers across multiple products and squads. Featured project: Grupo RD Saúde: led a team of four Designers mapping major friction points across digital platforms, unifying systems and supporting the refactoring of complex digital ecosystems.',
   },
   achievements: [
     { pt: 'Liderança de time, mentoria e desenvolvimento de carreira.', en: 'Team leadership, mentoring and career development.' },
@@ -176,8 +176,8 @@ const EXP_PD_2013: Experience = {
   location: { pt: 'São Paulo, Brazil', en: 'São Paulo, Brazil' },
   start: '01/2013', end: '12/2013', current: false,
   summary: {
-    pt: 'Produtos digitais envolvendo IoT, iOS/Android, web responsivo e geolocalização. Projeto em destaque: Porto Seguro — Assistente Tempo — solução de logística para atendimento ao cliente usando geolocalização, melhorando a eficiência operacional.',
-    en: 'Digital products involving IoT, iOS/Android, responsive web and geolocation. Featured project: Porto Seguro — Tempo Assistant — logistics solution for customer service using geolocation, improving operational efficiency.',
+    pt: 'Produtos digitais envolvendo IoT, iOS/Android, web responsivo e geolocalização. Projeto em destaque: Porto Seguro (Assistente Tempo): solução de logística para atendimento ao cliente usando geolocalização, melhorando a eficiência operacional.',
+    en: 'Digital products involving IoT, iOS/Android, responsive web and geolocation. Featured project: Porto Seguro (Tempo Assistant): logistics solution for customer service using geolocation, improving operational efficiency.',
   },
   achievements: [],
 }
@@ -222,12 +222,12 @@ const EXP_AWARI: Experience = {
 
 const EDUCATION: Education[] = [
   {
-    school: 'PUCRS — Pontifícia Universidade Católica do Rio Grande do Sul',
+    school: 'PUCRS, Pontifícia Universidade Católica do Rio Grande do Sul',
     degree: { pt: 'Pós-graduação, User Experience Design e Além', en: 'Postgraduate Degree, User Experience Design and Beyond' },
     start: '2023', end: '2024',
   },
   {
-    school: 'UNINOVE — Universidade Nove de Julho',
+    school: 'UNINOVE, Universidade Nove de Julho',
     degree: { pt: 'Bacharelado, Comunicação Social & Publicidade e Propaganda', en: "Bachelor's Degree, Social Communication & Advertising" },
     start: '2010', end: '2014',
   },
@@ -255,7 +255,7 @@ const CERTIFICATIONS: Certification[] = [
   { name: 'Customer Experience (CX)', issuer: 'Escola Conquer', year: '2023' },
   { name: 'Communication & Public Speaking', issuer: 'Evolive', year: '2023' },
   { name: 'Professional Adaptability: Emotional Intelligence, Personal Finance & Leadership', issuer: 'PUCRS', year: '2022' },
-  { name: '100 Mentorship Minutes — Mentor', issuer: 'ADPList', year: '2022' },
+  { name: '100 Mentorship Minutes: Mentor', issuer: 'ADPList', year: '2022' },
   { name: 'Exponential Leadership', issuer: 'StartSe', year: '2021' },
   { name: 'Enterprise Design Thinking', issuer: 'IBM', year: '2021' },
   { name: 'Product Analytics Certification (PAC)', issuer: 'Product School', year: '2021' },
@@ -323,14 +323,14 @@ export function defaultLetterData(): LetterData {
 
 Ao longo da minha trajetória, desenvolvi uma atuação sólida tanto em design de produto quanto em liderança de times, sempre conectando estratégia de negócio, pesquisa com usuários e entrega de valor real. Contribuí para produtos com mais de 1 milhão de usuários, aumentando taxas de conversão em até 25%, reduzindo abandono em 30%+ e melhorando a eficiência operacional em aproximadamente 20%.
 
-Tenho especial interesse em oportunidades que combinem desafios complexos de UX com impacto estratégico — seja como especialista técnico ou como líder de time. Minha abordagem é orientada por dados e pelo usuário, com forte capacidade de articulação entre produto, tecnologia e negócio.
+Tenho especial interesse em oportunidades que combinem desafios complexos de UX com impacto estratégico, seja como especialista técnico ou como líder de time. Minha abordagem é orientada por dados e pelo usuário, com forte capacidade de articulação entre produto, tecnologia e negócio.
 
 Fico à disposição para uma conversa. Meu portfólio está disponível em raullima.vercel.app.`,
       en: `My name is Raul Lima, a Product Designer with over 15 years of experience designing and leading digital products across Fintech, Retail, HealthTech, EdTech and Artificial Intelligence. I currently work as a Product Designer Specialist at Banco Daycoval and as Coordinator of Product Design at GOK.K, where I lead a team of 14 Designers.
 
 Throughout my career, I have developed a strong track record in both product design and team leadership, always connecting business strategy, user research and real value delivery. I have contributed to products reaching over 1 million users, increasing conversion rates by up to 25%, reducing drop-off by 30%+ and improving operational efficiency by approximately 20%.
 
-I am particularly interested in opportunities that combine complex UX challenges with strategic impact — whether as a technical specialist or as a team leader. My approach is data and user-driven, with a strong ability to bridge product, technology and business.
+I am particularly interested in opportunities that combine complex UX challenges with strategic impact, whether as a technical specialist or as a team leader. My approach is data and user-driven, with a strong ability to bridge product, technology and business.
 
 I would be happy to connect for a conversation. My portfolio is available at raullima.vercel.app.`,
     },
