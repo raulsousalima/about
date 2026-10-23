@@ -2,6 +2,7 @@ import './index.css'
 import './components.css'
 import { initCaseAccess } from './caseAccess'
 import { initCaseAdmin } from './caseAdmin'
+import { initMoreCases } from './moreCases'
 import { initI18n } from './i18n'
 import { initTheme } from './theme'
 import { initTypewriter } from './typewriter'
@@ -17,6 +18,7 @@ import { initReviewDashboards } from './reviewDashboard'
 
 // Case access gate — run first so restricted cards/pages resolve before the
 // rest of the page initializes. Admin tab wires up the manage panel.
+initMoreCases()
 initCaseAccess()
 initCaseAdmin()
 
