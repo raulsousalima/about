@@ -352,7 +352,8 @@
   .ds-body.is-nav-open .ds-scrim { opacity: 1; pointer-events: auto; }
 }
 @media (max-width: 640px) {
-  .ds-topbar__inner { padding: 0 var(--space-4); }
+  .ds-topbar__inner { padding: 0 var(--space-4); gap: var(--space-2); }
+  .ds-version, .ds-topbar [data-ds-aria="source"] { display: none; }
   .ds-main { padding: var(--space-8) var(--space-4) var(--space-16); }
   .ds-pg__stage { padding: var(--space-12) var(--space-4); min-height: 16rem; }
   .ds-type-row { grid-template-columns: minmax(0, 1fr); gap: var(--space-2); }

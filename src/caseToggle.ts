@@ -1,3 +1,5 @@
+// App/Web gallery switch (Daycoval). The buttons are a ui-segmented radiogroup:
+// state lives in aria-checked + roving tabindex; arrow keys move the selection.
 export function initGalleryToggle() {
   const appBtn = document.getElementById('view-mode-app-btn');
   const webBtn = document.getElementById('view-mode-web-btn');
@@ -7,31 +9,23 @@ export function initGalleryToggle() {
   if (!appBtn || !webBtn || !appView || !webView) return;
 
   function setViewMode(mode: 'app' | 'web') {
-    if (mode === 'app') {
-      // Button states
-      appBtn?.classList.add('bg-surface', 'shadow-sm');
-      appBtn?.classList.remove('text-muted');
-      webBtn?.classList.remove('bg-surface', 'shadow-sm');
-      webBtn?.classList.add('text-muted');
-
-      // Show App, Hide Web
-      appView?.classList.remove('hidden');
-      appView?.classList.add('show-grid');
-      webView?.classList.add('hidden');
-    } else {
-      // Button states
-      webBtn?.classList.add('bg-surface', 'shadow-sm');
-      webBtn?.classList.remove('text-muted');
-      appBtn?.classList.remove('bg-surface', 'shadow-sm');
-      appBtn?.classList.add('text-muted');
-
-      // Show Web, Hide App
-      webView?.classList.remove('hidden');
-      appView?.classList.add('hidden');
-      appView?.classList.remove('show-grid');
+    const app = mode === 'app';
+    for (const [btn, on] of [[appBtn!, app], [webBtn!, !app]] as const) {
+      btn.setAttribute('aria-checked', String(on));
+      btn.tabIndex = on ? 0 : -1;
     }
+    appView!.classList.toggle('hidden', !app);
+    appView!.classList.toggle('show-grid', app);
+    webView!.classList.toggle('hidden', app);
   }
 
   appBtn.addEventListener('click', () => setViewMode('app'));
   webBtn.addEventListener('click', () => setViewMode('web'));
+  appBtn.parentElement!.addEventListener('keydown', (e) => {
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
+    e.preventDefault();
+    const toWeb = appBtn.getAttribute('aria-checked') === 'true';
+    setViewMode(toWeb ? 'web' : 'app');
+    (toWeb ? webBtn : appBtn).focus();
+  });
 }

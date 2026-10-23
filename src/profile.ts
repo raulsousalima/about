@@ -361,8 +361,7 @@ function applyEditingLayout() {
   }
 
   document.querySelectorAll<HTMLElement>('.edit-btn').forEach(b => {
-    b.classList.toggle('bg-accent', state.editing)
-    b.classList.toggle('text-black', state.editing)
+    b.setAttribute('aria-pressed', String(state.editing))
     const label = b.querySelector('.edit-btn__label')
     if (label) label.textContent = state.editing ? 'Fechar edição' : 'Editar'
   })
@@ -382,9 +381,8 @@ function renderTabs() {
   if (ctrl) { ctrl.classList.remove('hidden'); ctrl.classList.add('flex') }
 
   document.querySelectorAll<HTMLButtonElement>('.tab-btn').forEach(b => {
-    const active = b.dataset.tab === state.tab
-    b.classList.toggle('bg-accent', active)
-    b.classList.toggle('text-black', active)
+    // ui-segmented items: the pressed state draws the selection.
+    b.setAttribute('aria-pressed', String(b.dataset.tab === state.tab))
   })
 }
 
@@ -392,12 +390,10 @@ function renderTabs() {
 
 function renderLangStyleToggles() {
   document.querySelectorAll<HTMLButtonElement>('.lang-btn').forEach(b => {
-    b.classList.toggle('bg-accent', b.dataset.lang === state.lang)
-    b.classList.toggle('text-black', b.dataset.lang === state.lang)
+    b.setAttribute('aria-pressed', String(b.dataset.lang === state.lang))
   })
   document.querySelectorAll<HTMLButtonElement>('.style-btn').forEach(b => {
-    b.classList.toggle('bg-accent', b.dataset.style === state.style)
-    b.classList.toggle('text-black', b.dataset.style === state.style)
+    b.setAttribute('aria-pressed', String(b.dataset.style === state.style))
   })
 }
 

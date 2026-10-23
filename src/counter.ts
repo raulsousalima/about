@@ -1,5 +1,5 @@
 export function animateCounters(container: HTMLElement) {
-  const counters = container.querySelectorAll('.metric-value');
+  const counters = container.querySelectorAll('.ui-card__metric');
   
   counters.forEach((counterRaw) => {
     const el = counterRaw as HTMLElement;
