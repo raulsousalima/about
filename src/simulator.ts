@@ -440,6 +440,25 @@ function onPanel(e: Event) {
   }
 }
 
+/* ---------------- Fit to viewport ---------------- */
+
+/** Scales the whole device (zoom keeps the app's 23rem layout intact) so the phone
+ *  and its toolbar fit the window height on laptops instead of forcing a scroll,
+ *  and the column width on phones. */
+function fit() {
+  const device = host?.querySelector<HTMLElement>('.sim-device')
+  if (!device?.isConnected || !device.offsetParent) return
+  const topbar = parseFloat(getComputedStyle(document.body).getPropertyValue('--ds-topbar')) || 64
+  const toolbar = host.querySelector<HTMLElement>('.sim-toolbar')!.offsetHeight
+  const stage = getComputedStyle(host.querySelector('.sim-stage')!)
+  const chrome = topbar + toolbar + parseFloat(stage.paddingTop) + parseFloat(stage.paddingBottom) + 24
+  device.style.zoom = '1'
+  const { width, height } = device.getBoundingClientRect()
+  const room = host.querySelector<HTMLElement>('.sim-stage')!.clientWidth - parseFloat(stage.paddingLeft) - parseFloat(stage.paddingRight)
+  const scale = Math.min(1, room / width, Math.max(0.6, (window.innerHeight - chrome) / height))
+  device.style.zoom = scale.toFixed(3)
+}
+
 /* ---------------- Mount ---------------- */
 
 export function mountSimulator(el: HTMLElement, t: T) {
@@ -484,8 +503,11 @@ export function mountSimulator(el: HTMLElement, t: T) {
     })
     // The accent-text contrast depends on the background, so recompute when the page theme flips.
     new MutationObserver(() => applyTokens()).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+    window.addEventListener('resize', fit)
+    new ResizeObserver(fit).observe(el)
   }
   renderPanel()
   render()
   applyTokens()
+  fit()
 }

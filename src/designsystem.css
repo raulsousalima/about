@@ -395,12 +395,12 @@
 .sim-frame { border: var(--border-1) solid var(--color-border); border-radius: var(--radius-lg); overflow: hidden; }
 .sim-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-bottom: var(--border-1) solid var(--color-border); }
 .sim-stage {
-  display: flex; justify-content: center; padding: var(--space-10) var(--space-4);
+  display: flex; justify-content: center; padding: var(--space-6) var(--space-4);
   background-image: radial-gradient(circle, var(--alpha-15) 1px, transparent 1px); background-size: 20px 20px;
 }
 .sim-device {
   --sim-device-radius: 3rem;
-  width: min(100%, 23rem); border: var(--border-frame) solid var(--color-device-frame); border-radius: var(--sim-device-radius);
+  width: 23rem; flex-shrink: 0; border: var(--border-frame) solid var(--color-device-frame); border-radius: var(--sim-device-radius);
   background: var(--color-device-frame); box-shadow: 0 0 0 1px var(--alpha-15), var(--shadow-xl);
 }
 .sim-app {
@@ -630,7 +630,7 @@
 @keyframes sim-float { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(-6deg) translateY(-8px); } }
 
 @media (max-width: 640px) {
-  .sim-stage { padding: var(--space-6) var(--space-2); }
+  .sim-stage { padding: var(--space-4) var(--space-2); }
   .sim-device { --sim-device-radius: 2.5rem; }
 }
 @media (prefers-reduced-motion: reduce) {
