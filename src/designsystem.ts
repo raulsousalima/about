@@ -827,7 +827,7 @@ const SPECS: Record<string, Spec> = {
       { type: 'switch', key: 'labels', label: ['Legendas', 'Labels'] },
       { type: 'switch', key: 'scroll', label: ['Rolagem interna', 'Inner scroll'] },
     ],
-    defaults: { pos: '50', labels: true, scroll: false },
+    defaults: { pos: '50', labels: true, scroll: true },
     render: p => `<div class="ui-compare${p.scroll ? ' ui-compare--scroll' : ''}" data-compare style="--pos: ${p.pos}%" data-ds-root>
         <div class="ui-compare__viewport"><div class="ui-compare__stage">
           <img class="ui-compare__after" src="/img/cases/kalion/site-depois.jpg" alt="${L('Depois', 'After')}" />
