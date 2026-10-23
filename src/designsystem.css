@@ -453,10 +453,11 @@
 .sim-h1:focus, .sim-h2:focus, .sr-only:focus { outline: none; }
 .sim-block { width: 100%; }
 .sim-center { align-self: center; }
+/* ui-btn--link has no height of its own; give it a full touch target in the app. */
+.sim-tap { min-height: var(--control-md); padding: 0 var(--space-4); color: var(--color-text-primary-dark); font-weight: var(--weight-medium); }
 
 /* Splash */
 .sim-splash { align-items: center; justify-content: center; }
-.sim-splash__loader { position: absolute; bottom: var(--space-16); color: var(--color-text-muted-dark); font-size: var(--text-lg); }
 
 /* Card art */
 .sim-card {
@@ -507,6 +508,7 @@
 /* Login */
 .sim-login { align-items: center; text-align: center; padding-top: var(--space-8); }
 .sim-login > .sim-muted { margin-top: 0; }
+.sim-login__forgot { margin-top: var(--space-2); }
 .sim-pin { display: flex; align-items: center; justify-content: center; gap: var(--space-4); height: 1.75rem; margin-top: var(--space-2); }
 .sim-pin__dot { width: 0.875rem; height: 0.875rem; border-radius: var(--radius-pill); border: var(--border-2) solid var(--color-text-muted-dark); transition: background-color var(--duration-fast), border-color var(--duration-fast), transform var(--duration-fast); }
 .sim-pin__dot.is-filled { background: var(--color-accent); border-color: var(--color-accent); transform: scale(1.1); }
