@@ -106,12 +106,12 @@
 
 .ds-docs .ds-tile strong { overflow-wrap: anywhere; }
 
-.ds-pager { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-top: var(--space-24) !important; padding-top: var(--space-8); border-top: 1px solid var(--color-border); }
+.ds-pager { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); margin-top: var(--space-24) !important; padding-top: var(--space-8); border-top: 1px solid var(--color-border); }
 .ds-pager a { display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-4) var(--space-5); border: 1px solid var(--color-border); border-radius: var(--radius-md); text-decoration: none; transition: border-color var(--duration-base); }
 .ds-pager a:hover { border-color: var(--color-accent); }
 .ds-pager a:focus-visible { outline: 2px solid var(--color-accent-text); outline-offset: 2px; }
 .ds-pager span { font-size: var(--text-xs); color: var(--color-text-muted-dark); }
-.ds-pager strong { font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--color-text-primary-dark); }
+.ds-pager strong { font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--color-text-primary-dark); overflow-wrap: anywhere; }
 .ds-pager .is-next { text-align: right; grid-column: 2; }
 
 /* Overview cards */
@@ -370,8 +370,8 @@
   .ds-motion__row { grid-template-columns: minmax(0, 1fr) auto; }
   .ds-motion__track { grid-column: 1 / -1; }
   .ds-compare { grid-template-columns: minmax(0, 1fr); }
-  .ds-pager { grid-template-columns: minmax(0, 1fr); }
-  .ds-pager .is-next { grid-column: 1; }
+  .ds-pager { gap: var(--space-2); }
+  .ds-pager a { padding: var(--space-3) var(--space-4); }
 }
 @media (prefers-reduced-motion: reduce) {
   .ds-sidebar, .ds-scrim, .ds-swatch, .ds-tile, .ds-toast { transition: none; }
@@ -473,7 +473,11 @@
 .sim-card__num { grid-column: 1; letter-spacing: var(--tracking-wide); }
 .sim-card__tier { grid-column: 2; color: var(--color-text-muted-dark); }
 .sim-card--float { transform: rotate(-8deg); animation: sim-float 6s var(--ease-standard) infinite; }
-.sim-card--mini { width: 6rem; padding: var(--space-2); gap: var(--space-1); font-size: var(--text-2xs); box-shadow: var(--shadow-xs); }
+/* Same footprint and frame as the add-card slot next to it (.sim-cards__add), solid instead of dashed. */
+.sim-card--mini {
+  width: 6rem; height: 3.8rem; aspect-ratio: auto; padding: var(--space-2); gap: 0; font-size: var(--text-2xs);
+  border: var(--border-1) solid var(--alpha-40); border-radius: var(--sim-card-slot-radius); box-shadow: none;
+}
 .sim-card--mini .sim-card__top .sim-icon { width: 0.875rem; height: 0.875rem; }
 .sim-card--mini .sim-card__chip { width: 1rem; height: 0.75rem; }
 .sim-card--mini .sim-card__tier { display: none; }
