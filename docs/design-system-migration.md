@@ -77,11 +77,11 @@ Header e footer são idênticos nas 6 páginas; troca feita por script com subst
 - Navegação só com teclado: foco visível, toggle App/Web, chips, accordion, popover.
 - Sem rolagem horizontal no mobile e sem erros no console.
 
-## Decisões pendentes
+## Decisões
 
-- **Styleguide x Design System:** manter `styleguide.html` como vitrine curta (linkada no footer)
-  ou redirecionar o link do footer para `/designsystem.html`. Até decidir, o styleguide é migrado
-  e o design system continua sem link público.
+- **Styleguide x Design System:** o link do footer (home e cases) aponta para `/designsystem.html`
+  com o nome “Design System”, e a página deixou de ter `noindex`. `styleguide.html` continua no
+  build, mas sem link no site.
 
 ## Status
 
