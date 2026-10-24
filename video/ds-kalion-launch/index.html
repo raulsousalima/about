@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>DS Kalion launch</title>
+<!--
+  DS Kalion launch film (10 s, 1920x1080). Not part of the site build.
+  Every frame is a pure function of time: window.render(t) places everything,
+  and scripts/render-video.mjs steps t at 60 fps and encodes with ffmpeg.
+  The button is the real ui-btn from src/components.css; the final screen is a
+  capture of /designsystem.html, so no UI is redrawn by hand.
+-->
+<link rel="stylesheet" href="/src/index.css" />
+<link rel="stylesheet" href="/src/components.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css" />
+<style>
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #050505; }
+  #stage {
+    position: relative; width: 1920px; height: 1080px; overflow: hidden; perspective: 1500px;
+    background: radial-gradient(ellipse 70% 60% at 50% 42%, #161616 0%, #0a0a0a 55%, #030303 100%);
+  }
+  #world, .abs { position: absolute; left: 50%; top: 50%; transform-style: preserve-3d; }
+  #world { width: 0; height: 0; }
+  .center { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
+
+  /* Space: floor grid and dust */
+  #floor {
+    position: absolute; left: -3000px; top: -3000px; width: 6000px; height: 6000px;
+    background-image: linear-gradient(rgba(255,255,255,0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.055) 1px, transparent 1px);
+    background-size: 120px 120px;
+    -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 38%);
+  }
+  .dust { position: absolute; width: 4px; height: 4px; margin: -2px; border-radius: 50%; background: #fff; }
+  #light { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 40% 35% at 30% 18%, rgba(255,255,255,0.06), transparent 70%); }
+  #vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.65) 100%); }
+
+  /* Orb → pill */
+  #orb { position: absolute; background: #C8F04E; }
+  #orb-glow { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(200,240,78,0.45), rgba(200,240,78,0) 65%); }
+
+  /* Token chips: glass cards */
+  .token {
+    position: absolute; display: flex; align-items: center; gap: 20px; padding: 18px 28px 18px 18px; white-space: nowrap;
+    border-radius: 22px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12);
+    backdrop-filter: blur(14px); color: #F4F4F4; font-family: Inter, sans-serif;
+  }
+  .token__viz { width: 64px; height: 64px; border-radius: 14px; display: grid; place-items: center; flex-shrink: 0; }
+  .token__name { font: 500 23px/1.3 ui-monospace, 'SF Mono', Menlo, monospace; color: #F4F4F4; }
+  .token__val { font: 400 19px/1.3 ui-monospace, 'SF Mono', Menlo, monospace; color: rgba(255,255,255,0.5); }
+
+  /* Button (real component) and its exploded layers */
+  .btn-wrap { position: absolute; transform-style: preserve-3d; }
+  .btn-layer { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  .btn-layer .ui-btn { pointer-events: none; }
+  .only-bg .ui-btn > * { visibility: hidden; }
+  .only-label .ui-btn { background: transparent; box-shadow: none; }
+  .only-label .ui-btn > i { visibility: hidden; }
+  .only-icon .ui-btn { background: transparent; box-shadow: none; }
+  .only-icon .ui-btn > span { visibility: hidden; }
+
+  /* Anatomy + measures, same language as the docs overlays */
+  .pin { position: absolute; width: 44px; height: 44px; margin: -22px; border-radius: 50%; background: #C8F04E; color: #111; font: 700 21px/44px Inter, sans-serif; text-align: center; box-shadow: 0 0 0 4px rgba(200,240,78,0.25); }
+  .pin-label { position: absolute; font: 500 26px/1 Inter, sans-serif; color: #F4F4F4; white-space: nowrap; }
+  .lead { position: absolute; height: 2px; background: rgba(200,240,78,0.8); transform-origin: 0 50%; }
+  .m-line { position: absolute; background: #FF4D9D; }
+  .m-tag { position: absolute; padding: 5px 12px; border-radius: 8px; background: #FF4D9D; color: #fff; font: 600 21px/1.2 ui-monospace, Menlo, monospace; white-space: nowrap; transform: translate(-50%, -50%); }
+
+  /* Interface assembly */
+  #panel { position: absolute; border: 1px solid rgba(255,255,255,0.12); }
+  #ui { position: absolute; left: 0; top: 0; width: 1366px; height: 1024px; transform-origin: 0 0; perspective: 1400px; transform-style: preserve-3d; }
+  #ui .piece { position: absolute; background-image: url(assets/overview.png); background-size: 1366px 1024px; }
+  #shot { position: absolute; inset: 0; background: url(assets/overview.png) 0 0 / 100% 100%; }
+
+  /* Tablet (used until a hand photo is supplied) */
+  #device { position: absolute; transform-style: preserve-3d; }
+  #bezel { position: absolute; border-radius: 46px; background: linear-gradient(145deg, #2a2a2c, #0c0c0d 60%); box-shadow: 0 60px 120px rgba(0,0,0,0.7), inset 0 0 0 2px rgba(255,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.18); }
+  #glare { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.03) 28%, transparent 42%); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="light"></div>
+  <div id="world">
+    <div class="center" id="floor-wrap"><div id="floor"></div></div>
+    <div class="center" id="dust"></div>
+    <div class="center" id="orb-wrap"><div id="orb-glow"></div><div id="orb"></div></div>
+    <div class="center" id="tokens"></div>
+    <div class="center" id="btn"></div>
+    <div class="center" id="anatomy"></div>
+    <div class="center" id="screen"></div>
+  </div>
+  <div id="vignette"></div>
+</div>
+
+<script type="module">
+/* ---------- math ---------- */
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v))
+const seg = (t, a, b) => clamp((t - a) / (b - a))
+const lerp = (a, b, p) => a + (b - a) * p
+const easeInOut = p => p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2
+const easeOut = p => 1 - Math.pow(1 - p, 3)
+const easeOutBack = p => { const c = 1.4; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2) }
+const easeIn = p => p * p * p
+let seed = 7
+const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647
+
+const $ = s => document.querySelector(s)
+const el = (tag, cls, parent, html = '') => { const e = document.createElement(tag); if (cls) e.className = cls; e.innerHTML = html; parent.appendChild(e); return e }
+const T3 = (x, y, z = 0, extra = '') => `translate3d(${x}px, ${y}px, ${z}px) ${extra}`
+
+/* ---------- scene setup ---------- */
+const world = $('#world')
+$('#floor-wrap').style.transform = 'translate3d(0, 420px, 0) rotateX(90deg)'
+
+const dust = Array.from({ length: 70 }, () => {
+  const d = el('div', 'dust', $('#dust'))
+  return { d, x: (rnd() - 0.5) * 3200, y: (rnd() - 0.5) * 1800, z: -rnd() * 2400 + 300, s: 0.4 + rnd() * 1.2, a: 0.08 + rnd() * 0.22, v: 10 + rnd() * 30 }
+})
+
+// Real DS button, at 3.2x so it reads on screen.
+const BTN_SCALE = 3.2
+const BTN_HTML = `<button type="button" class="ui-btn ui-btn--primary ui-btn--lg"><span>View projects</span><i class="ti ti-arrow-right" aria-hidden="true"></i></button>`
+const layers = ['only-bg', 'only-label', 'only-icon'].map(c => {
+  const w = el('div', 'btn-wrap', $('#btn'))
+  const l = el('div', `btn-layer ${c}`, w, BTN_HTML)
+  l.style.zoom = BTN_SCALE // real layout at 3.2x, so 3D tilts stay crisp
+  return w
+})
+const realBtn = layers[0].querySelector('.ui-btn')
+const label = layers[1].querySelector('.ui-btn > span')
+const icon = layers[2].querySelector('.ui-btn > i')
+
+const TOKENS = [
+  { viz: `<span class="token__viz" style="background:#C8F04E"></span>`, name: '--color-accent', val: '#C8F04E', at: [-560, -270, -80] },
+  { viz: `<span class="token__viz" style="background:#111;border:1px solid rgba(255,255,255,.2)"></span>`, name: '--color-on-accent', val: '#111111', at: [520, -300, -40] },
+  { viz: `<span class="token__viz" style="background:rgba(255,255,255,.08);font:600 22px Inter;color:#F4F4F4">Aa</span>`, name: '--font-sans', val: 'Inter 600', at: [-600, 230, 40] },
+  { viz: `<span class="token__viz" style="background:rgba(255,255,255,.08)"><span style="width:22px;height:22px;border:2.5px solid #C8F04E;border-radius:0 11px 0 0;border-left:0;border-bottom:0;display:block"></span></span>`, name: '--radius-pill', val: '9999px', at: [600, 170, 20] },
+  { viz: `<span class="token__viz" style="background:rgba(255,255,255,.08)"><span style="display:flex;gap:6px;align-items:center"><span style="width:4px;height:18px;background:#FF4D9D"></span><span style="width:14px;height:2px;background:#FF4D9D"></span><span style="width:4px;height:18px;background:#FF4D9D"></span></span></span>`, name: '--space-6', val: '24px', at: [-30, -410, -160] },
+  { viz: `<span class="token__viz" style="background:rgba(255,255,255,.04)"><span style="width:24px;height:24px;border-radius:6px;background:#2a2a2a;box-shadow:0 8px 16px rgba(0,0,0,.6)"></span></span>`, name: '--shadow-md', val: '0 8px 24px', at: [80, 380, 0] },
+]
+const tokens = TOKENS.map(tk => {
+  const e = el('div', 'token', $('#tokens'), `${tk.viz}<span><div class="token__name">${tk.name}</div><div class="token__val">${tk.val}</div></span>`)
+  return { ...tk, e }
+})
+
+/* Layout numbers measured from the real component (unscaled px). */
+const bw = realBtn.offsetWidth, bh = realBtn.offsetHeight // zoom-independent CSS px
+const cs = getComputedStyle(realBtn)
+const padL = parseFloat(cs.paddingLeft), gap = parseFloat(cs.columnGap || cs.gap) || 8
+const W = bw * BTN_SCALE, H = bh * BTN_SCALE
+const labelBox = () => { const r = label.getBoundingClientRect(); return r }
+
+/* Anatomy pins + measures (positions in button-local, scaled px) */
+const an = $('#anatomy')
+const pins = [
+  { n: 1, name: 'Container', z: 0, px: W * 0.08, py: H * 0.5, dx: -230, dy: -150 },
+  { n: 2, name: 'Label', z: 120, px: (padL + 0.42 * (bw - 2 * padL)) * BTN_SCALE, py: H * 0.5, dx: -40, dy: -230 },
+  { n: 3, name: 'Icon', z: 220, px: W - (padL + 9) * BTN_SCALE, py: H * 0.5, dx: 200, dy: -170 },
+].map(p => ({ ...p, pin: el('div', 'pin', an, String(p.n)), line: el('div', 'lead', an), lab: el('div', 'pin-label', an, p.name) }))
+const mW = { line: el('div', 'm-line', an), tag: el('div', 'm-tag', an, `${Math.round(bw * 10) / 10}`) }
+const mH = { line: el('div', 'm-line', an), tag: el('div', 'm-tag', an, `${Math.round(bh)}`) }
+const mP = { line: el('div', 'm-line', an), tag: el('div', 'm-tag', an, `${Math.round(padL)}`) }
+const mG = { line: el('div', 'm-line', an), tag: el('div', 'm-tag', an, `${Math.round(gap)}`) }
+
+/* Interface panel built from the real capture */
+const SW = 1366, SH = 1024, PS = 0.88 // panel scale → 1202x901
+const screen = $('#screen')
+const device = el('div', '', screen); device.id = 'device'
+const bezel = el('div', '', device); bezel.id = 'bezel'
+const panel = el('div', '', device); panel.id = 'panel'
+const ui = el('div', '', device); ui.id = 'ui'
+ui.style.transform = `translate(${-SW * PS / 2}px, ${-SH * PS / 2}px) scale(${PS})`
+const shot = el('div', '', ui); shot.id = 'shot'
+const glare = el('div', '', ui); glare.id = 'glare'
+shot.style.borderRadius = glare.style.borderRadius = 10 / PS + 'px'
+const pieces = (await (await fetch('assets/pieces.json')).json()).map((r, i) => {
+  const e = el('div', 'piece', ui)
+  Object.assign(e.style, { left: r.x + 'px', top: r.y + 'px', width: r.w + 'px', height: r.h + 'px', backgroundPosition: `${-r.x}px ${-r.y}px` })
+  return { ...r, e, ox: (rnd() - 0.5) * 1100, oy: (rnd() - 0.5) * 700, oz: 250 + rnd() * 450, rx: (rnd() - 0.5) * 50, ry: (rnd() - 0.5) * 60, i }
+})
+const BEZ = 34
+
+/* ---------- render ---------- */
+window.render = (t) => {
+  /* Camera */
+  const pIntro = easeOut(seg(t, 0, 1.7))
+  const pAnat = easeInOut(seg(t, 3.45, 4.15)) * (1 - easeInOut(seg(t, 5.25, 5.85)))
+  const drift = Math.sin(t * 0.6) * 1.2
+  let rx = lerp(10, 0, pIntro) + 10 * pAnat + drift * 0.3
+  let ry = lerp(-22, 0, pIntro) - 30 * pAnat - 4 * seg(t, 4.1, 5.25) * pAnat + drift
+  let cz = lerp(-300, 0, pIntro) + 60 * pAnat
+  // Assembly + pull back: camera settles flat, then the device recedes and tilts.
+  const pFlat = seg(t, 5.8, 6.4)
+  rx = lerp(rx, 0, pFlat); ry = lerp(ry, 0, pFlat)
+  world.style.transform = `translateZ(${cz}px) rotateX(${rx}deg) rotateY(${ry}deg)`
+
+  /* Space fades away as the interface takes over */
+  const spaceA = 1 - seg(t, 7.0, 8.2) * 0.85
+  $('#floor').style.opacity = spaceA
+  dust.forEach(p => {
+    const z = p.z + t * p.v * 6
+    p.d.style.transform = T3(p.x + Math.sin(t * 0.5 + p.x) * 20, p.y - t * p.v, z, `scale(${p.s})`)
+    p.d.style.opacity = p.a * spaceA
+  })
+
+  /* Orb travel → morph to pill */
+  const pTravel = easeInOut(seg(t, 0, 1.55))
+  const ox = lerp(-620, 0, pTravel) + Math.sin(pTravel * Math.PI) * 120
+  const oy = lerp(260, 0, pTravel) - Math.sin(pTravel * Math.PI) * 180
+  const oz = lerp(-2200, 0, pTravel)
+  const pMorph = easeInOut(seg(t, 1.5, 2.45))
+  const d0 = 150
+  const ow = lerp(d0, W, pMorph), oh = lerp(d0, H, pMorph)
+  const orb = $('#orb'), glow = $('#orb-glow')
+  Object.assign(orb.style, { width: ow + 'px', height: oh + 'px', left: -ow / 2 + 'px', top: -oh / 2 + 'px', borderRadius: Math.min(ow, oh) / 2 + 'px' })
+  orb.style.boxShadow = `0 0 ${lerp(70, 40, pMorph)}px rgba(200,240,78,${lerp(0.55, 0.25, pMorph)})`
+  const gs = lerp(520, 900, pMorph) * (1 + Math.sin(t * 3) * 0.04)
+  Object.assign(glow.style, { width: gs + 'px', height: gs * lerp(1, 0.5, pMorph) + 'px', left: -gs / 2 + 'px', top: -gs * lerp(1, 0.5, pMorph) / 2 + 'px', opacity: lerp(0.9, 0.5, pMorph) * (1 - seg(t, 5.9, 6.4)) })
+  const orbOn = 1 - seg(t, 2.45, 2.6)
+  $('#orb-wrap').style.transform = T3(ox, oy, oz)
+  orb.style.opacity = orbOn
+
+  /* Tokens: appear around, then fly into the button one by one */
+  tokens.forEach((tk, i) => {
+    const tIn = 1.25 + i * 0.07
+    const pIn = easeOutBack(seg(t, tIn, tIn + 0.45))
+    const tFly = 2.35 + i * 0.13
+    const pFly = easeIn(seg(t, tFly, tFly + 0.42))
+    const [x, y, z] = tk.at
+    const bob = Math.sin(t * 1.6 + i) * 10
+    const fx = lerp(x, 0, pFly), fy = lerp(y + bob, 0, pFly), fz = lerp(z, 40, pFly)
+    tk.e.style.transform = T3(fx, fy, fz, `translate(-50%, -50%) scale(${lerp(0.6, 1, pIn) * lerp(1, 0.15, pFly)})`)
+    tk.e.style.opacity = clamp(pIn) * (1 - seg(pFly, 0.6, 1))
+  })
+  const arrive = i => 2.35 + i * 0.13 + 0.42
+
+  /* Button: appears where the pill is, label and icon land with their tokens */
+  const btnOn = seg(t, 2.42, 2.55) * (1 - seg(t, 5.95, 6.25))
+  const pLabel = easeOut(seg(t, arrive(2) - 0.05, arrive(2) + 0.3))
+  const pIcon = easeOut(seg(t, arrive(4) - 0.05, arrive(4) + 0.3))
+  const pShadow = easeOut(seg(t, arrive(5), arrive(5) + 0.4))
+  label.style.opacity = pLabel; label.style.transform = `translateY(${lerp(6, 0, pLabel)}px)`
+  icon.style.opacity = pIcon; icon.style.transform = `translateX(${lerp(-8, 0, pIcon)}px)`
+  realBtn.style.boxShadow = `0 ${lerp(0, 10, pShadow)}px ${lerp(0, 28, pShadow)}px rgba(0,0,0,${0.5 * pShadow}), 0 0 ${lerp(0, 50, pShadow)}px rgba(200,240,78,${0.18 * pShadow})`
+  const pExplode = easeInOut(seg(t, 3.6, 4.25)) * (1 - easeInOut(seg(t, 5.3, 5.8)))
+  const zs = [0, 120, 220]
+  layers.forEach((w, i) => {
+    w.style.transform = T3(-W / 2, -H / 2, zs[i] * pExplode)
+    w.style.opacity = btnOn
+  })
+  // Arrival pulses
+  const pulse = Math.max(...tokens.map((_, i) => { const p = seg(t, arrive(i), arrive(i) + 0.35); return p > 0 && p < 1 ? 1 - p : 0 }))
+  orb.style.transform = `scale(${1 + 0.04 * pulse})`
+
+  /* Anatomy and measures */
+  const pPins = easeOut(seg(t, 4.1, 4.45)) * (1 - seg(t, 5.15, 5.35))
+  const pMeas = easeOut(seg(t, 4.35, 4.7)) * (1 - seg(t, 5.15, 5.35))
+  pins.forEach(p => {
+    const z = p.z * pExplode
+    const x0 = -W / 2 + p.px, y0 = -H / 2 + p.py
+    const x1 = x0 + p.dx * pPins, y1 = y0 + p.dy * pPins
+    p.pin.style.transform = T3(x1, y1, z); p.pin.style.opacity = pPins
+    const len = Math.hypot(x1 - x0, y1 - y0), ang = Math.atan2(y1 - y0, x1 - x0)
+    Object.assign(p.line.style, { width: len + 'px', transform: T3(x0, y0, z, `rotate(${ang}rad)`), opacity: pPins })
+    p.lab.style.transform = T3(x1 + (p.dx < 0 ? -38 : 38), y1, z, `translate(${p.dx < 0 ? '-100%' : '0'}, -50%)`); p.lab.style.opacity = pPins
+  })
+  const top = -H / 2 - 46, right = W / 2 + 46
+  Object.assign(mW.line.style, { width: W * pMeas + 'px', height: '2px', transform: T3(-W / 2, top, 0), opacity: pMeas })
+  mW.tag.style.transform = T3(0, top, 0, 'translate(-50%, -50%)'); mW.tag.style.opacity = pMeas
+  Object.assign(mH.line.style, { width: '2px', height: H * pMeas + 'px', transform: T3(right, -H / 2, 0), opacity: pMeas })
+  mH.tag.style.transform = T3(right + 30, 0, 0, 'translate(-50%, -50%)'); mH.tag.style.opacity = pMeas
+  const padW = padL * BTN_SCALE
+  Object.assign(mP.line.style, { width: padW * pMeas + 'px', height: '2px', transform: T3(-W / 2, H / 2 + 34, 0), opacity: pMeas })
+  mP.tag.style.transform = T3(-W / 2 + padW / 2, H / 2 + 62, 0, 'translate(-50%, -50%)'); mP.tag.style.opacity = pMeas
+  const gx = W / 2 - padW - 18 * BTN_SCALE - gap * BTN_SCALE
+  Object.assign(mG.line.style, { width: gap * BTN_SCALE * pMeas + 'px', height: '2px', transform: T3(gx, H / 2 + 34, zs[2] * pExplode), opacity: pMeas })
+  mG.tag.style.transform = T3(gx + gap * BTN_SCALE / 2, H / 2 + 62, zs[2] * pExplode, 'translate(-50%, -50%)'); mG.tag.style.opacity = pMeas
+
+  /* Interface: panel grows out of the button, real pieces assemble */
+  const pGrow = easeInOut(seg(t, 5.85, 6.45))
+  const pw = lerp(W, SW * PS, pGrow), ph = lerp(H, SH * PS, pGrow)
+  const growOn = seg(t, 5.85, 5.95)
+  Object.assign(panel.style, { width: pw + 'px', height: ph + 'px', left: -pw / 2 + 'px', top: -ph / 2 + 'px', borderRadius: lerp(H / 2, 10, easeOut(pGrow)) + 'px', opacity: growOn })
+  panel.style.background = `rgb(${lerp(200, 17, pGrow)},${lerp(240, 17, pGrow)},${lerp(78, 17, pGrow)})`
+  pieces.forEach(pc => {
+    const tA = 6.2 + pc.i * 0.065
+    const p = easeOut(seg(t, tA, tA + 0.55))
+    pc.e.style.transform = `translate3d(${pc.ox * (1 - p)}px, ${pc.oy * (1 - p)}px, ${pc.oz * (1 - p)}px) rotateX(${pc.rx * (1 - p)}deg) rotateY(${pc.ry * (1 - p)}deg)`
+    pc.e.style.opacity = seg(t, tA, tA + 0.2)
+  })
+  const pShot = seg(t, 7.45, 7.7)
+  shot.style.opacity = pShot
+
+  /* Pull back to the device */
+  const pBack = easeInOut(seg(t, 7.6, 9.3))
+  const scale = lerp(1, 0.9, pBack)
+  const tilt = { x: lerp(0, 9, pBack), y: lerp(0, -13, pBack), z: lerp(0, 1.5, pBack) }
+  device.style.transform = `translate3d(0, ${lerp(0, 18, pBack)}px, 0) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) rotateZ(${tilt.z}deg) scale(${scale})`
+  const bwid = SW * PS + BEZ * 2, bhei = SH * PS + BEZ * 2
+  Object.assign(bezel.style, { width: bwid + 'px', height: bhei + 'px', left: -bwid / 2 + 'px', top: -bhei / 2 + 'px', opacity: easeOut(seg(t, 7.7, 8.4)), transform: 'translateZ(-2px)' })
+  glare.style.opacity = seg(t, 8.0, 8.8)
+}
+
+await document.fonts.ready
+window.render(0)
+window.ready = true
+</script>
+</body>
+</html>
