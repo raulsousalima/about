@@ -29,6 +29,7 @@ export default defineConfig({
         kalion: resolve(__dirname, 'case/kalion.html'),
         spaceshooter: resolve(__dirname, 'space-shooter-offline.html'),
         profile: resolve(__dirname, 'profile.html'),
+        prototipoDecathlon: resolve(__dirname, 'prototipo/decathlon.html'),
       },
     },
   },
