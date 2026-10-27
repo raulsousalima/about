@@ -10,13 +10,18 @@ export async function mountPhone3D(stage: HTMLElement): Promise<Phone> {
   // screen shows the stage's hidden <img> (so Vite fingerprints it).
   const live = stage.dataset.phone3dApp === 'decathlon' ? await mountDecathlon() : null
   const screenElement = live?.host ?? null
+  // Mobile (small or touch-only screens): no automatic motion; the phone starts
+  // facing front and only turns when the visitor drags or picks a view.
+  const still = matchMedia('(max-width: 767px), (hover: none) and (pointer: coarse)').matches
   const phone: Phone = createPhone3D(stage, {
     screenSrc: screenElement ? null : stage.querySelector('img')?.src || null,
     screenElement,
     finish: stage.dataset.finish || 'preto',
-    autoRotate: true,
+    autoRotate: !still,
     autoRotateSpeed: 0.45,
-    ...(screenElement ? { distance: 3.3, initialRotation: { x: 0.06, y: 0.28 } } : {}),
+    float: !still,
+    ...(screenElement ? { distance: 3.3, initialRotation: still ? { x: 0, y: 0 } : { x: 0.06, y: 0.28 } } : {}),
+    ...(!screenElement && still ? { initialRotation: { x: 0, y: 0 } } : {}),
   })
   const card = stage.closest('.ui-card--device')
   const views = [...(card?.querySelectorAll<HTMLButtonElement>('[data-phone3d-view]') ?? [])]
@@ -26,8 +31,10 @@ export async function mountPhone3D(stage: HTMLElement): Promise<Phone> {
     views.forEach(b => b.setAttribute('aria-checked', String(b.dataset.phone3dView === name)))
   }
   views.forEach(btn => btn.addEventListener('click', () => setView(btn.dataset.phone3dView!)))
+  const home = still ? 'frente' : 'auto'
+  if (still) views.forEach(b => b.setAttribute('aria-checked', String(b.dataset.phone3dView === home)))
   card?.querySelector('[data-phone3d-restart]')?.addEventListener('click', () => {
-    setView('auto')
+    setView(home)
     live?.app.restart()
   })
   return phone

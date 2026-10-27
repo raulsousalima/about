@@ -144,7 +144,10 @@ export function createPhone3D(container, opts = {}) {
   // Tela interativa: um elemento DOM posto no plano da tela via CSS3DRenderer.
   // Fica numa camada por cima do canvas; de costas é escondida em updateScreenFacing
   // (backface-visibility não alcança os filhos que têm camada própria).
-  let cssRenderer = null, screenObj = null, screenShown = true;
+  // A camada HTML vive numa cena própria, ampliada K vezes (K = px por unidade da
+  // tela), para o elemento ficar em escala ~1: com escalas minúsculas (~0,002) o
+  // WebKit (Safari/iOS) perde precisão no matrix3d e a tela se desloca do aparelho.
+  let cssRenderer = null, screenObj = null, screenShown = true, cssScene = null, cssRoot = null, cssCamera = null, K = 1;
   // Auto-rotation pauses while the live screen is hovered, touched (for a few
   // seconds) or holds focus, so the app stays usable while the phone spins.
   let screenHover = false, screenHold = 0;
@@ -156,10 +159,13 @@ export function createPhone3D(container, opts = {}) {
     el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') screenHover = true; });
     el.addEventListener('pointerleave', () => { screenHover = false; });
     el.addEventListener('pointerdown', () => { screenHold = performance.now() + 5000; });
+    K = pxW / SW;
+    cssScene = new THREE.Scene(); cssRoot = new THREE.Group(); cssScene.add(cssRoot);
+    cssCamera = new THREE.PerspectiveCamera(camera.fov, 1, 0.1 * K, 50 * K);
     const obj = screenObj = new CSS3DObject(el);
-    obj.scale.set(SW / pxW, SH / pxH, 1);
-    obj.position.z = D / 2 + 0.003;
-    phone.add(obj);
+    obj.scale.set(1, (SH / pxH) * K, 1);
+    obj.position.z = (D / 2 + 0.003) * K;
+    cssRoot.add(obj);
     cssRenderer = new CSS3DRenderer();
     Object.assign(cssRenderer.domElement.style, { position: 'absolute', inset: '0', pointerEvents: 'none' });
     container.appendChild(cssRenderer.domElement);
@@ -172,7 +178,7 @@ export function createPhone3D(container, opts = {}) {
     screenObj.updateWorldMatrix(true, false);
     screenNormal.set(0, 0, 1).transformDirection(screenObj.matrixWorld);
     screenObj.getWorldPosition(screenPos);
-    const facing = toCam.subVectors(camera.position, screenPos).normalize().dot(screenNormal) > 0.08;
+    const facing = toCam.subVectors(cssCamera.position, screenPos).normalize().dot(screenNormal) > 0.08;
     if (facing === screenShown) return;
     screenShown = facing;
     screenObj.element.style.visibility = facing ? '' : 'hidden';
@@ -263,7 +269,8 @@ export function createPhone3D(container, opts = {}) {
 
   // Pausa quando fora da tela
   let visible = true;
-  const io = new IntersectionObserver(([en]) => { visible = en.isIntersecting; }); io.observe(container);
+  // Entries can arrive batched (e.g. layout shifts while loading): the last one is current.
+  const io = new IntersectionObserver((entries) => { visible = entries[entries.length - 1].isIntersecting; }); io.observe(container);
 
   let raf = 0, t0 = performance.now();
   const loop = (t) => {
@@ -285,7 +292,16 @@ export function createPhone3D(container, opts = {}) {
     camera.position.set(0, 0.05, dist); camera.lookAt(0, 0, 0);
     if (o.onRotate) o.onRotate(Math.round(((ry * 180 / Math.PI) % 360 + 540) % 360 - 180), Math.round(rx * 180 / Math.PI));
     renderer.render(scene, camera);
-    if (cssRenderer) { updateScreenFacing(); cssRenderer.render(scene, camera); }
+    if (cssRenderer) {
+      // Mirror the phone and the camera into the K-scaled CSS scene.
+      cssRoot.position.copy(phone.position).multiplyScalar(K);
+      cssRoot.quaternion.copy(phone.quaternion);
+      cssCamera.position.copy(camera.position).multiplyScalar(K);
+      cssCamera.quaternion.copy(camera.quaternion);
+      if (cssCamera.aspect !== camera.aspect) { cssCamera.aspect = camera.aspect; cssCamera.updateProjectionMatrix(); }
+      updateScreenFacing();
+      cssRenderer.render(cssScene, cssCamera);
+    }
   };
   raf = requestAnimationFrame(loop);
 
