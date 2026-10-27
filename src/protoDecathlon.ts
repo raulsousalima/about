@@ -18,6 +18,10 @@ import offerAniversario from '../img/cases/decathlon/prototipo/beneficio-anivers
 import offerFrete from '../img/cases/decathlon/prototipo/beneficio-frete.webp'
 import produtoBarraca from '../img/cases/decathlon/prototipo/produto-barraca.webp'
 import produtoSaco from '../img/cases/decathlon/prototipo/produto-saco.webp'
+import memberHero1 from '../img/cases/decathlon/prototipo/logado-hero-1.webp'
+import memberHero2 from '../img/cases/decathlon/prototipo/logado-hero-2.webp'
+import memberHero3 from '../img/cases/decathlon/prototipo/logado-hero-3.webp'
+import memberPerks from '../img/cases/decathlon/prototipo/logado-beneficios.webp'
 import entrarHero from '../img/cases/decathlon/prototipo/entrar-hero.webp'
 
 export type DktScreen = 'splash' | 'clube' | 'entrar' | 'login' | 'codigo'
@@ -59,9 +63,12 @@ function splash() {
   </section>`
 }
 
-function tabBar() {
-  const tabs: [string, string, string][] = [['home', 'Início', ti('home')], ['explorar', 'Explorar', ti('list-search')], ['clube', 'Clube', ti('circle-dot')], ['favoritos', 'Favoritos', ti('heart')], ['carrinho', 'Carrinho', ti('shopping-bag')]]
-  return `<nav class="dkt-tabs" aria-label="Menu principal">${tabs.map(([id, label, icon]) =>
+// Tab bars follow each design: logged in swaps Favoritos for Descontos and marks Clube with the DE tile.
+function tabBar(signedIn: boolean) {
+  const tabs: [string, string, string][] = signedIn
+    ? [['home', 'Início', ti('home')], ['explorar', 'Explorar', ti('list-search')], ['descontos', 'Descontos', ti('tag')], ['clube', 'Clube', '<span class="dkt-de" aria-hidden="true">DE</span>'], ['carrinho', 'Carrinho', ti('shopping-bag')]]
+    : [['home', 'Início', ti('home')], ['explorar', 'Explorar', ti('list-search')], ['clube', 'Clube', ti('circle-dot')], ['favoritos', 'Favoritos', ti('heart')], ['carrinho', 'Carrinho', ti('shopping-bag')]]
+  return `<nav class="dkt-tabs${signedIn ? ' dkt-tabs--member' : ''}" aria-label="Menu principal">${tabs.map(([id, label, icon]) =>
     `<button type="button" class="dkt-tab"${id === 'clube' ? ' aria-current="page"' : ' data-dkt="soon"'}>${icon}<span>${label}</span></button>`).join('')}</nav>`
 }
 
@@ -73,7 +80,9 @@ const TIERS: Record<Tier, [string, string, string, string]> = {
   elite: ['Elite', '#F5C629', '#C99A06', '#FFDA55'],
   legend: ['Legend', '#5B67DE', '#2F3AA6', '#7380F0'],
 }
-const medal = (tier: Tier, cls = '') => {
+const LOCKED = `<path d="M16.5 21.5v-2.2a3.5 3.5 0 0 1 7 0v2.2M15 21.5h10v7.5H15z" fill="none" stroke="#B5B5B8" stroke-width="1.8" stroke-linejoin="round"/>`
+const medal = (tier: Tier | 'locked', cls = '') => {
+  if (tier === 'locked') return `<svg class="dkt-medal ${cls}" viewBox="0 0 40 44" aria-hidden="true" focusable="false"><path d="M20 2.5 36.5 12v20L20 41.5 3.5 32V12z" fill="#EEEEF0" stroke="#C9C9CD" stroke-width="2" stroke-linejoin="round"/><path d="M20 9 30.5 15v14L20 35 9.5 29V15z" fill="#FAFAFB"/>${LOCKED}</svg>`
   const [, outer, edge, inner] = TIERS[tier]
   return `<svg class="dkt-medal ${cls}" viewBox="0 0 40 44" aria-hidden="true" focusable="false"><path d="M20 2.5 36.5 12v20L20 41.5 3.5 32V12z" fill="${outer}" stroke="${edge}" stroke-width="2" stroke-linejoin="round"/><path d="M20 9 30.5 15v14L20 35 9.5 29V15z" fill="${inner}"/><path d="M20 15.2l1.9 3.9 4.3.6-3.1 3 .7 4.2-3.8-2-3.8 2 .7-4.2-3.1-3 4.3-.6z" fill="${edge}"/></svg>`
 }
@@ -97,24 +106,83 @@ const PERKS: [string, string, boolean][][] = [
 ]
 
 const PRO_VALUES: [string, string | null][] = [['Cashback de 5%', '60 dias de uso'], ['Frete grátis', 'Acima de R$ 200'], ['Desconto de aniversário', '5% OFF'], ['Eventos pagos', null]]
+const PRO_VALUES_MEMBER: [string, string | null][] = [['Cashback', '5% (60 dias)'], ['Frete grátis', 'Acima de R$ 200'], ['Desconto de aniversário', '5%'], ['Eventos pagos', null]]
 const PRO_INCLUDED = ['Descontos exclusivos', 'Descontos na oficina', '1º Revisão da Bike', 'Encordoamento de raquete', 'Troca estendida e sem cupom', 'Convite para evento em lojas', 'Dicas de esportes', 'Divulgação antecipada de lançamentos']
 
-const progress = (label: string) => `<div class="dkt-progress" aria-hidden="true" data-dkt-progress="${label}"><span></span></div>`
+// Member hero: three campaign slides that advance on their own (see the mount).
+const MEMBER_SLIDES: [string, string][] = [
+  [memberHero1, 'Tenista em quadra. Estamos com você a cada conquista'],
+  [memberHero2, 'Alpinista no alto da montanha. A cada vitória um novo benefício'],
+  [memberHero3, 'Atleta escalando. É hora de ir para o próximo level'],
+]
 
-function clube(s: State, behind = false) {
-  const perkCard = ([icon, label, wide]: [string, string, boolean]) =>
-    `<button type="button" class="dkt-perk${wide ? ' dkt-perk--wide' : ''}" data-dkt="soon">${ti(icon)}<span>${label}</span>${ti('chevron-right')}</button>`
-  return `<section class="dkt-screen dkt-clube" aria-labelledby="dkt-clube-title"${behind ? ' inert' : ''}>
-    <header class="dkt-bar">
+const progress = (label: string) => `<div class="dkt-progress" aria-hidden="true" data-dkt-progress="${label}"><span></span></div>`
+const included = `${ti('circle-check')}<span class="dkt-sr">Incluso</span>`
+const notIncluded = `${ti('circle-x')}<span class="dkt-sr">Não incluso</span>`
+
+/* Sections shared by both Clube variants */
+
+function clubeHeader(s: State) {
+  return `<header class="dkt-bar">
       <h1 class="dkt-bar__title" id="dkt-clube-title" tabindex="-1">Clube Decathlon</h1>
       <span class="dkt-bar__actions">
         <button type="button" class="dkt-icon-btn dkt-bell" data-dkt="soon" aria-label="Notificações, 3 novas">${ti('bell')}<span class="dkt-bell__badge" aria-hidden="true">3</span></button>
-        <button type="button" class="dkt-icon-btn" data-dkt="entrar" aria-label="${s.signedIn ? 'Minha conta' : 'Entrar ou cadastrar'}">${ti(s.signedIn ? 'user-check' : 'user')}</button>
+        <button type="button" class="dkt-icon-btn" data-dkt="entrar" aria-label="${s.signedIn ? 'Minha conta' : 'Entrar ou cadastrar'}">${ti('user')}</button>
       </span>
-    </header>
+    </header>`
+}
+
+function perksRail() {
+  const card = ([icon, label, wide]: [string, string, boolean]) =>
+    `<button type="button" class="dkt-perk${wide ? ' dkt-perk--wide' : ''}" data-dkt="soon">${ti(icon)}<span>${label}</span>${ti('chevron-right')}</button>`
+  return `<div class="dkt-rail dkt-perks" data-dkt-rail="perks">${PERKS.map(row => `<div class="dkt-perks__row">${row.map(card).join('')}</div>`).join('')}</div>
+      ${progress('perks')}`
+}
+
+function productsSection() {
+  return `<h2 class="dkt-sec-title">Preços exclusivos<br />do <strong>Clube Decathlon</strong></h2>
+      <div class="dkt-rail dkt-rail--products" data-dkt-rail="products">${PRODUCTS.map(p =>
+        `<button type="button" class="dkt-product" data-dkt="soon"><span class="dkt-product__img"><img src="${p.img}" alt="" />${p.badge ? `<span class="dkt-product__badge dkt-product__badge--${p.badge[1]}">${p.badge[0]}</span>` : ''}</span><span class="dkt-product__name">${p.name}</span><span class="dkt-product__price">${p.price}</span></button>`).join('')}</div>
+      ${progress('products')}
+      <button type="button" class="dkt-outline-pill" data-dkt="soon">Ver todos os produtos</button>`
+}
+
+function levelSection(member: boolean) {
+  const values = member ? PRO_VALUES_MEMBER : PRO_VALUES
+  return `<h2 class="dkt-sec-title dkt-sec-title--level"><strong>Avance de nível</strong><br />e ganhe novos benefícios!</h2>
+      <div class="dkt-level-tabs" role="tablist" aria-label="Níveis do Clube">${(Object.keys(TIERS) as Tier[]).map(t =>
+        `<button type="button" class="dkt-level-tab" role="tab" aria-selected="${t === 'pro'}"${t === 'pro' ? '' : ' data-dkt="soon"'}>${TIERS[t][0]}</button>`).join('')}</div>
+      <div class="dkt-level" role="tabpanel" aria-label="Nível Pro">
+        <div class="dkt-level__head">${medal('pro', 'dkt-medal--lg')}<span class="dkt-level__here">Você começa aqui</span></div>
+        <h3 class="dkt-level__name">PRO</h3>
+        ${member
+          ? `<p class="dkt-level__lead">Comprou entrou.</p><p class="dkt-level__note">A partir da sua primeira compra,<br />você já faz parte do <strong>Clube Decathlon.</strong></p>`
+          : `<p class="dkt-level__note"><strong>Comprou, entrou!</strong> A partir da sua primeira compra, você já faz parte do Clube</p>`}
+        <h3 class="dkt-level__sub">Benefícios exclusivos</h3>
+        <dl class="dkt-level__values${member ? ' dkt-level__values--checked' : ''}">${values.map(([k, v]) =>
+          `<div><dt>${k}</dt><dd>${v === null ? notIncluded : member ? `<span>${v}</span>${included}` : v}</dd></div>`).join('')}</dl>
+        <ul class="dkt-level__list">${PRO_INCLUDED.map(k => `<li><span>${k}</span>${included}</li>`).join('')}</ul>
+        <div class="dkt-progress dkt-progress--static" aria-hidden="true"><span></span></div>
+        <p class="dkt-level__foot">* Período do gasto ou número de compras: 12 meses.</p>
+      </div>
+      <button type="button" class="dkt-cta dkt-cta--block" data-dkt="entrar">Me tornar membro clube</button>
+      <button type="button" class="dkt-faq" data-dkt="soon">${ti('help-circle')}<span>Dúvidas frequentes</span>${ti('chevron-right')}</button>`
+}
+
+function clube(s: State, behind = false) {
+  const body = s.signedIn ? clubeMember(s) : clubeGuest()
+  return `<section class="dkt-screen dkt-clube" aria-labelledby="dkt-clube-title"${behind ? ' inert' : ''}>
+    ${clubeHeader(s)}
     <div class="dkt-clube__scroll" data-dkt-scroll>
-      <p class="dkt-ribbon">O Clube está de cara nova, confira!</p>
-      <div class="dkt-hero">
+      <p class="dkt-ribbon${s.signedIn ? ' dkt-ribbon--light' : ''}">O Clube está de cara nova, confira!</p>
+      ${body}
+    </div>
+    ${tabBar(s.signedIn)}
+  </section>`
+}
+
+function clubeGuest() {
+  return `<div class="dkt-hero">
         <img src="${clubeHero}" alt="Atleta pulando em trilha na montanha. Eleve o jogo com Clube Decathlon. Entre jogando no 1º Nível e já tem benefícios para aproveitar." />
         <button type="button" class="dkt-cta dkt-hero__cta" data-dkt="entrar">Me tornar membro clube</button>
       </div>
@@ -127,35 +195,54 @@ function clube(s: State, behind = false) {
         `<button type="button" class="dkt-offer" data-dkt="soon"><img src="${img}" alt="${alt}. Saiba mais" /></button>`).join('')}</div>
       ${progress('offers')}
 
-      <h2 class="dkt-sec-title">Preços exclusivos<br />do <strong>Clube Decathlon</strong></h2>
-      <div class="dkt-rail dkt-rail--products" data-dkt-rail="products">${PRODUCTS.map(p =>
-        `<button type="button" class="dkt-product" data-dkt="soon"><span class="dkt-product__img"><img src="${p.img}" alt="" />${p.badge ? `<span class="dkt-product__badge dkt-product__badge--${p.badge[1]}">${p.badge[0]}</span>` : ''}</span><span class="dkt-product__name">${p.name}</span><span class="dkt-product__price">${p.price}</span></button>`).join('')}</div>
-      ${progress('products')}
-      <button type="button" class="dkt-outline-pill" data-dkt="soon">Ver todos os produtos</button>
+      ${productsSection()}
 
       <h2 class="dkt-sec-title">Confira outros benefícios</h2>
-      <div class="dkt-rail dkt-perks" data-dkt-rail="perks">${PERKS.map(row => `<div class="dkt-perks__row">${row.map(perkCard).join('')}</div>`).join('')}</div>
-      ${progress('perks')}
+      ${perksRail()}
 
-      <h2 class="dkt-sec-title dkt-sec-title--level"><strong>Avance de nível</strong><br />e ganhe novos benefícios!</h2>
-      <div class="dkt-level-tabs" role="tablist" aria-label="Níveis do Clube">${(Object.keys(TIERS) as Tier[]).map(t =>
-        `<button type="button" class="dkt-level-tab" role="tab" aria-selected="${t === 'pro'}"${t === 'pro' ? '' : ' data-dkt="soon"'}>${TIERS[t][0]}</button>`).join('')}</div>
-      <div class="dkt-level" role="tabpanel" aria-label="Nível Pro">
-        <div class="dkt-level__head">${medal('pro', 'dkt-medal--lg')}<span class="dkt-level__here">Você começa aqui</span></div>
-        <h3 class="dkt-level__name">PRO</h3>
-        <p class="dkt-level__note"><strong>Comprou, entrou!</strong> A partir da sua primeira compra, você já faz parte do Clube</p>
-        <h3 class="dkt-level__sub">Benefícios exclusivos</h3>
-        <dl class="dkt-level__values">${PRO_VALUES.map(([k, v]) =>
-          `<div><dt>${k}</dt><dd>${v ?? `${ti('circle-x')}<span class="dkt-sr">Não incluso</span>`}</dd></div>`).join('')}</dl>
-        <ul class="dkt-level__list">${PRO_INCLUDED.map(k => `<li><span>${k}</span>${ti('circle-check')}<span class="dkt-sr">Incluso</span></li>`).join('')}</ul>
-        <div class="dkt-progress dkt-progress--static" aria-hidden="true"><span></span></div>
-        <p class="dkt-level__foot">* Período do gasto ou número de compras: 12 meses.</p>
+      ${levelSection(false)}`
+}
+
+// Logged-in Clube: greeting, cashback and progress to the next level, then the shared sections.
+function clubeMember(s: State) {
+  return `<div class="dkt-rail dkt-slides" data-dkt-rail="slides" data-dkt-slides aria-roledescription="carrossel" aria-label="Campanhas do Clube">${MEMBER_SLIDES.map(([img, alt], i) =>
+        `<img src="${img}" alt="${alt}" aria-roledescription="slide" aria-label="${i + 1} de ${MEMBER_SLIDES.length}" />`).join('')}</div>
+      <div class="dkt-hello">
+        <p class="dkt-hello__name">Olá, Raul!</p>
+        <p class="dkt-hello__tier">Nível Pro</p>
       </div>
-      <button type="button" class="dkt-cta dkt-cta--block" data-dkt="entrar">Me tornar membro clube</button>
-      <button type="button" class="dkt-faq" data-dkt="soon">${ti('help-circle')}<span>Dúvidas frequentes</span>${ti('chevron-right')}</button>
-    </div>
-    ${tabBar()}
-  </section>`
+      <div class="dkt-status-card">
+        <div class="dkt-status-card__cash">
+          <p><span>Cashback disponível</span><strong>R$ 4,00</strong></p>
+          <svg class="dkt-cash-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M25.2 9.2A12 12 0 1 0 28 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M28.6 7.4 25.6 9.8l-3-2.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.4 11.6c-.6-1.2-1.9-1.9-3.4-1.9-2 0-3.4 1.1-3.4 2.7 0 3.7 7 1.9 7 5.7 0 1.6-1.6 2.8-3.6 2.8-1.6 0-3-.7-3.6-2M16 7.8v2M16 20.9v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="dkt-status-card__level">
+          <div class="dkt-meter__labels"><span class="dkt-meter__from">Pro</span><strong>50%</strong><span class="dkt-meter__to">Elite</span></div>
+          <div class="dkt-meter" role="progressbar" aria-label="Progresso para o nível Elite" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+            ${medal('pro')}<span class="dkt-meter__track"><span class="dkt-meter__fill"></span><span class="dkt-meter__thumb"></span></span>${medal('locked')}
+          </div>
+          <div class="dkt-details" id="dkt-details" hidden>
+            <p class="dkt-details__lead">Faltam <strong>R$583,00</strong> ou <strong>2 compras</strong><br />para você subir de nível*</p>
+            <dl class="dkt-details__box">
+              <div><dt>Compras</dt><dd><span class="dkt-steps" aria-hidden="true"><i class="is-on"></i><i class="is-on"></i><i></i><i></i></span><span>2 de 4</span></dd></div>
+              <div><dt>Valor gasto</dt><dd><span class="dkt-spend" aria-hidden="true"><i></i></span><span>R$ 417 de 1.000</span></dd></div>
+            </dl>
+            <p class="dkt-details__note">*Seu progresso é calculado com base a cada compra ou valor gasto em 12 meses.<br /><strong>Continue acumulando!</strong></p>
+            <p class="dkt-details__expire"><strong>-05%</strong>1 compra expira em <b>20 dias</b>.</p>
+          </div>
+          <button type="button" class="dkt-details__toggle" data-dkt="details" aria-expanded="false" aria-controls="dkt-details"><span>Ver mais detalhes</span>${ti('chevron-down')}</button>
+        </div>
+      </div>
+
+      <div class="dkt-perks-banner">
+        <img src="${memberPerks}" alt="Pai e filho pedalando juntos" />
+        <p>Os melhores benefícios, você encontra aqui</p>
+      </div>
+      ${perksRail()}
+
+      ${productsSection()}
+
+      ${levelSection(true)}`
 }
 
 // Home header seen dimmed behind the sign-in sheets.
@@ -250,6 +337,13 @@ function esc(v: string) {
 export function mountDecathlonApp(el: HTMLElement, opts: { onChange?: (screen: DktScreen) => void; island?: boolean } = {}): DktApp {
   const s: State = { screen: 'splash', email: '', emailError: '', code: '', resendIn: RESEND_SECONDS, signedIn: false, clubeScroll: 0 }
   let splashTimer = 0, resendTimer = 0, snackTimer = 0
+  // Member hero slides advance every few seconds unless someone is on them.
+  const slidesTimer = window.setInterval(() => {
+    const rail = view.querySelector<HTMLElement>('.dkt-screen:not([inert]) [data-dkt-slides]')
+    if (!rail || rail.matches(':hover, :focus-within') || matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const next = Math.round(rail.scrollLeft / rail.clientWidth) + 1
+    rail.scrollTo({ left: next >= rail.children.length ? 0 : next * rail.clientWidth, behavior: 'smooth' })
+  }, 4500)
 
   el.innerHTML = `<div class="dkt-app" role="region" aria-label="Protótipo do app Decathlon">
       <div class="dkt-status" aria-hidden="true"><span>9:41</span><span class="dkt-status__icons">${ti('antenna-bars-4')}${ti('wifi')}${ti('battery-3')}</span></div>
@@ -335,6 +429,13 @@ export function mountDecathlonApp(el: HTMLElement, opts: { onChange?: (screen: D
     else if (action === 'close') go('clube')
     else if (action === 'login') { s.emailError = ''; go('login') }
     else if (action === 'soon') snack('Fora do fluxo deste protótipo')
+    else if (action === 'details') {
+      // Expands in place, so the Clube keeps its scroll position.
+      const open = t.getAttribute('aria-expanded') !== 'true'
+      t.setAttribute('aria-expanded', String(open))
+      t.innerHTML = `<span>${open ? 'Esconder' : 'Ver mais detalhes'}</span>${ti(open ? 'chevron-up' : 'chevron-down')}`
+      view.querySelector<HTMLElement>('#dkt-details')!.hidden = !open
+    }
   }
 
   const onSubmit = (e: SubmitEvent) => {
@@ -347,6 +448,7 @@ export function mountDecathlonApp(el: HTMLElement, opts: { onChange?: (screen: D
       s.emailError ? render(true) : go('codigo')
     } else if (s.code.length === CODE_LENGTH) {
       s.signedIn = true
+      s.clubeScroll = 0
       go('clube')
       snack('Login concluído. Boas-vindas ao Clube!')
     }
@@ -388,6 +490,6 @@ export function mountDecathlonApp(el: HTMLElement, opts: { onChange?: (screen: D
     go,
     restart: () => go('splash'),
     get screen() { return s.screen },
-    destroy: () => { clearTimeout(splashTimer); clearInterval(resendTimer); clearTimeout(snackTimer); el.innerHTML = '' },
+    destroy: () => { clearInterval(slidesTimer); clearTimeout(splashTimer); clearInterval(resendTimer); clearTimeout(snackTimer); el.innerHTML = '' },
   }
 }
