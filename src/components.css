@@ -282,6 +282,14 @@ button.ui-card--item[aria-expanded="true"] .ui-card__dot { background: var(--col
   display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); overflow: hidden;
   border-radius: var(--radius-lg); border: var(--border-1) solid var(--color-border); background: var(--alpha-5);
 }
+.ui-card__toolbar {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4); border-bottom: var(--border-1) solid var(--color-border);
+}
+/* Five screen steps can outgrow a phone-width card: scroll sideways instead of wrapping. */
+.ui-card__toolbar .ui-segmented { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.ui-card__toolbar .ui-segmented__item { flex-shrink: 0; }
+@media (max-width: 479px) { .ui-card__toolbar .ui-segmented__item { padding: 0 var(--space-2); } }
 .ui-card__stage {
   position: relative; height: 40rem; touch-action: pan-y;
   background: radial-gradient(80% 70% at 50% 45%, var(--alpha-10), transparent 70%);
