@@ -165,7 +165,9 @@ function levelSection(member: boolean) {
         <div class="dkt-progress dkt-progress--static" aria-hidden="true"><span></span></div>
         <p class="dkt-level__foot">* Período do gasto ou número de compras: 12 meses.</p>
       </div>
-      <button type="button" class="dkt-cta dkt-cta--block" data-dkt="entrar">Me tornar membro clube</button>
+      ${member
+        ? `<button type="button" class="dkt-cta dkt-cta--block" data-dkt="logout">${ti('logout')}Sair da conta</button>`
+        : `<button type="button" class="dkt-cta dkt-cta--block" data-dkt="entrar">Me tornar membro clube</button>`}
       <button type="button" class="dkt-faq" data-dkt="soon">${ti('help-circle')}<span>Dúvidas frequentes</span>${ti('chevron-right')}</button>`
 }
 
@@ -173,7 +175,7 @@ function clube(s: State, behind = false) {
   const body = s.signedIn ? clubeMember(s) : clubeGuest()
   return `<section class="dkt-screen dkt-clube" aria-labelledby="dkt-clube-title"${behind ? ' inert' : ''}>
     ${clubeHeader(s)}
-    <div class="dkt-clube__scroll" data-dkt-scroll>
+    <div class="dkt-clube__scroll" data-dkt-scroll="${s.signedIn ? 'member' : 'guest'}">
       <p class="dkt-ribbon${s.signedIn ? ' dkt-ribbon--light' : ''}">O Clube está de cara nova, confira!</p>
       ${body}
     </div>
@@ -372,7 +374,8 @@ export function mountDecathlonApp(el: HTMLElement, opts: { onChange?: (screen: D
     const sheet = s.screen === 'entrar' || s.screen === 'login' || s.screen === 'codigo'
     // Sheets sit over the Clube screen, which stays visible (and inert) behind the scrim;
     // its scroll position survives opening and closing them.
-    const scroller = view.querySelector<HTMLElement>('[data-dkt-scroll]')
+    // Only while it stays the same Clube: signing in or out starts the other one at the top.
+    const scroller = view.querySelector<HTMLElement>(`[data-dkt-scroll="${s.signedIn ? 'member' : 'guest'}"]`)
     if (scroller) s.clubeScroll = scroller.scrollTop
     view.innerHTML = (sheet ? clube(s, true) : '') + ({ splash, clube, entrar, login, codigo }[s.screen])(s)
     app.dataset.screen = s.screen
@@ -429,6 +432,11 @@ export function mountDecathlonApp(el: HTMLElement, opts: { onChange?: (screen: D
     else if (action === 'close') go('clube')
     else if (action === 'login') { s.emailError = ''; go('login') }
     else if (action === 'soon') snack('Fora do fluxo deste protótipo')
+    else if (action === 'logout') {
+      Object.assign(s, { signedIn: false, email: '', code: '', clubeScroll: 0 })
+      go('clube')
+      snack('Você saiu da sua conta')
+    }
     else if (action === 'details') {
       // Expands in place, so the Clube keeps its scroll position.
       const open = t.getAttribute('aria-expanded') !== 'true'
