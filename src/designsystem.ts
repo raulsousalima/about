@@ -4,6 +4,8 @@ import './designsystem.css'
 import { initTheme } from './theme'
 import { initI18n, getLang } from './i18n'
 import { mountSimulator } from './simulator'
+import { mountPhone3D } from './phone3d'
+import decathlonScreen from '../img/cases/decathlon/1.png'
 
 /* =====================================================
    /designsystem — docs app
@@ -42,6 +44,7 @@ function remToPx(v: string): string {
 }
 
 let toastTimer = 0
+let devicePhone: ReturnType<typeof mountPhone3D> | null = null
 function toast(msg: string) {
   let el = document.querySelector<HTMLElement>('.ds-toast')
   if (!el) {
@@ -613,12 +616,12 @@ const SPECS: Record<string, Spec> = {
 
   card: {
     controls: [
-      { type: 'radio', key: 'variant', label: ['Variante', 'Variant'], options: [['lead', 'Lead'], ['case', 'Case'], ['metric', ['Métrica', 'Metric']], ['item', 'Item']] },
+      { type: 'radio', key: 'variant', label: ['Variante', 'Variant'], options: [['lead', 'Lead'], ['case', 'Case'], ['metric', ['Métrica', 'Metric']], ['item', 'Item'], ['device', ['Aparelho 3D', '3D device']]] },
       { type: 'switch', key: 'interactive', label: ['Clicável (botão)', 'Clickable (button)'], when: p => p.variant === 'item' },
       { type: 'switch', key: 'expanded', label: ['Expandido', 'Expanded'], when: p => p.variant === 'item' && !!p.interactive },
       { type: 'switch', key: 'icon', label: ['Ícone', 'Icon'], when: p => p.variant === 'lead' },
       { type: 'switch', key: 'accent', label: ['Valor em accent', 'Accent value'], when: p => p.variant === 'metric' },
-      { type: 'radio', key: 'state', label: ['Estado', 'State'], options: [['default', 'Default'], ['hover', 'Hover'], ['focus', 'Focus']], when: p => p.variant !== 'metric' },
+      { type: 'radio', key: 'state', label: ['Estado', 'State'], options: [['default', 'Default'], ['hover', 'Hover'], ['focus', 'Focus']], when: p => p.variant !== 'metric' && p.variant !== 'device' },
     ],
     defaults: { variant: 'case', icon: true, accent: true, state: 'default', interactive: true, expanded: false },
     render: p => {
@@ -631,6 +634,10 @@ const SPECS: Record<string, Spec> = {
         return p.interactive
           ? `<button type="button" class="ui-card ui-card--item${st}" aria-expanded="${!!p.expanded}" data-ds-root>${inner}</button>`
           : `<div class="ui-card ui-card--item" data-ds-root>${inner}</div>`
+      }
+      if (p.variant === 'device') {
+        const v = (key: string, label: string, on = false) => `<button type="button" class="ui-segmented__item" role="radio" aria-checked="${on}" data-phone3d-view="${key}">${label}</button>`
+        return `<div class="ui-card ui-card--device" data-ds-root><div class="ui-card__stage" data-phone3d role="img" aria-labelledby="ds-device-title"><img src="${decathlonScreen}" alt="" hidden></div><div class="ui-card__body"><p class="ui-card__overline">${L('Protótipo', 'Prototype')}</p><h3 class="ui-card__heading" id="ds-device-title">${L('Clube Decathlon no app', 'Decathlon Club in the app')}</h3><p class="ui-card__text">${L('Mockup 3D do aparelho com a tela do app. Arraste para girar.', '3D device mockup showing the app screen. Drag to rotate.')}</p><div class="ui-segmented ui-segmented--sm" role="radiogroup" aria-label="${L('Vista do aparelho', 'Device view')}">${v('frente', L('Frente', 'Front'), true)}${v('lateral', L('Lateral', 'Side'))}${v('verso', L('Verso', 'Back'))}</div><p class="ui-card__hint">${icon('hand-move')}<span>${L('Arraste para girar', 'Drag to rotate')}</span></p></div></div>`
       }
       if (p.variant === 'metric') {
         return `<div class="ui-card ui-card--metric" data-ds-root><p class="ui-card__metric${p.accent ? ' is-accent' : ''}">230K</p><p class="ui-card__text">${L('usuários ativos na plataforma em 2023', 'active users on the platform in 2023')}</p></div>`
@@ -649,6 +656,13 @@ const SPECS: Record<string, Spec> = {
         { label: L('Indicador', 'Indicator'), selector: '.ui-card__dot', note: L('Accent quando expandido', 'Accent when expanded') },
         { label: L('Nome', 'Name'), selector: '.ui-card__name', note: 'Inter semibold' },
         { label: 'Meta', selector: '.ui-card__meta', note: L('Período, segmento', 'Period, industry') },
+      ]
+      if (p.variant === 'device') return [
+        { label: P.container(), selector: '.ui-card', note: L('Duas colunas no desktop, empilha no mobile', 'Two columns on desktop, stacks on mobile') },
+        { label: L('Palco 3D', '3D stage'), selector: '.ui-card__stage', note: L('Canvas Three.js; arrastar gira, carrega só perto da viewport', 'Three.js canvas; drag rotates, loads only near the viewport') },
+        { label: P.title(), selector: '.ui-card__heading', note: L('Playfair bold; nomeia o palco (aria-labelledby)', 'Playfair bold; names the stage (aria-labelledby)') },
+        { label: L('Vistas', 'Views'), selector: '.ui-segmented', note: L('Frente, lateral e verso pelo teclado', 'Front, side and back from the keyboard') },
+        { label: L('Dica', 'Hint'), selector: '.ui-card__hint', note: L('Como interagir', 'How to interact') },
       ]
       if (p.variant === 'metric') return [
         { label: P.container(), selector: '.ui-card', note: L('Centralizado, padding generoso', 'Centered, generous padding') },
@@ -684,6 +698,15 @@ const SPECS: Record<string, Spec> = {
         { part: L('Indicador', 'Indicator'), prop: 'background', token: p.interactive && p.expanded ? '--color-accent' : '--alpha-20' },
         { part: 'Meta', prop: 'color', token: '--color-text-muted-dark' },
       ]
+      if (p.variant === 'device') return [
+        { part: C, prop: 'background', token: '--alpha-5' },
+        { part: C, prop: 'border-color', token: '--color-border' },
+        { part: C, prop: 'border-radius', token: '--radius-lg' },
+        { part: L('Palco 3D', '3D stage'), prop: 'background', token: '--alpha-10 (radial)' },
+        { part: L('Corpo', 'Body'), prop: 'padding', token: '--space-6 / --space-10' },
+        { part: L('Corpo', 'Body'), prop: 'gap', token: '--space-4' },
+        { part: L('Dica', 'Hint'), prop: 'color', token: '--color-text-muted-dark' },
+      ]
       if (p.variant === 'metric') return [
         { part: C, prop: 'background', token: '--alpha-5' },
         { part: C, prop: 'border-color', token: '--color-border' },
@@ -704,6 +727,13 @@ const SPECS: Record<string, Spec> = {
         { part: T, prop: 'font-size', token: '--text-xl' },
         { part: D, prop: 'color', token: '--color-text-muted-dark' },
       ]
+    },
+    bind: stage => {
+      // Each re-render replaces the markup; free the previous WebGL scene first.
+      devicePhone?.then(ph => ph.dispose())
+      devicePhone = null
+      const el = stage.querySelector<HTMLElement>('[data-phone3d]')
+      if (el) devicePhone = mountPhone3D(el)
     },
   },
 

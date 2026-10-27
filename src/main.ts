@@ -16,6 +16,7 @@ import { initScorecardCharts } from './scorecardChart'
 import { initFeatureTables } from './featureTable'
 import { initRadarCharts } from './radarChart'
 import { initReviewDashboards } from './reviewDashboard'
+import { initPhone3D } from './phone3d'
 
 // Case access gate — run first so restricted cards/pages resolve before the
 // rest of the page initializes. Admin tab wires up the manage panel.
@@ -89,6 +90,7 @@ initScorecardCharts()
 initFeatureTables()
 initRadarCharts()
 initReviewDashboards()
+initPhone3D()
 initTheme()
 initTypewriter()
 initGalleryToggle()
