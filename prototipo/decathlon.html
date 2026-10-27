@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Protótipo Clube Decathlon | Raul Lima</title>
+  <meta name="description" content="Protótipo navegável do app Clube Decathlon: splash, clube, entrada, login e código de verificação." />
+  <meta name="robots" content="noindex" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>R</text></svg>" />
+  <!-- Tabler Icons Standard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+</head>
+
+<body>
+  <main class="max-w-7xl mx-auto px-6 py-10">
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+      <a href="../case/decathlon.html" class="ui-btn ui-btn--link">
+        <i class="ti ti-arrow-left" aria-hidden="true"></i><span data-i18n="proto.decathlon.back">Voltar ao case</span>
+      </a>
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-1 text-xs font-medium">
+          <button data-lang-btn="en" class="px-2 py-1 rounded-full transition-all text-text-muted-dark cursor-pointer hover:opacity-80">EN</button>
+          <span class="text-text-muted-dark opacity-50">|</span>
+          <button data-lang-btn="pt" class="px-2 py-1 rounded-full transition-all text-text-muted-dark cursor-pointer hover:opacity-80">PT</button>
+        </div>
+        <button id="theme-toggle" class="text-text-muted-dark hover:text-text-primary-dark transition-colors" aria-label="Alternar tema">
+          <i class="ti ti-moon text-2xl" aria-hidden="true" id="theme-icon"></i>
+        </button>
+      </div>
+    </div>
+
+    <span class="ui-badge ui-badge--label" data-i18n="proto.decathlon.label">Protótipo</span>
+    <h1 class="font-serif text-3xl md:text-4xl font-bold mt-4 mb-3" data-i18n="proto.decathlon.title">Clube Decathlon no app</h1>
+    <p class="text-base leading-relaxed text-text-muted-dark max-w-3xl mb-8" data-i18n="proto.decathlon.lead">
+      Navegue pelo fluxo de entrada no Clube: Splash, Clube, Entrar (toque no ícone de perfil no topo), Login e Código.
+      Digite qualquer email válido e um código de 6 dígitos.
+    </p>
+
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+      <div class="ui-segmented ui-segmented--sm" role="radiogroup" aria-label="Telas do fluxo" data-proto-steps></div>
+      <button type="button" class="ui-btn ui-btn--ghost ui-btn--sm" data-proto-restart>
+        <i class="ti ti-refresh" aria-hidden="true"></i><span class="ui-btn__label" data-i18n="proto.decathlon.restart">Reiniciar</span>
+      </button>
+    </div>
+
+    <div class="flex justify-center" data-proto-stage>
+      <div class="dkt-device"><div class="dkt-device__screen" data-proto-app></div></div>
+    </div>
+  </main>
+
+  <script type="module" src="/src/protoPreview.ts"></script>
+</body>
+
+</html>

@@ -275,6 +275,27 @@ button.ui-card--item[aria-expanded="true"] .ui-card__dot { background: var(--col
 .ui-card__metric--sm { font-size: clamp(1.75rem, 4vw, 2.75rem); }
 .ui-card__text strong { color: var(--color-text-primary-dark); }
 
+/* Device — 3D phone mockup (Three.js) beside a short caption and a view switch.
+   Two columns when the card has room (also in narrow containers), else stacked.
+   The stage is drag-to-rotate; the switch gives keyboard users the same views. */
+.ui-card--device {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); overflow: hidden;
+  border-radius: var(--radius-lg); border: var(--border-1) solid var(--color-border); background: var(--alpha-5);
+}
+.ui-card__stage {
+  position: relative; height: 26rem; touch-action: pan-y;
+  background: radial-gradient(80% 70% at 50% 45%, var(--alpha-10), transparent 70%);
+}
+.ui-card--device .ui-card__body { display: flex; flex-direction: column; justify-content: center; gap: var(--space-4); padding: var(--space-6); }
+.ui-card--device .ui-card__overline, .ui-card--device .ui-card__heading { margin-bottom: 0; }
+.ui-card--device .ui-segmented { align-self: flex-start; }
+.ui-card__hint { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-xs); color: var(--color-text-muted-dark); }
+.ui-card__hint i { font-size: 1rem; line-height: 1; }
+@media (min-width: 768px) {
+  .ui-card__stage { height: 34rem; }
+  .ui-card--device .ui-card__body { padding: var(--space-10); }
+}
+
 .ui-card:focus-visible, .ui-card.is-focus { outline: var(--border-2) solid var(--color-accent-text); outline-offset: 2px; }
 
 /* ---------- Accordion (native details) ---------- */
