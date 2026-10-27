@@ -637,7 +637,7 @@ const SPECS: Record<string, Spec> = {
       }
       if (p.variant === 'device') {
         const v = (key: string, label: string, on = false) => `<button type="button" class="ui-segmented__item" role="radio" aria-checked="${on}" data-phone3d-view="${key}">${label}</button>`
-        return `<div class="ui-card ui-card--device" data-ds-root><div class="ui-card__stage" data-phone3d role="img" aria-labelledby="ds-device-title"><img src="${decathlonScreen}" alt="" hidden></div><div class="ui-card__body"><p class="ui-card__overline">${L('Protótipo', 'Prototype')}</p><h3 class="ui-card__heading" id="ds-device-title">${L('Clube Decathlon no app', 'Decathlon Club in the app')}</h3><p class="ui-card__text">${L('Mockup 3D do aparelho com a tela do app. Arraste para girar.', '3D device mockup showing the app screen. Drag to rotate.')}</p><div class="ui-segmented ui-segmented--sm" role="radiogroup" aria-label="${L('Vista do aparelho', 'Device view')}">${v('frente', L('Frente', 'Front'), true)}${v('lateral', L('Lateral', 'Side'))}${v('verso', L('Verso', 'Back'))}</div><p class="ui-card__hint">${icon('hand-move')}<span>${L('Arraste para girar', 'Drag to rotate')}</span></p></div></div>`
+        return `<div class="ui-card ui-card--device" data-ds-root><div class="ui-card__stage" data-phone3d role="img" aria-labelledby="ds-device-title"><img src="${decathlonScreen}" alt="" hidden></div><div class="ui-card__body"><p class="ui-card__overline">${L('Protótipo', 'Prototype')}</p><h3 class="ui-card__heading" id="ds-device-title">${L('Clube Decathlon no app', 'Decathlon Club in the app')}</h3><p class="ui-card__text">${L('Mockup 3D do aparelho com a tela do app. Arraste para girar.', '3D device mockup showing the app screen. Drag to rotate.')}</p><div class="ui-segmented ui-segmented--sm" role="radiogroup" aria-label="${L('Vista do aparelho', 'Device view')}">${v('auto', L('Girar', 'Spin'), true)}${v('frente', L('Frente', 'Front'))}${v('lateral', L('Lateral', 'Side'))}${v('verso', L('Verso', 'Back'))}</div><p class="ui-card__hint">${icon('hand-move')}<span>${L('Arraste para girar', 'Drag to rotate')}</span></p></div></div>`
       }
       if (p.variant === 'metric') {
         return `<div class="ui-card ui-card--metric" data-ds-root><p class="ui-card__metric${p.accent ? ' is-accent' : ''}">230K</p><p class="ui-card__text">${L('usuários ativos na plataforma em 2023', 'active users on the platform in 2023')}</p></div>`
@@ -661,7 +661,7 @@ const SPECS: Record<string, Spec> = {
         { label: P.container(), selector: '.ui-card', note: L('Duas colunas no desktop, empilha no mobile', 'Two columns on desktop, stacks on mobile') },
         { label: L('Palco 3D', '3D stage'), selector: '.ui-card__stage', note: L('Canvas Three.js; arrastar gira, carrega só perto da viewport', 'Three.js canvas; drag rotates, loads only near the viewport') },
         { label: P.title(), selector: '.ui-card__heading', note: L('Playfair bold; nomeia o palco (aria-labelledby)', 'Playfair bold; names the stage (aria-labelledby)') },
-        { label: L('Vistas', 'Views'), selector: '.ui-segmented', note: L('Frente, lateral e verso pelo teclado', 'Front, side and back from the keyboard') },
+        { label: L('Vistas', 'Views'), selector: '.ui-segmented', note: L('Girar (padrão), frente, lateral e verso pelo teclado', 'Spin (default), front, side and back from the keyboard') },
         { label: L('Dica', 'Hint'), selector: '.ui-card__hint', note: L('Como interagir', 'How to interact') },
       ]
       if (p.variant === 'metric') return [
