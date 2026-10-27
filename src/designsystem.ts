@@ -3,7 +3,6 @@ import './components.css'
 import './designsystem.css'
 import { initTheme } from './theme'
 import { initI18n, getLang } from './i18n'
-import { bindCompare } from './compare'
 import { mountSimulator } from './simulator'
 
 /* =====================================================
@@ -134,7 +133,6 @@ const PAGES: PageDef[] = [
   { id: 'accordion', title: ['Accordion', 'Accordion'], icon: 'layout-list', group: 'components', desc: ['Conteúdo expansível em lista.', 'Expandable list content.'] },
   { id: 'tooltip', title: ['Tooltip', 'Tooltip'], icon: 'message-2', group: 'components', desc: ['Rótulos e valores sob demanda.', 'Labels and values on demand.'] },
   { id: 'popover', title: ['Popover', 'Popover'], icon: 'layout-bottombar-expand', group: 'components', desc: ['Painel com detalhes ao clicar.', 'Detail panel on click.'] },
-  { id: 'compare', title: ['Compare', 'Compare'], icon: 'columns-2', group: 'components', desc: ['Antes e depois com linha arrastável.', 'Before and after with a draggable line.'] },
   { id: 'navbar', title: ['Navbar', 'Navbar'], icon: 'layout-navbar', group: 'components', desc: ['Cabeçalho fixo com vidro fosco.', 'Fixed frosted-glass header.'] },
   { id: 'simulador', title: ['Simulador', 'Simulator'], icon: 'device-mobile', group: 'support', desc: ['App Kalion Bank navegável com tokens editáveis.', 'Navigable Kalion Bank app with editable tokens.'] },
   { id: 'documentacao', title: ['Documentação', 'Documentation'], icon: 'book', group: 'support', desc: ['Linguagem, guia de uso e docs do repositório.', 'Language, usage guide and repository docs.'] },
@@ -822,46 +820,6 @@ const SPECS: Record<string, Spec> = {
     },
     bind: (stage, p, set) => {
       stage.querySelector('.ui-card--item')?.addEventListener('click', () => set({ open: !p.open }, true))
-    },
-  },
-
-  compare: {
-    controls: [
-      { type: 'radio', key: 'pos', label: ['Posição', 'Position'], options: [['25', '25%'], ['50', '50%'], ['75', '75%']] },
-      { type: 'switch', key: 'labels', label: ['Legendas', 'Labels'] },
-      { type: 'switch', key: 'scroll', label: ['Rolagem interna', 'Inner scroll'] },
-    ],
-    defaults: { pos: '50', labels: true, scroll: true },
-    render: p => `<div class="ui-compare${p.scroll ? ' ui-compare--scroll' : ''}" data-compare style="--pos: ${p.pos}%" data-ds-root>
-        <div class="ui-compare__viewport"><div class="ui-compare__stage">
-          <img class="ui-compare__after" src="/img/cases/kalion/site-depois.jpg" alt="${L('Depois', 'After')}" />
-          <img class="ui-compare__before" src="/img/cases/kalion/site-antes.jpg" alt="${L('Antes', 'Before')}" />
-          <div class="ui-compare__line" aria-hidden="true"><span class="ui-compare__knob">${icon('arrows-horizontal')}</span></div>
-        </div></div>
-        ${p.labels ? `<span class="ui-compare__label is-before">${L('Antes', 'Before')}</span><span class="ui-compare__label is-after">${L('Depois', 'After')}</span>` : ''}
-        <input class="ui-compare__range" type="range" min="0" max="100" value="${p.pos}" aria-label="${L('Comparar antes e depois', 'Compare before and after')}" />
-      </div>`,
-    anatomy: p => [
-      { label: P.container(), selector: '.ui-compare', note: L('Moldura com borda e raio lg', 'Frame with border and lg radius') },
-      { label: L('Linha', 'Line'), selector: '.ui-compare__line', note: L('2px em accent, segue --pos', '2px accent, follows --pos') },
-      { label: L('Marcador', 'Knob'), selector: '.ui-compare__knob', note: L('Sticky: fica no centro ao rolar', 'Sticky: stays centered while scrolling') },
-      ...(p.labels ? [{ label: L('Legendas', 'Labels'), selector: '.ui-compare__label', note: L('Discretas, vidro fosco', 'Subtle, frosted glass') }] : []),
-    ],
-    tokens: () => [
-      { part: P.container(), prop: 'border-color', token: '--color-border' },
-      { part: P.container(), prop: 'border-radius', token: '--radius-lg' },
-      { part: L('Linha', 'Line'), prop: 'background', token: '--color-accent' },
-      { part: L('Linha', 'Line'), prop: 'width', token: '--border-2' },
-      { part: L('Marcador', 'Knob'), prop: 'background', token: '--color-accent' },
-      { part: L('Marcador', 'Knob'), prop: 'color', token: '--color-on-accent' },
-      { part: L('Marcador', 'Knob'), prop: 'box-shadow', token: '--shadow-md' },
-      { part: L('Legendas', 'Labels'), prop: 'background', token: '--glass-bg' },
-      { part: L('Legendas', 'Labels'), prop: 'font-size', token: '--text-2xs' },
-      { part: P.focus(), prop: 'outline', token: '--color-accent-text' },
-    ],
-    bind: (stage) => {
-      const root = stage.querySelector<HTMLElement>('[data-compare]')
-      if (root) bindCompare(root)
     },
   },
 
