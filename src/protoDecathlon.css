@@ -41,6 +41,9 @@
 }
 .dkt-app[data-status-dark="true"] .dkt-status { color: #000000; }
 .dkt-status__icons { display: inline-flex; gap: 5px; font-size: 18px; }
+.dkt-island { position: absolute; top: 11px; left: 50%; z-index: 31; width: 124px; height: 36px; transform: translateX(-50%); border-radius: 18px; background: #000000; pointer-events: none; }
+/* Host on the 3D phone: the app at native size; CSS3DRenderer scales it onto the screen. */
+.dkt-host { width: 393px; height: 852px; background: #000000; }
 .dkt-home-indicator { position: absolute; left: 50%; bottom: 8px; z-index: 30; width: 139px; height: 5px; transform: translateX(-50%); border-radius: 100px; background: #000000; pointer-events: none; }
 
 .dkt-view { position: absolute; inset: 0; }

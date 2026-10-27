@@ -2,6 +2,7 @@
 // Rotatable iPhone-style device; the screen is a canvas texture so it can later
 // show a navigable prototype instead of a still image.
 import * as THREE from 'three';
+import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
 
 export const FINISHES = {
   preto: { frame: 0x2a2b2e, back: 0x141517 },
@@ -28,6 +29,7 @@ function flatUV(geo, w, h) {
 export function createPhone3D(container, opts = {}) {
   const o = {
     screenSrc: null,      // URL da imagem da tela (proporção ~ 9:19.5)
+    screenElement: null,  // elemento HTML vivo na tela (ex.: protótipo 393×852), por cima do WebGL
     finish: 'preto',      // 'preto' | 'branco' | 'cinza'
     autoRotate: false,    // gira sozinho
     autoRotateSpeed: 0.6, // rad/s (negativo inverte)
@@ -139,6 +141,28 @@ export function createPhone3D(container, opts = {}) {
   flatUV(screenGeo, SW, SH);
   const screenMat = track(new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false }));
   const screen = new THREE.Mesh(screenGeo, screenMat); screen.position.z = D / 2 + 0.0016; phone.add(screen);
+  // Tela interativa: um elemento DOM posto no plano da tela via CSS3DRenderer.
+  // Fica numa camada por cima do canvas e some de costas (backface hidden).
+  let cssRenderer = null;
+  // Auto-rotation pauses while the live screen is hovered, touched (for a few
+  // seconds) or holds focus, so the app stays usable while the phone spins.
+  let screenHover = false, screenHold = 0;
+  const screenBusy = (t) => !!o.screenElement && (screenHover || t < screenHold || o.screenElement.contains(document.activeElement));
+  if (o.screenElement) {
+    const el = o.screenElement;
+    const pxW = el.offsetWidth || 393, pxH = el.offsetHeight || 852;
+    Object.assign(el.style, { backfaceVisibility: 'hidden', pointerEvents: 'auto', borderRadius: `${Math.round((R - 0.03) / SW * pxW)}px`, overflow: 'hidden' });
+    el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') screenHover = true; });
+    el.addEventListener('pointerleave', () => { screenHover = false; });
+    el.addEventListener('pointerdown', () => { screenHold = performance.now() + 5000; });
+    const obj = new CSS3DObject(el);
+    obj.scale.set(SW / pxW, SH / pxH, 1);
+    obj.position.z = D / 2 + 0.003;
+    phone.add(obj);
+    cssRenderer = new CSS3DRenderer();
+    Object.assign(cssRenderer.domElement.style, { position: 'absolute', inset: '0', pointerEvents: 'none' });
+    container.appendChild(cssRenderer.domElement);
+  }
   const glossMat = track(new THREE.MeshPhysicalMaterial({ color: 0x000000, transparent: true, opacity: 0.12, roughness: 0.05, clearcoat: 1, depthWrite: false }));
   const gloss = new THREE.Mesh(screenGeo, glossMat); gloss.position.z = D / 2 + 0.0022; phone.add(gloss);
 
@@ -215,8 +239,9 @@ export function createPhone3D(container, opts = {}) {
 
   const resize = () => {
     const w = container.clientWidth || 1, h = container.clientHeight || 1;
-    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
-    baseDist = o.distance * (w / h < 0.75 ? 1.45 : 1); tDist = clampD(baseDist);
+    renderer.setSize(w, h, false); cssRenderer?.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix();
+    // Pull back only as far as needed for the phone (plus margin) to fit the width.
+    baseDist = Math.max(o.distance, (W * 1.25) / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect)); tDist = clampD(baseDist);
   };
   const ro = new ResizeObserver(resize); ro.observe(container); resize(); dist = tDist;
 
@@ -235,7 +260,7 @@ export function createPhone3D(container, opts = {}) {
         if (Math.abs(tRy - ry) < 0.001) { ry = tRy; tRy = null; }
       } else {
         ry += vy; rx = clampX(rx + vx); vy *= 0.94; vx *= 0.9;
-        if (auto && !reduceMotion) ry -= dt * o.autoRotateSpeed;
+        if (auto && !reduceMotion && !screenBusy(t)) ry -= dt * o.autoRotateSpeed;
       }
     }
     dist += (tDist - dist) * Math.min(1, dt * 8);
@@ -244,6 +269,7 @@ export function createPhone3D(container, opts = {}) {
     camera.position.set(0, 0.05, dist); camera.lookAt(0, 0, 0);
     if (o.onRotate) o.onRotate(Math.round(((ry * 180 / Math.PI) % 360 + 540) % 360 - 180), Math.round(rx * 180 / Math.PI));
     renderer.render(scene, camera);
+    cssRenderer?.render(scene, camera);
   };
   raf = requestAnimationFrame(loop);
 
@@ -263,7 +289,7 @@ export function createPhone3D(container, opts = {}) {
       canvas.removeEventListener('pointercancel', onUp);
       canvas.removeEventListener('wheel', onWheel);
       disposables.forEach((d) => d.dispose());
-      renderer.dispose(); canvas.remove();
+      renderer.dispose(); canvas.remove(); cssRenderer?.domElement.remove();
     },
   };
 }

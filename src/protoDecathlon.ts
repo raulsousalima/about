@@ -168,7 +168,7 @@ function esc(v: string) {
 
 /* ---------------- Mount ---------------- */
 
-export function mountDecathlonApp(el: HTMLElement, opts: { onChange?: (screen: DktScreen) => void } = {}): DktApp {
+export function mountDecathlonApp(el: HTMLElement, opts: { onChange?: (screen: DktScreen) => void; island?: boolean } = {}): DktApp {
   const s: State = { screen: 'splash', email: '', emailError: '', code: '', resendIn: RESEND_SECONDS, signedIn: false }
   let splashTimer = 0, resendTimer = 0, snackTimer = 0
 
@@ -176,7 +176,7 @@ export function mountDecathlonApp(el: HTMLElement, opts: { onChange?: (screen: D
       <div class="dkt-status" aria-hidden="true"><span>9:41</span><span class="dkt-status__icons">${ti('antenna-bars-4')}${ti('wifi')}${ti('battery-3')}</span></div>
       <div class="dkt-view" data-dkt-view></div>
       <div class="dkt-snack" role="status" aria-live="polite" data-dkt-snack></div>
-      <span class="dkt-home-indicator" aria-hidden="true"></span>
+      <span class="dkt-home-indicator" aria-hidden="true"></span>${opts.island ? '<span class="dkt-island" aria-hidden="true"></span>' : ''}
     </div>`
   const app = el.querySelector<HTMLElement>('.dkt-app')!
   const view = el.querySelector<HTMLElement>('[data-dkt-view]')!
