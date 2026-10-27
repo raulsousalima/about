@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 310">
+  <!-- Generic product (prototype placeholder): 3-person dome tent, flat illustration -->
+  <rect width="310" height="310" fill="#F4F4F6"/>
+  <ellipse cx="155" cy="232" rx="118" ry="16" fill="#000" opacity=".08"/>
+  <path d="M42 228C58 150 104 98 158 92c56-6 100 52 112 136z" fill="#1E7A99"/>
+  <path d="M158 92c-22 30-34 80-36 136h70c-2-60-12-108-34-136z" fill="#2A93B5"/>
+  <path d="M42 228C58 150 104 98 158 92" fill="none" stroke="#13586F" stroke-width="3"/>
+  <path d="M158 92c56-6 100 52 112 136" fill="none" stroke="#13586F" stroke-width="3"/>
+  <path d="M158 92c-22 30-34 80-36 136M158 92c22 28 32 76 34 136" fill="none" stroke="#5FB6D1" stroke-width="2.5"/>
+  <path d="M136 228c2-34 10-62 22-80 12 18 18 46 20 80z" fill="#0E3F50"/>
+  <path d="M158 148v80" stroke="#2A93B5" stroke-width="2" stroke-dasharray="4 5"/>
+  <path d="M86 132c18-16 40-26 62-30" fill="none" stroke="#9ED3E3" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+  <path d="M30 228h250" stroke="#B9BCC4" stroke-width="2" stroke-linecap="round"/>
+</svg>
