@@ -142,8 +142,9 @@ export function createPhone3D(container, opts = {}) {
   const screenMat = track(new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false }));
   const screen = new THREE.Mesh(screenGeo, screenMat); screen.position.z = D / 2 + 0.0016; phone.add(screen);
   // Tela interativa: um elemento DOM posto no plano da tela via CSS3DRenderer.
-  // Fica numa camada por cima do canvas e some de costas (backface hidden).
-  let cssRenderer = null;
+  // Fica numa camada por cima do canvas; de costas é escondida em updateScreenFacing
+  // (backface-visibility não alcança os filhos que têm camada própria).
+  let cssRenderer = null, screenObj = null, screenShown = true;
   // Auto-rotation pauses while the live screen is hovered, touched (for a few
   // seconds) or holds focus, so the app stays usable while the phone spins.
   let screenHover = false, screenHold = 0;
@@ -151,11 +152,11 @@ export function createPhone3D(container, opts = {}) {
   if (o.screenElement) {
     const el = o.screenElement;
     const pxW = el.offsetWidth || 393, pxH = el.offsetHeight || 852;
-    Object.assign(el.style, { backfaceVisibility: 'hidden', pointerEvents: 'auto', borderRadius: `${Math.round((R - 0.03) / SW * pxW)}px`, overflow: 'hidden' });
+    Object.assign(el.style, { pointerEvents: 'auto', borderRadius: `${Math.round((R - 0.03) / SW * pxW)}px`, overflow: 'hidden' });
     el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') screenHover = true; });
     el.addEventListener('pointerleave', () => { screenHover = false; });
     el.addEventListener('pointerdown', () => { screenHold = performance.now() + 5000; });
-    const obj = new CSS3DObject(el);
+    const obj = screenObj = new CSS3DObject(el);
     obj.scale.set(SW / pxW, SH / pxH, 1);
     obj.position.z = D / 2 + 0.003;
     phone.add(obj);
@@ -163,6 +164,21 @@ export function createPhone3D(container, opts = {}) {
     Object.assign(cssRenderer.domElement.style, { position: 'absolute', inset: '0', pointerEvents: 'none' });
     container.appendChild(cssRenderer.domElement);
   }
+  // Shows the DOM screen only while its front faces the camera (small margin
+  // so it is already gone when the phone is edge-on).
+  const screenNormal = new THREE.Vector3(), screenPos = new THREE.Vector3(), toCam = new THREE.Vector3();
+  const updateScreenFacing = () => {
+    if (!screenObj) return;
+    screenObj.updateWorldMatrix(true, false);
+    screenNormal.set(0, 0, 1).transformDirection(screenObj.matrixWorld);
+    screenObj.getWorldPosition(screenPos);
+    const facing = toCam.subVectors(camera.position, screenPos).normalize().dot(screenNormal) > 0.08;
+    if (facing === screenShown) return;
+    screenShown = facing;
+    screenObj.element.style.visibility = facing ? '' : 'hidden';
+    // Keep focus out of a screen nobody can see.
+    if (!facing && screenObj.element.contains(document.activeElement)) document.activeElement.blur();
+  };
   const glossMat = track(new THREE.MeshPhysicalMaterial({ color: 0x000000, transparent: true, opacity: 0.12, roughness: 0.05, clearcoat: 1, depthWrite: false }));
   const gloss = new THREE.Mesh(screenGeo, glossMat); gloss.position.z = D / 2 + 0.0022; phone.add(gloss);
 
@@ -269,7 +285,7 @@ export function createPhone3D(container, opts = {}) {
     camera.position.set(0, 0.05, dist); camera.lookAt(0, 0, 0);
     if (o.onRotate) o.onRotate(Math.round(((ry * 180 / Math.PI) % 360 + 540) % 360 - 180), Math.round(rx * 180 / Math.PI));
     renderer.render(scene, camera);
-    cssRenderer?.render(scene, camera);
+    if (cssRenderer) { updateScreenFacing(); cssRenderer.render(scene, camera); }
   };
   raf = requestAnimationFrame(loop);
 
