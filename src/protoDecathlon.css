@@ -166,7 +166,7 @@
 .dkt-perks__row { display: flex; gap: 12px; }
 .dkt-perk {
   position: relative; display: flex; flex-direction: column; align-items: flex-start; flex-shrink: 0; width: 148px; height: 140px; padding: 18px 16px;
-  border: 1px solid #DADADA; text-align: left; font-size: 14px; font-weight: 600; line-height: 1.5;
+  border: 1px solid #DADADA; background: var(--dkt-surface); text-align: left; font-size: 14px; font-weight: 600; line-height: 1.5;
 }
 .dkt-perk--wide { width: 308px; }
 .dkt-perk > i:first-child { font-size: 22px; margin-bottom: 14px; }
