@@ -6,11 +6,11 @@
 
 const CASES = [
   { slug: 'kalion', title: 'DS Kalion', overline: 'Design System · Design AI Engineer', cover: new URL('../img/cases/kalion/bannerhero.jpg', import.meta.url).href },
-  { slug: 'pernambucanas', title: 'Pernambucanas', overline: 'Retail · Design Leadership', cover: new URL('../img/cases/pernambucanas/bannerhero.png', import.meta.url).href },
-  { slug: 'decathlon', title: 'Decathlon', overline: 'Retail · Loyalty UX', cover: new URL('../img/cases/decathlon/bannerhero.png', import.meta.url).href },
-  { slug: 'nofrictionai', title: 'No Friction AI', overline: 'AI · Zero-to-One', cover: new URL('../img/cases/nofrictionai/bannerhero.png', import.meta.url).href },
+  { slug: 'pernambucanas', title: 'Pernambucanas', overline: 'Retail · Design Leadership', cover: new URL('../img/cases/pernambucanas/bannerhero.webp', import.meta.url).href },
+  { slug: 'decathlon', title: 'Decathlon', overline: 'Retail · Loyalty UX', cover: new URL('../img/cases/decathlon/bannerhero.webp', import.meta.url).href },
+  { slug: 'nofrictionai', title: 'No Friction AI', overline: 'AI · Zero-to-One', cover: new URL('../img/cases/nofrictionai/bannerhero.webp', import.meta.url).href },
   { slug: 'daycoval', title: 'Banco Daycoval', overline: 'Fintech · Pix UX', cover: new URL('../img/cases/daycoval/banner_hero.webp', import.meta.url).href },
-  { slug: 'starbem', title: 'Starbem', overline: 'Healthtech · Zero-to-One', cover: new URL('../img/cases/starbem/bannerhero.png', import.meta.url).href },
+  { slug: 'starbem', title: 'Starbem', overline: 'Healthtech · Zero-to-One', cover: new URL('../img/cases/starbem/bannerhero.webp', import.meta.url).href },
   { slug: 'pefisa', title: 'Pefisa', overline: 'Fintech · Product Analysis', cover: new URL('../img/cases/pefisa/bannerhero.webp', import.meta.url).href },
 ]
 

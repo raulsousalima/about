@@ -14,11 +14,13 @@ case/
 img/
   cases/
     [slug-do-case]/
-      1.png                    ← screenshots para o gallery (mín. 4)
-      2.png
-      3.png
-      4.png
+      1.webp                    ← screenshots para o gallery (mín. 4)
+      2.webp
+      3.webp
+      4.webp
 ```
+
+> **Formato das imagens:** sempre `.webp` (qualidade ~85). Cada deploy da Vercel guarda uma cópia completa do site, então PNG/JPG pesados multiplicam o uso de armazenamento. Para converter: `python3 -c "from PIL import Image; Image.open('in.png').save('out.webp', quality=85, method=6)"`.
 
 - O **slug** deve ser em minúsculas, sem espaços, usando hífens (ex: `no-friction`, `pernambucanas`).
 - Nunca criar subpastas extras dentro de `case/`. Todas as páginas ficam no mesmo nível.
@@ -252,7 +254,7 @@ Em `src/translations.json`, adicionar dentro dos blocos `"pt"` **e** `"en"`:
 </section>
 ```
 
-- Imagem do hero: preferencialmente da pasta `img/cases/[slug]/bannerhero.png`.
+- Imagem do hero: preferencialmente da pasta `img/cases/[slug]/bannerhero.webp`.
 - O ícone Tabler e o subtítulo (`hero_subtitle`) foram **removidos** do template — não adicionar.
 
 ---
@@ -314,10 +316,10 @@ A galeria sempre tem toggle **App / Web**. O padrão App mostra 4 telas em grid;
         <h4 class="case-item-title" data-i18n="case.[slug].gallery.title1">Nome da Tela</h4>
         <div class="case-gallery-item">
           <div class="case-gallery-scroll">
-            <img src="../img/cases/[slug]/1.png" alt="Descrição da tela" />
+            <img src="../img/cases/[slug]/1.webp" alt="Descrição da tela" />
           </div>
           <!-- Opcional: overlay do menu/navegador -->
-          <!-- <img src="../img/cases/[slug]/menuinferior.png" class="case-gallery-overlay" alt="Menu inferior" /> -->
+          <!-- <img src="../img/cases/[slug]/menuinferior.webp" class="case-gallery-overlay" alt="Menu inferior" /> -->
         </div>
       </div>
       <!-- items 2, 3, 4 seguem o mesmo padrão -->
@@ -330,7 +332,7 @@ A galeria sempre tem toggle **App / Web**. O padrão App mostra 4 telas em grid;
         <h4 class="case-item-title">Desktop View</h4>
         <div class="case-gallery-item web-desktop-format">
           <div class="case-gallery-scroll">
-            <img src="../img/cases/[slug]/web1.png" alt="Tela Web Desktop" />
+            <img src="../img/cases/[slug]/web1.webp" alt="Tela Web Desktop" />
           </div>
         </div>
       </div>
@@ -339,9 +341,9 @@ A galeria sempre tem toggle **App / Web**. O padrão App mostra 4 telas em grid;
         <h4 class="case-item-title">Mobile Web View</h4>
         <div class="case-gallery-item web-mobile-format">
           <div class="case-gallery-scroll">
-            <img src="../img/cases/[slug]/web2.png" alt="Tela Web Mobile" />
+            <img src="../img/cases/[slug]/web2.webp" alt="Tela Web Mobile" />
           </div>
-          <!-- <img src="../img/cases/[slug]/navegador.png" class="case-gallery-overlay" alt="Navegador mobile" /> -->
+          <!-- <img src="../img/cases/[slug]/navegador.webp" class="case-gallery-overlay" alt="Navegador mobile" /> -->
         </div>
       </div>
     </div>
@@ -416,7 +418,7 @@ O card do case na `index.html` deve usar:
 ```html
 <a href="case/[slug].html" data-case-slug="[slug]" class="ui-card ui-card--case reveal">
   <div class="ui-card__media">
-    <img src="img/cases/[slug]/bannerhero.png" alt="[Nome do case] cover" />
+    <img src="img/cases/[slug]/bannerhero.webp" alt="[Nome do case] cover" />
   </div>
   <div class="ui-card__body">
     <p class="ui-card__overline">[TAGS SETOR]</p>
@@ -433,7 +435,7 @@ O card do case na `index.html` deve usar:
 
 ### ✅ Estrutura
 - [ ] Arquivo em `case/[slug].html`
-- [ ] Imagens em `img/cases/[slug]/1.png` a `4.png` + `bannerhero.png`
+- [ ] Imagens em `img/cases/[slug]/1.webp` a `4.webp` + `bannerhero.webp`
 - [ ] Header e Footer copiados literalmente do template (não modificados)
 - [ ] `<script type="module" src="/src/main.ts"></script>` único e ao final do `<body>`
 

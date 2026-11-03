@@ -5,7 +5,7 @@ import { initTheme } from './theme'
 import { initI18n, getLang } from './i18n'
 import { mountSimulator } from './simulator'
 import { mountPhone3D } from './phone3d'
-import decathlonScreen from '../img/cases/decathlon/1.png'
+import decathlonScreen from '../img/cases/decathlon/1.webp'
 
 /* =====================================================
    /designsystem — docs app

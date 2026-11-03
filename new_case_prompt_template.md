@@ -161,7 +161,7 @@ Etapa 5:
 ## 🖼️ GALLERY — Imagens do projeto
 
 ```
-As imagens devem estar salvas em: /img/cases/[slug]/1.png até 4.png
+As imagens devem estar salvas em: /img/cases/[slug]/1.webp até 4.webp
 
 Alt da imagem 1 (PT/EN): [ex: Tela de dashboard principal]
 Alt da imagem 2 (PT/EN): [ex: Fluxo de onboarding do usuário]
@@ -217,5 +217,5 @@ Texto do link (EN): [ex: back to home]
 - [ ] Imagem do challenge (URL Unsplash)
 - [ ] Logo da empresa (SVG ou path da imagem)
 - [ ] Todos os textos em PT e EN preenchidos
-- [ ] 4 imagens de galeria em `/img/cases/[slug]/1-4.png` (ou avisar que ainda não tem)
+- [ ] 4 imagens de galeria em `/img/cases/[slug]/1-4.webp` (ou avisar que ainda não tem)
 - [ ] 3 métricas de impacto definidas
